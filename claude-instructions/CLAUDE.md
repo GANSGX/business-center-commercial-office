@@ -635,25 +635,15 @@ npx ts-node scripts/create-admin.ts
 
 ## Prisma 7 — важные особенности
 
-> Проект использует **Prisma 7**, которая имеет breaking changes относительно Prisma 5/6.
+> Проект использует **Prisma 7**. Конфигурация datasource вынесена в `prisma.config.ts`.
 
-1. **Импорты** — НЕ из `@prisma/client`, а из `@/generated/prisma/client`:
-
-   ```ts
-   import { PrismaClient, RoomStatus } from '@/generated/prisma/client'
-   // или для скриптов вне src/:
-   import { PrismaClient } from '../src/generated/prisma/client'
-   ```
-
-2. **Адаптер обязателен** — `new PrismaClient()` без аргументов не работает. Всегда так:
+1. **Импорты** — из стандартного `@prisma/client` (generator без кастомного output):
 
    ```ts
-   import { PrismaPg } from '@prisma/adapter-pg'
-   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
-   const prisma = new PrismaClient({ adapter })
+   import { PrismaClient, RoomStatus } from '@prisma/client'
    ```
 
-3. **Singleton** — в коде приложения всегда импортировать готовый клиент:
+2. **Singleton** — в коде приложения всегда импортировать готовый клиент:
 
    ```ts
    import { prisma } from '@/shared/lib/prisma'
@@ -661,7 +651,18 @@ npx ts-node scripts/create-admin.ts
 
    НЕ создавать новый PrismaClient в каждом файле.
 
-4. **schema.prisma** — `url` убран из datasource, datasource подключается через `prisma.config.ts` автоматически.
+3. **`new PrismaClient()`** — без адаптера, стандартное TCP-соединение через DATABASE_URL:
+
+   ```ts
+   // src/shared/lib/prisma.ts
+   import { PrismaClient } from '@prisma/client'
+   const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+   export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+   if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+   ```
+
+4. **prisma.config.ts** — содержит datasource URL. `schema.prisma` также содержит
+   `url = env("DATABASE_URL")` для обратной совместимости инструментов (Studio, etc.).
 
 5. **После изменения schema.prisma** всегда запускать:
    ```bash
