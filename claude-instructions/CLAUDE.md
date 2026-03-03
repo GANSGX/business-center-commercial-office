@@ -412,7 +412,7 @@ model SiteSettings {
   updatedAt DateTime @updatedAt
 }
 // Ключи: phones | email | address | workHours | socials | requisites
-//        mapProvider | mapLat | mapLng | mapZoom
+//        mapProvider | mapLat | mapLng | mapZoom | transport
 
 model User {
   id           String   @id @default(cuid())

@@ -77,7 +77,7 @@
 
 - [ ] **[S1-D1-05]** `widgets/tenants`: логотипы арендаторов. Горизонтальная прокрутка на мобильных. next/image с `object-contain`. Пропсы: `items: Tenant[]`.
 
-- [ ] **[S1-D1-06]** `widgets/map`: компонент карты. **Ленивая загрузка через IntersectionObserver** — JS карты не грузится до появления в viewport. Провайдер (yandex/2gis) из `NEXT_PUBLIC_MAP_PROVIDER`. Координаты через пропсы.
+- [ ] **[S1-D1-06]** `widgets/map`: компонент карты. **Ленивая загрузка через IntersectionObserver** — JS карты не грузится до появления в viewport. Провайдер (yandex/2gis) из `NEXT_PUBLIC_MAP_PROVIDER`. Координаты через пропсы. Под картой — текстовый блок "транспортная доступность" из SiteSettings (ключ `transport`).
 
 - [ ] **[S1-D1-07]** `pages/home`: сборка главной страницы. Порядок секций: HeroSlider → АктуальныеПредложения → Advantages → Tenants → LeadForm → Map. Данные через ISR (revalidate: 300).
 
@@ -133,7 +133,7 @@
 
 - [ ] **[S2-D1-07]** `src/app/(public)/gallery/page.tsx`: сетка 3-4 в ряд, next/image lazy + blur, lightbox. ISR 600. `generateMetadata`.
 
-- [ ] **[S2-D1-08]** `src/app/(public)/contacts/page.tsx`: блок данных (адрес, телефоны click-to-call, email mailto, часы работы), соцсети, реквизиты, LeadForm, Map. ISR 600. `generateMetadata`.
+- [ ] **[S2-D1-08]** `src/app/(public)/contacts/page.tsx`: блок данных (адрес, телефоны click-to-call, email mailto, часы работы), соцсети, реквизиты, LeadForm, Map. Блок "транспортная доступность" из SiteSettings (ключ `transport`). ISR 600. `generateMetadata`.
 
 - [ ] **[S2-D1-09]** `src/app/not-found.tsx`: кастомная 404. Ссылки на главные разделы. Без лишнего.
 
@@ -199,7 +199,7 @@
 
 - [ ] **[S3-D2-06]** `src/app/api/leads/route.ts` GET + `leads/[id]/route.ts` PATCH: список с фильтром/поиском/пагинацией. Смена статуса.
 
-- [ ] **[S3-D2-07]** `src/app/(admin)/[adminSlug]/settings/page.tsx`: форма настроек. Телефоны (dynamic list). Email, адрес, часы работы. Соцсети (VK, WhatsApp, Telegram, Avito). Реквизиты (textarea). Карта (провайдер select, lat, lng, zoom). Кнопка Сохранить с optimistic update.
+- [ ] **[S3-D2-07]** `src/app/(admin)/[adminSlug]/settings/page.tsx`: форма настроек. Телефоны (dynamic list). Email, адрес, часы работы. Соцсети (VK, WhatsApp, Telegram, Avito). Реквизиты (textarea). Транспортная доступность (textarea, ключ `transport`). Карта (провайдер select, lat, lng, zoom). Кнопка Сохранить с optimistic update.
 
 - [ ] **[S3-D2-08]** `src/app/api/settings/route.ts` PATCH: сохраняет массив `{key, value}[]` батчом через `prisma.siteSettings.upsert`.
 
