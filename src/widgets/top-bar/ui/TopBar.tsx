@@ -18,23 +18,27 @@ export function TopBar({ phones, email, address, socials }: TopBarProps) {
     <div className={styles.topBar}>
       <div className={`container ${styles.inner}`}>
         <div className={styles.contacts}>
-          {phones.map((phone) => (
-            <a key={phone} href={`tel:${phone.replace(/\D/g, '')}`} className={styles.contactItem}>
-              <IconPhone size={13} />
+          {phones.map((phone, i) => (
+            <a
+              key={phone}
+              href={`tel:${phone.replace(/\D/g, '')}`}
+              className={`${styles.contactItem} ${i > 0 ? styles.phoneSecondary : ''}`}
+            >
+              <IconPhone size={12} />
               <span className={styles.contactText}>{phone}</span>
             </a>
           ))}
 
           {email && (
             <a href={`mailto:${email}`} className={`${styles.contactItem} ${styles.emailItem}`}>
-              <IconEmail size={13} />
+              <IconEmail size={12} />
               <span className={styles.contactText}>{email}</span>
             </a>
           )}
 
           {address && (
             <span className={`${styles.contactItem} ${styles.addressItem}`}>
-              <IconMapPin size={13} />
+              <IconMapPin size={12} />
               <span className={styles.contactText}>{address}</span>
             </span>
           )}
@@ -47,10 +51,10 @@ export function TopBar({ phones, email, address, socials }: TopBarProps) {
                 href={socials.vk}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.socialLink}
+                className={`${styles.socialLink} ${styles.vk}`}
                 aria-label="ВКонтакте"
               >
-                <IconVk size={16} />
+                <IconVk size={17} />
               </Link>
             )}
             {socials?.wa && (
@@ -58,10 +62,10 @@ export function TopBar({ phones, email, address, socials }: TopBarProps) {
                 href={socials.wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.socialLink}
+                className={`${styles.socialLink} ${styles.wa}`}
                 aria-label="WhatsApp"
               >
-                <IconWhatsapp size={16} />
+                <IconWhatsapp size={17} />
               </Link>
             )}
             {socials?.tg && (
@@ -69,10 +73,10 @@ export function TopBar({ phones, email, address, socials }: TopBarProps) {
                 href={socials.tg}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.socialLink}
+                className={`${styles.socialLink} ${styles.tg}`}
                 aria-label="Telegram"
               >
-                <IconTelegram size={16} />
+                <IconTelegram size={17} />
               </Link>
             )}
             {socials?.avito && (
@@ -80,10 +84,10 @@ export function TopBar({ phones, email, address, socials }: TopBarProps) {
                 href={socials.avito}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.socialLink}
+                className={`${styles.socialLink} ${styles.avito}`}
                 aria-label="Avito"
               >
-                <IconAvito size={16} />
+                <IconAvito size={17} />
               </Link>
             )}
           </div>
