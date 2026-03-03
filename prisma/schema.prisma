@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomStatus {
+  FREE
+  RESERVED
+  RENTED
+}
+
+enum LeadStatus {
+  NEW
+  PROCESSED
+}
+
+model Room {
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  slug        String      @unique
+  title       String
+  roomNumber  String?
+  type        String?
+  area        Float
+  floor       Int
+  layoutType  String?
+  water       Boolean     @default(false)
+  wc          Boolean     @default(false)
+  windows     Boolean     @default(false)
+  entrance    String?
+  rentType    String?
+  internet    String?
+  minRentTerm String?
+  priceMonth  Int
+  priceM2     Float?
+  description String?
+  suitableFor String[]
+  status      RoomStatus  @default(FREE)
+  showOnHome  Boolean     @default(false)
+  photos      RoomPhoto[]
+}
+
+model RoomPhoto {
+  id     String @id @default(cuid())
+  url    String
+  order  Int    @default(0)
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId String
+}
+
+model HeroSlide {
+  id         String  @id @default(cuid())
+  title      String
+  subtitle   String?
+  buttonText String?
+  buttonUrl  String?
+  image      String
+  order      Int     @default(0)
+  active     Boolean @default(true)
+}
+
+model Advantage {
+  id    String @id @default(cuid())
+  icon  String
+  title String
+  text  String
+  order Int    @default(0)
+}
+
+model Tenant {
+  id    String @id @default(cuid())
+  name  String
+  logo  String
+  order Int    @default(0)
+}
+
+model Service {
+  id        String          @id @default(cuid())
+  slug      String          @unique
+  title     String
+  content   String?
+  image     String?
+  priceText String?
+  order     Int             @default(0)
+  seoTitle  String?
+  seoDesc   String?
+  options   ServiceOption[]
+}
+
+model ServiceOption {
+  id          String  @id @default(cuid())
+  label       String
+  description String?
+  price       String?
+  order       Int     @default(0)
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId   String
+}
+
+model GalleryImage {
+  id      String  @id @default(cuid())
+  url     String
+  caption String?
+  order   Int     @default(0)
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  name        String
+  phone       String
+  email       String?
+  message     String?
+  roomId      String?
+  serviceName String?
+  pageUrl     String?
+  utm         Json?
+  status      LeadStatus @default(NEW)
+}
+
+model SiteSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
