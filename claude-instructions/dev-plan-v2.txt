@@ -1,0 +1,772 @@
+ПЛАН РАЗРАБОТКИ САЙТА
+Бизнес-центр — Аренда офисов
+Next.js · React 19 · TypeScript · PostgreSQL · FSD · CSS Modules
+Документ для команды разработки. Используется как техническое задание для LLM и разработчиков.
+1. Технологический стек
+⚑  Tailwind CSS не используется. Стилизация — исключительно CSS Modules (.module.css) с кастомными переменными. Никаких UI-библиотек с готовыми компонентами.
+Слой
+Технология
+Назначение / комментарий
+Frontend
+React 19
+UI, Server Components, Suspense, use()
+Next.js 15 (App Router)
+SSR, SSG, ISR, роутинг, API Routes, Middleware
+TypeScript 5
+Строгая типизация. strict: true обязательно
+CSS Modules (.module.css)
+Кастомные стили. Переменные через :root в globals.css. БЭМ-именование внутри модулей
+CSS Custom Properties
+Все цвета, отступы, типографика — через var(--). Тема сайта через переменные
+Zustand
+Глобальный стейт: фильтры каталога, состояние форм, UI-флаги (модалки)
+React Hook Form + Zod
+Формы и валидация на клиенте и сервере
+Swiper.js
+Слайдеры, галереи. Подключается как модуль, не через CDN
+dnd-kit
+Drag & drop сортировка фото в админке
+Backend
+Next.js Route Handlers
+REST API: /api/rooms, /api/leads и т.д.
+NextAuth.js v5
+Авторизация в админку: credentials + JWT + httpOnly cookie
+Prisma ORM
+Работа с PostgreSQL, миграции, типы из схемы
+PostgreSQL 16
+Основная БД
+Nodemailer
+Email-уведомления при новой заявке
+Хранилище
+Uploadthing или AWS S3-совместимое
+Загрузка и хранение изображений. Возможна замена на локальный /public/uploads при желании заказчика
+Инфра
+Docker + docker-compose
+Контейнеризация: app + postgres + nginx. Для деплоя достаточно docker compose up
+Nginx
+Reverse proxy, HTTPS, gzip, кеш статики
+GitHub Actions
+CI: lint → typecheck → build. Деплой — через webhook или вручную
+SEO
+Next.js Metadata API
+generateMetadata() для каждой страницы
+next-sitemap
+Автоматический sitemap.xml + robots.txt
+JSON-LD (schema.org)
+Структурированные данные: Organization, LocalBusiness, Product (Room)
+2. Архитектура проекта — Feature-Sliced Design (FSD)
+Вся кодовая база строго следует FSD. Нарушение правил импортов и слоёв недопустимо. Каждый разработчик обязан изучить https://feature-sliced.design перед началом работы.
+2.1 Слои и их содержимое
+Слой
+Путь
+Что хранится
+app
+src/app/
+Next.js App Router: layout.tsx, page.tsx, loading.tsx, error.tsx, not-found.tsx, middleware.ts. Только провайдеры и роутинг.
+pages
+src/pages/
+Page-level компоненты — только компоновка виджетов. Никакой бизнес-логики.
+widgets
+src/widgets/
+Самодостаточные блоки страниц: Header, Footer, HeroSlider, RoomCard, LeadForm, AdvantagesSection, TenantsSection, MapSection, GalleryGrid, FloatingCTA
+features
+src/features/
+Пользовательские действия: room-filter, lead-submit, auth-admin, gallery-lightbox, image-upload, room-status-badge
+entities
+src/entities/
+Бизнес-сущности с типами, API-функциями и базовым UI: room, service, lead, gallery, site-settings, hero-slide, advantage, tenant
+shared
+src/shared/
+ui/ — атомарные компоненты (Button, Input, Modal, Spinner, Badge, Pagination). lib/ — утилиты. hooks/ — useDebounce, useIntersection. config/ — константы. types/ — общие типы. api/ — fetch-обёртка.
+2.2 Правила FSD — обязательны к соблюдению
+Импорты только вниз по слоям: app → pages → widgets → features → entities → shared. Запрещено импортировать из вышестоящего слоя.
+Каждый слайс содержит: index.ts (публичный API экспорт), ui/ (компоненты), model/ (хуки, стор), api/ (запросы), lib/ (хелперы), types/ (типы).
+Компонент = JSX + пропсы/хуки. Вся логика — в хуках (model/) или сервисах (api/). В теле компонента нет прямых fetch, сложных условий, работы с БД.
+shared/ui — только "глупые" компоненты. Без зависимостей от entities, features, widgets.
+Состояние (Zustand stores) живёт в model/ каждого слайса или в features/ если оно сквозное.
+CSS Modules подключаются внутри компонента: styles.module.css рядом с компонентом.
+Admin-роуты — отдельный App Router segment: src/app/(admin)/
+2.3 Структура директорий
+src/
+├── app/
+│   ├── (public)/
+│   │   ├── page.tsx                        # Главная страница
+│   │   ├── offices/
+│   │   │   ├── page.tsx                    # Каталог помещений
+│   │   │   └── [slug]/
+│   │   │       └── page.tsx                # Карточка помещения
+│   │   ├── services/
+│   │   │   ├── page.tsx                    # Список услуг
+│   │   │   └── [slug]/page.tsx             # Карточка услуги
+│   │   ├── gallery/page.tsx
+│   │   └── contacts/page.tsx
+│   ├── (admin)/
+│   │   └── [adminSlug]/                    # Значение из ADMIN_SLUG env
+│   │       ├── layout.tsx                  # Admin layout + auth guard
+│   │       ├── page.tsx                    # Dashboard
+│   │       ├── rooms/  services/  leads/
+│   │       ├── gallery/  hero-slides/
+│   │       └── settings/
+│   ├── api/
+│   │   ├── rooms/         services/
+│   │   ├── leads/         gallery/
+│   │   ├── upload/        auth/
+│   │   └── settings/
+│   ├── layout.tsx                          # Root layout
+│   ├── not-found.tsx                       # 404 страница
+│   └── middleware.ts                       # Auth guard + noindex для (admin)
+├── pages/                                  # Page-компоненты (FSD)
+├── widgets/
+│   ├── header/          footer/
+│   ├── hero-slider/     room-card/
+│   ├── advantages/      tenants/
+│   ├── lead-form/       map/
+│   ├── gallery-grid/    floating-cta/
+│   └── ...
+├── features/
+│   ├── room-filter/     lead-submit/
+│   ├── auth-admin/      gallery-lightbox/
+│   └── image-upload/
+├── entities/
+│   ├── room/   service/   lead/
+│   ├── gallery/ site-settings/
+│   ├── hero-slide/ advantage/ tenant/
+├── shared/
+│   ├── ui/     hooks/    lib/
+│   ├── types/  config/   api/
+├── styles/
+│   └── globals.css                         # CSS-переменные, reset, типографика
+prisma/
+│   └── schema.prisma
+docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── nginx.conf
+.env.example                                # Шаблон переменных для деплоя
+3. Страницы сайта и их содержимое
+Все страницы, блоки и поведение описаны по ТЗ и карте сайта. LLM-агент или разработчик должен реализовать каждый пункт точно.
+3.1 Сквозные элементы (присутствуют на всех страницах)
+TopBar
+Тонкая полоска над шапкой
+Содержит: телефоны (click-to-call), email, адрес офиса, иконки соцсетей (VK, WhatsApp, Telegram, Avito)
+Берётся из SiteSettings через getStaticProps / ISR
+Header
+Логотип (SVG или next/image) — ссылка на главную
+Навигационное меню:
+Аренда офисов → /offices
+Дополнительные услуги → dropdown со списком услуг из БД → /services/[slug]
+Фотогалерея → /gallery
+Расположение → /contacts#map
+О нас → /about (или секция на главной)
+Контакты → /contacts
+Мобильное меню: бургер → drawer/sidebar с полным меню
+Header при скролле: фиксируется (sticky), получает фоновую заливку и shadow
+Плавающая кнопка "Напишите нам"
+Фиксированная позиция: right: 24px, bottom: 80px (или right side)
+При клике — открывает Modal с FormLead (Имя, Телефон, Email, Сообщение, чекбокс согласия ПДн)
+Видна на всех страницах публичной части
+На мобильных — уменьшается до иконки-кружка
+Footer
+Дублирует контактные данные (телефоны, email, адрес)
+Ссылки на основные разделы
+Ссылки на соцсети
+Копирайт + ссылка на Политику конфиденциальности
+Реквизиты компании (можно раскрывающийся блок или отдельная строка)
+3.2 Главная страница /
+⚑  Блоки расположены строго в указанном порядке сверху вниз.
+Блок 1: Hero-слайдер
+Полноэкранный (100vh или фиксированная высота) слайдер на Swiper.js
+Каждый слайд: фоновое изображение + overlay, заголовок H1, подзаголовок, кнопка CTA
+Кнопки навигации: стрелки влево/вправо + пагинационные точки
+Автоплей с паузой при hover
+Данные слайдов — из таблицы HeroSlide в БД, поле active. Управляются из админки.
+Изображения через next/image с priority на первом слайде
+Блок 2: Актуальные предложения
+Заголовок раздела: "Актуальные предложения"
+Выводятся помещения с флагом showOnHome: true и статусом free или reserved
+Сетка карточек: 3–4 в ряд на десктопе, 2 на планшете, 1 на мобильном
+Карточка (RoomCard widget): фото (next/image lazy), площадь, этаж, цена/мес, статус-бейдж, кнопка "Оставить заявку"
+Кнопка "Смотреть все офисы" → /offices
+Блок 3: Почему арендаторы выбирают нас
+Заголовок: "Почему арендаторы выбирают нас?"
+8 карточек-преимуществ: иконка (SVG) + заголовок + краткий текст
+Данные из таблицы Advantage в БД, управляются из админки
+Сетка: 4 в ряд на десктопе, 2 на планшете, 1–2 на мобильном
+Блок 4: Наши арендаторы
+Заголовок: "Наши арендаторы"
+Логотипы компаний-арендаторов (горизонтальная прокрутка или сетка)
+Данные из таблицы Tenant, управляются из админки (drag & drop сортировка)
+Изображения с next/image, aspect-ratio сохранён
+Блок 5: Форма обратной связи
+Заголовок: "Свяжитесь с нами"
+Поля: Имя (обязательно), Телефон (обязательно), Email (опционально), Сообщение (опционально)
+Чекбокс согласия с Политикой персональных данных — обязательный
+Honeypot-поле (скрытое) для защиты от спамботов
+Валидация на клиенте (Zod) и на сервере (API Route)
+При успехе — inline сообщение об успехе (без перезагрузки страницы)
+Rate limit: не более 5 заявок с одного IP за 15 минут
+Блок 6: Карта
+Карта Яндекс.Карт или 2GIS (выбор при разработке, настраивается через SiteSettings)
+Метка на адресе бизнес-центра
+Ленивая загрузка карты (IntersectionObserver): не грузить JS карты до скролла к блоку
+Координаты берутся из SiteSettings
+3.3 Каталог помещений /offices
+Фильтры (features/room-filter)
+Фильтр по статусу: все / свободно / бронь / сдано
+Фильтр по площади: от / до (числовой input)
+Фильтр по этажу: выпадающий список или чекбоксы
+Фильтр по цене: от / до
+Сортировка: по цене (возр/убыв), по площади, по этажу
+Состояние фильтров — в Zustand store (features/room-filter/model/)
+URL-параметры синхронизируются с фильтрами (useSearchParams) для копирования ссылки
+Сброс фильтров — кнопка "Сбросить"
+Сетка карточек
+RoomCard (widget): фото (lazy next/image), площадь, этаж, цена/мес, бейдж статуса, CTA-кнопка
+CTA по статусу: free → "Оставить заявку", reserved → "Раннее бронирование", rented → "Уточнить наличие"
+Пагинация внизу: по 9 или 12 карточек на страницу
+При изменении фильтров — плавный scroll to top сетки
+Skeleton-лоадер пока данные загружаются
+3.4 Карточка помещения /offices/[slug]
+Хлебные крошки: Главная → Аренда офисов → [название]
+Галерея фотографий: главное фото крупно + миниатюры ряд снизу (Swiper). Клик на миниатюру — сменить главное. Клик на главное — lightbox (features/gallery-lightbox)
+Таблица характеристик — показывать ТОЛЬКО заполненные поля:
+Номер помещения, Тип помещения, Площадь (м²), Этаж
+Планировка, Наличие воды, Санузел, Окна
+Вход (описание), Тип аренды, Интернет, Минимальный срок аренды
+Блок цены: крупно цена/мес + кнопка "Оставить заявку" (открывает форму с предзаполненным номером помещения)
+Описание помещения (richtext из БД, рендер безопасного HTML)
+"Подходит для": список тегов/иконок из поля suitableFor[]
+ISR: revalidate каждые 60 секунд
+SEO: title = "[название] — аренда, [площадь] м²", description из первых 160 символов описания, OG-image
+3.5 Дополнительные услуги /services
+Список карточек услуг: иконка/изображение + название + краткое описание + кнопка "Подробнее"
+Данные из таблицы Service
+Карточка услуги /services/[slug]
+Заголовок услуги
+Изображение или иконка
+Описание (richtext)
+Цены / условия: текстовый блок priceText ИЛИ таблица опций (ServiceOption[])
+Для услуги "Реклама": поддержка нескольких блоков опций — LED-экран, лайтбоксы, реклама в лифтах и т.д. Каждый блок: название + описание + цена
+Кнопка "Оставить заявку" → открывает LeadForm с предзаполненной темой (название услуги)
+ISR: revalidate 60 сек
+3.6 Фотогалерея /gallery
+Заголовок: "Фотогалерея"
+Сетка: 3–4 фото в ряд на десктопе, 2 на планшете, 1–2 на мобильном
+Все изображения — next/image с lazy loading и blur placeholder
+Клик на фото → lightbox (features/gallery-lightbox): просмотр в полный размер, навигация стрелками, закрытие по Esc и клику вне
+Данные из таблицы GalleryImage, сортировка по полю order
+3.7 Контакты /contacts
+Контактный блок: адрес, телефоны (click-to-call), email (mailto), график работы
+Иконки соцсетей со ссылками
+Реквизиты компании (текстовый блок, HTML из SiteSettings)
+Форма обратной связи (тот же компонент LeadForm)
+Карта с меткой (ленивая загрузка)
+Все данные берутся из SiteSettings через ISR
+4. База данных — Prisma Schema
+Все модели описаны ниже. Prisma schema является источником истины для типов TypeScript.
+Модель
+Поля
+Описание
+Room
+id, createdAt, updatedAt
+slug (unique)
+title
+roomNumber
+type
+area (Float)
+floor (Int)
+layoutType
+water (Bool)
+wc (Bool)
+windows (Bool)
+entrance (String?)
+rentType
+internet (String?)
+minRentTerm (String?)
+priceMonth (Int)
+priceM2 (Float?)
+description (String richtext)
+suitableFor (String[])
+status: RoomStatus
+showOnHome (Bool)
+Помещение/офис. status enum: FREE | RESERVED | RENTED. photos[] — relation к RoomPhoto.
+RoomPhoto
+id, url, order (Int)
+roomId (FK → Room)
+Фотографии помещения. Сортируются по order ASC.
+HeroSlide
+id, title, subtitle
+buttonText, buttonUrl
+image (url)
+order (Int)
+active (Bool)
+Слайды главного баннера. Показываются только active: true.
+Advantage
+id, icon (String, SVG-name)
+title, text
+order (Int)
+Преимущества. Ровно 8 штук. Управляются из админки.
+Tenant
+id, name
+logo (url)
+order (Int)
+Арендаторы. Логотипы на главной.
+Service
+id, slug (unique)
+title, content (richtext)
+image (url?)
+priceText (String?)
+order (Int)
+seoTitle, seoDesc
+options[] → ServiceOption
+Дополнительная услуга. options[] — блоки вариантов (для Рекламы и подобных).
+ServiceOption
+id, label, description?
+price (String?)
+order (Int)
+serviceId (FK)
+Вариант/блок услуги. Например: LED-экран, лайтбокс, реклама в лифте.
+GalleryImage
+id, url
+caption (String?)
+order (Int)
+Фотографии в галерее.
+Lead
+id, createdAt
+name, phone
+email (String?)
+message (String?)
+roomId (String?)
+serviceName (String?)
+pageUrl (String?)
+utm (Json?)
+status: LeadStatus
+Заявка. status enum: NEW | PROCESSED. При создании — email-уведомление на почту администратора.
+SiteSettings
+id, key (unique)
+value (String)
+updatedAt
+Key-value хранилище настроек. Ключи: phones, email, address, workHours, socials, requisites, mapProvider, mapLat, mapLng, mapZoom
+User
+id, email (unique)
+passwordHash
+createdAt
+Администратор. Только для NextAuth. Создаётся через seed-скрипт.
+5. API Routes
+⚑  Все API Routes располагаются в src/app/api/. Валидация входных данных через Zod обязательна на каждом endpoint.
+Метод + путь
+Доступ
+Описание
+GET /api/rooms
+Публичный
+Список помещений. Query: status, areaMin, areaMax, floor, priceMin, priceMax, sort, page, limit
+GET /api/rooms/[slug]
+Публичный
+Одно помещение по slug. 404 если не найдено.
+GET /api/rooms?showOnHome=true
+Публичный
+Помещения для блока "Актуальные предложения" на главной
+GET /api/hero-slides
+Публичный
+Активные слайды, отсортированные по order
+GET /api/advantages
+Публичный
+8 преимуществ, отсортированных по order
+GET /api/tenants
+Публичный
+Арендаторы, отсортированные по order
+GET /api/services
+Публичный
+Список услуг, отсортированных по order
+GET /api/services/[slug]
+Публичный
+Одна услуга со всеми options[]
+GET /api/gallery
+Публичный
+Все фото галереи, отсортированные по order
+GET /api/settings
+Публичный
+Все SiteSettings как объект {key: value}
+POST /api/leads
+Публичный
+Создать заявку. Тело: name, phone, email?, message?, roomId?, serviceName?, pageUrl?, utm?. Rate limit: 5 req / 15 min per IP. Honeypot: поле website должно быть пустым.
+POST /api/rooms
+PUT /api/rooms/[id]
+DELETE /api/rooms/[id]
+Admin only
+CRUD помещений
+POST /api/rooms/[id]/photos
+DELETE /api/rooms/[id]/photos/[photoId]
+PATCH /api/rooms/[id]/photos/order
+Admin only
+Загрузка, удаление, сортировка фото помещения
+CRUD /api/hero-slides
+CRUD /api/advantages
+CRUD /api/tenants
+Admin only
+Управление блоками главной страницы
+CRUD /api/services
+CRUD /api/services/[id]/options
+Admin only
+Управление услугами и их вариантами
+CRUD /api/gallery
+Admin only
+Управление галереей
+GET /api/leads
+PATCH /api/leads/[id]
+Admin only
+Список заявок с фильтром по статусу. Смена статуса new → processed
+PATCH /api/settings
+Admin only
+Сохранение настроек контактов
+POST /api/upload
+Admin only
+Загрузка изображений. Возвращает URL. Uploadthing или S3.
+6. Административная панель
+6.1 Скрытость и защита
+⚑  Ни один публичный файл, HTML, JS-бандл, robots.txt, sitemap.xml не должен содержать упоминания admin-пути. Это строгое требование.
+Уровень защиты
+Реализация
+Secret slug
+Роут: /[adminSlug]/... где adminSlug = значение переменной окружения ADMIN_SLUG. Пример: ADMIN_SLUG=xK9mQr2p. Нигде не захардкожен в коде. Читается только через process.env.ADMIN_SLUG.
+Middleware
+src/app/middleware.ts проверяет каждый запрос к (admin) сегменту: 1) pathname начинается с /[ADMIN_SLUG], 2) есть валидная сессия NextAuth. Если любое условие не выполнено — возвращает 404 (не 401, не 403, именно 404).
+NextAuth
+Credentials provider: email + пароль (bcryptjs). JWT-сессия. httpOnly + secure cookie. Бот-защита: после 5 неверных попыток — блокировка IP на 15 мин (in-memory Map или Redis).
+Robots / Sitemap
+robots.txt: User-agent: * / Disallow: /[ADMIN_SLUG]/. Sitemap.xml не содержит admin-url. В middleware для всех (admin) запросов добавляется заголовок X-Robots-Tag: noindex, nofollow.
+JS-бандл
+Все admin-компоненты — dynamic import с ssr: false. В публичном бандле нет кода и строк admin-роутов. ADMIN_SLUG читается только на сервере (не попадает в NEXT_PUBLIC_).
+Nginx
+Опциональный доп. слой: location /[ADMIN_SLUG] требует заголовка X-Admin-Request: true. Без него — 444 (drop). Устанавливается в docker-compose через proxy_set_header.
+6.2 Интерфейс и функциональность
+Dashboard (главная страница админки)
+Счётчики: всего помещений, свободных, новых заявок за сегодня/неделю
+Последние 5 заявок
+Быстрые ссылки на разделы
+CRUD: Помещения
+Таблица всех помещений: номер, название, площадь, этаж, статус, showOnHome, действия (изменить/удалить)
+Форма создания/редактирования: все поля из модели Room
+Описание — Tiptap richtext editor (жирный, курсив, списки, ссылки)
+Загрузка фото: drag & drop upload нескольких файлов. Preview после загрузки.
+Сортировка фото: drag & drop (dnd-kit) для изменения порядка
+Удаление отдельных фото
+Поле suitableFor: добавление/удаление тегов
+Смена статуса прямо из таблицы (select dropdown)
+Переключатель showOnHome прямо в таблице (toggle)
+CRUD: Главная страница
+Hero-слайды: таблица + форма (заголовок, подзаголовок, кнопка, URL кнопки, загрузка фото, активен/нет). Drag & drop сортировка.
+Преимущества (Advantages): 8 карточек, редактирование иконки (выбор из предустановленного набора SVG) + заголовок + текст. Drag & drop сортировка.
+Арендаторы (Tenants): добавление логотипа + название. Drag & drop сортировка. Удаление.
+CRUD: Услуги
+Список услуг: таблица, drag & drop сортировка
+Форма: title, slug (автогенерация из title), richtext описание, загрузка изображения, priceText
+Блок Options: добавление/удаление вариантов (label, description, price). Drag & drop сортировка.
+SEO поля: seoTitle, seoDesc
+CRUD: Галерея
+Сетка всех фотографий
+Массовая загрузка (multiple upload)
+Поле caption (подпись) для каждого фото
+Drag & drop сортировка
+Удаление
+Заявки (Leads)
+Таблица с колонками: дата, имя, телефон, email, сообщение, помещение/услуга, страница, статус
+Фильтр по статусу: все / новые / обработанные
+Поиск по имени и телефону
+Смена статуса: кнопка "Обработано" / "Вернуть в новые"
+Новые заявки выделяются визуально (жирный шрифт или цветовой маркер)
+Пагинация
+Настройки контакт
+Одна страница со всеми полями: телефоны (динамический список + добавить), email, адрес, график работы
+Соцсети: VK, WhatsApp, Telegram, Avito, другие — поля для URL
+Реквизиты: textarea (HTML-контент)
+Карта: выбор провайдера (Яндекс / 2GIS), поля для широты, долготы, зума
+Кнопка "Сохранить" с оптимистичным обновлением UI
+7. SEO — максимальная оптимизация
+⚑  Каждый пункт обязателен к реализации. SEO — приоритет наравне с функциональностью.
+7.1 Meta-теги и Metadata API
+generateMetadata() для каждой page.tsx: title, description, keywords, canonical
+Главная: title = "Аренда офисов в [город] — Бизнес-центр [название]", description уникальный
+/offices: title = "Каталог офисов в аренду — [название БЦ]"
+/offices/[slug]: title = "[Название офиса] — аренда [площадь] м², этаж [N]", description из первых 155 символов поля description
+/services/[slug]: title = "[Название услуги] — [название БЦ]"
+Open Graph: og:title, og:description, og:image (next/og для динамических), og:url, og:type
+Twitter Card: summary_large_image
+robots meta: index, follow для публичных; noindex, nofollow для (admin)
+canonical: абсолютный URL на каждой странице
+7.2 Структурированные данные (JSON-LD)
+Organization на главной: name, url, logo, contactPoint, address, sameAs (соцсети)
+LocalBusiness на главной: address, geo, openingHours, telephone
+Product / Offer на карточке помещения: name, description, offers.price, offers.availability
+BreadcrumbList на /offices/[slug] и /services/[slug]
+7.3 Технические SEO-факторы
+sitemap.xml: статические страницы + все /offices/[slug] + все /services/[slug]. Генерируется next-sitemap при сборке + ISR-обновление при добавлении нового помещения/услуги.
+robots.txt: Allow: / для публичных. Disallow: /api/, /[ADMIN_SLUG]/. Ссылка на sitemap.xml.
+404 страница (not-found.tsx): кастомный дизайн, ссылки на главные разделы
+Чистые ЧПУ: /offices/nazvanie-pomescheniya, /services/parkovka — только латиница + тире (translit при сохранении slug)
+Canonical URL с trailing slash или без — единый вариант для всего сайта (настраивается в next.config.ts)
+hreflang если требуется мультиязычность (на будущее)
+Скорость: Core Web Vitals — LCP < 2.5s, FID < 100ms, CLS < 0.1. Проверка через PageSpeed Insights.
+8. Производительность и оптимизация
+8.1 Изображения
+Все изображения через next/image: автоматический WebP/AVIF, responsive sizes, lazy loading по умолчанию
+Первое изображение на каждой странице (Hero, первое фото помещения) — priority={true}, fetchPriority="high"
+blur placeholder: blurDataURL генерируется при загрузке в Uploadthing/S3
+Указывать sizes="" соответственно layout: "(max-width: 768px) 100vw, 33vw"
+Запрет на inline base64 изображений размером > 10kb в коде
+8.2 Ленивая загрузка компонентов
+Карта (MapSection): загружается через IntersectionObserver, JS карты не грузится до скролла к блоку
+Lightbox (GalleryLightbox): dynamic import, загружается только при первом клике
+Tiptap editor в админке: dynamic import с loading={<Spinner/>}
+Все иконки-SVG: inline SVG компоненты или sprite, не font-icons
+8.3 Рендеринг и кеширование
+Главная страница: ISR, revalidate: 300 (5 минут)
+Каталог /offices: SSR с cache: "no-store" для актуальных фильтров. Или ISR + клиентская фильтрация через Zustand
+/offices/[slug]: ISR, revalidate: 60
+/services/[slug]: ISR, revalidate: 60
+/gallery, /contacts: ISR, revalidate: 600
+API Routes: заголовки Cache-Control: max-age=30 для публичных GET
+Статика (CSS, JS, шрифты): Nginx Cache-Control: max-age=31536000, immutable
+8.4 Шрифты
+Подключение через next/font (Google Fonts или local). display: swap. Preload критических начертаний.
+Не более 2 семейств шрифтов на сайте
+Subset: latin, cyrillic
+8.5 CSS
+CSS Modules — нет глобальных стилей кроме :root переменных и reset в globals.css
+Критический CSS инлайнится автоматически Next.js (App Router)
+Анимации только через CSS transitions/animations. Избегать JS-анимаций для layout-свойств
+will-change: transform только там где нужно, не глобально
+8.6 JavaScript
+Tree-shaking: импортировать только нужные части библиотек (import { Swiper } from "swiper/react")
+Анализ бандла: @next/bundle-analyzer при необходимости
+Не использовать тяжёлые библиотеки для простых задач (moment.js, lodash целиком)
+Prefetch: next/link автоматически prefetch-ит in-viewport ссылки
+9. Адаптивность и кроссбраузерность
+9.1 Breakpoints (CSS Custom Properties)
+Имя
+Ширина
+Целевые устройства
+--bp-mobile
+до 480px
+Смартфоны в портретной ориентации
+--bp-tablet-sm
+481px – 768px
+Смартфоны в ландшафтной + небольшие планшеты
+--bp-tablet
+769px – 1024px
+Планшеты (iPad и аналоги)
+--bp-desktop-sm
+1025px – 1280px
+Небольшие ноутбуки
+--bp-desktop
+1281px – 1440px
+Стандартные десктопы
+--bp-wide
+1441px+
+Широкие мониторы
+9.2 Адаптивные правила
+Mobile-first подход: базовые стили для мобильных, медиазапросы расширяют для больших экранов
+Шапка: на мобильных — бургер-меню + drawer
+Сетки (помещения, преимущества, галерея): CSS Grid с auto-fill/auto-fit, минимальный размер колонки
+Таблица характеристик помещения: на мобильном стекируется в вертикальный список
+Hero-слайдер: высота 100svh на мобильных (svh для учёта тулбара браузера)
+Плавающая кнопка: на мобильных — уменьшенный круглый FAB
+Карта: фиксированная высота 400px на десктопе, 250px на мобильном
+Шрифты: адаптивный размер через clamp() или медиазапросы
+Touch-события: swipe для слайдеров (Swiper поддерживает по умолчанию)
+Dropdown в меню: на мобильных раскрывается как аккордеон, не как hover-dropdown
+9.3 Кроссбраузерность
+Поддерживаемые браузеры: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+, Chrome/Safari на iOS/Android
+Проверка через Can I Use для нестандартных CSS-свойств
+Autoprefixer — обязательно (postcss конфиг в Next.js)
+Избегать: -webkit- только префиксов без стандартного, устаревший Flexbox синтаксис
+Тестирование: BrowserStack или ручная проверка на основных браузерах перед сдачей
+10. Формы, валидация и безопасность
+10.1 Форма заявки (LeadForm)
+Поля: name (обязательно, мин. 2 символа), phone (обязательно, маска +7 или RU формат), email (опционально, валидный email), message (опционально, макс. 1000 символов)
+Чекбокс согласия с Политикой ПДн — обязателен, без него кнопка неактивна
+Honeypot: скрытое поле <input name="website" tabIndex={-1} autoComplete="off"> — если заполнено, API возвращает 200 но не сохраняет
+Клиентская валидация: React Hook Form + Zod. Ошибки появляются при blur или submit.
+Серверная валидация: API Route /api/leads повторно валидирует через Zod
+Rate limit: максимум 5 заявок с одного IP за 15 минут. Превышение → 429 с сообщением пользователю
+Optimistic UI: кнопка "Отправляется..." при pending, "Готово!" при успехе
+При ошибке сервера — понятное сообщение пользователю, не технический текст
+После успеха форма очищается, Modal закрывается через 2 секунды
+10.2 Общая безопасность
+Все API Routes с мутациями (POST/PUT/DELETE) для (admin) — проверяют сессию NextAuth
+CSRF: Next.js App Router использует SameSite cookies, дополнительно CSRF-токен для форм
+XSS: richtext из БД рендерится через dangerouslySetInnerHTML ТОЛЬКО после санитизации (sanitize-html или DOMPurify на сервере)
+SQL Injection: Prisma использует параметризованные запросы, прямой SQL не используется
+Env переменные: ADMIN_SLUG, DATABASE_URL, NEXTAUTH_SECRET, EMAIL_* — только в .env, не в NEXT_PUBLIC_
+Заголовки безопасности в next.config.ts: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy: strict-origin-when-cross-origin
+Content Security Policy: настраивается в next.config.ts с учётом карты и загрузки изображений
+11. Docker и деплой
+⚑  Деплой выполняет хостинговая сторона. Задача разработчика — предоставить готовый docker-compose.yml и .env.example, чтобы подъём занял 5–10 минут на любом VPS.
+11.1 Контейнеры
+Сервис
+Образ
+Описание
+app
+node:20-alpine (multi-stage)
+Next.js. Stage 1 (deps): npm ci. Stage 2 (builder): npm run build. Stage 3 (runner): копирует .next, запускает node server.js. Порт 3000.
+postgres
+postgres:16-alpine
+База данных. Volume: pgdata для персистентности. Healthcheck: pg_isready. Доступна только внутри docker network (не expose наружу).
+nginx
+nginx:1.25-alpine
+Reverse proxy. HTTP:80 → редирект на HTTPS:443. HTTPS:443 → proxy_pass http://app:3000. Gzip: on. Cache статики: 1 год. SSL-сертификат монтируется как volume.
+redis (опц.)
+redis:7-alpine
+Для rate limiting форм если требуется. Можно заменить in-memory Map для MVP.
+11.2 docker-compose.yml структура
+Один файл с профилями: dev и prod
+dev профиль: volume mount src/ для hot reload, postgres expose :5432, нет nginx
+prod профиль: multi-stage build, нет expose портов кроме nginx 80/443
+Healthcheck у postgres, depends_on: { postgres: { condition: service_healthy } } у app
+restart: unless-stopped для app и postgres
+Все секреты через environment: из .env файла
+11.3 .env.example — обязательные переменные
+DATABASE_URL="postgresql://user:password@postgres:5432/businesscenter"
+NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_SECRET="длинная_случайная_строка_32+_символа"
+ADMIN_SLUG="секретный_путь_для_входа"
+ADMIN_EMAIL="admin@yourdomain.com"
+ADMIN_PASSWORD_HASH="bcrypt_hash_пароля"
+EMAIL_HOST="smtp.yandex.ru"
+EMAIL_PORT=465
+EMAIL_USER="noreply@yourdomain.com"
+EMAIL_PASS="пароль"
+EMAIL_TO="owner@yourdomain.com"
+UPLOADTHING_SECRET="sk_live_..."   # или S3 credentials
+NEXT_PUBLIC_MAP_PROVIDER="yandex"  # или 2gis
+11.4 Инструкция для хостинга (README.md)
+В корне репозитория должен быть README.md с инструкцией:
+Установить Docker и docker-compose (версия 2.x)
+Склонировать репозиторий: git clone ...
+Скопировать .env.example в .env и заполнить все переменные
+Поместить SSL-сертификат в docker/certs/ (cert.pem + key.pem)
+Запустить: docker compose --profile prod up -d
+Применить миграции: docker compose exec app npx prisma migrate deploy
+Создать admin пользователя: docker compose exec app npx ts-node scripts/create-admin.ts
+Сайт доступен по https://yourdomain.com
+Для обновления: git pull && docker compose --profile prod up -d --build
+12. Порядок разработки (2 разработчика)
+Спринт 0 — Инфраструктура
+Dev 1
+Dev 2
+Инициализация Next.js 15 + TS + ESLint + Prettier + Husky
+FSD структура папок
+Prisma schema (все модели)
+NextAuth credentials + middleware скрытой админки
+Shared/ui: Button, Input, Modal, Spinner, Badge
+globals.css: CSS-переменные, reset, типографика
+Docker: Dockerfile (multi-stage) + docker-compose.yml (dev + prod)
+Nginx конфиг (dev-заглушка + prod полный)
+GitHub Actions: lint + typecheck + build
+.env.example со всеми переменными
+Seed-скрипт: create-admin + тестовые данные
+Спринт 1 — Публичная часть: Главная + Каталог
+Dev 1
+Dev 2
+entities/room: типы, API-функции, маппер
+widgets/hero-slider: Swiper, данные из API
+widgets/room-card: фото, характеристики, CTA по статусу
+widgets/advantages + widgets/tenants
+pages/home: сборка всех секций главной
+SEO: generateMetadata для главной
+API GET /api/rooms (фильтры, пагинация, сортировка)
+API GET /api/hero-slides, /api/advantages, /api/tenants
+features/room-filter: UI фильтров + Zustand store
+pages/offices: каталог с фильтрами + skeleton loader
+URL-параметры для фильтров (useSearchParams)
+JSON-LD: Organization, LocalBusiness
+Спринт 2 — Карточка + Формы + Услуги + Остальные страницы
+Dev 1
+Dev 2
+pages/offices/[slug]: галерея + lightbox + таблица характеристик
+features/lead-submit: LeadForm + React Hook Form + Zod + honeypot
+widgets/floating-cta: плавающая кнопка + Modal
+pages/gallery: сетка + lightbox
+pages/contacts: контакты + форма + карта
+SEO: generateMetadata для room[slug], gallery, contacts
+API GET /api/rooms/[slug] + ISR + 404
+API POST /api/leads: rate limit + email-уведомление
+entities/service + API GET /api/services и /api/services/[slug]
+pages/services: список + карточка услуги + ServiceOptions
+widgets/map: ленивая загрузка (IntersectionObserver)
+JSON-LD: Product/Offer для Room, BreadcrumbList
+Спринт 3 — Административная панель
+Dev 1
+Dev 2
+Admin layout: sidebar навигация, auth guard
+Dashboard: счётчики, последние заявки
+CRUD помещений: форма (все поля + Tiptap) + таблица
+Фото upload + drag & drop сортировка (dnd-kit)
+CRUD: HeroSlides, Advantages, Tenants (drag & drop)
+CRUD: Services + ServiceOptions
+Все Admin API Routes: POST/PUT/DELETE для rooms, services, slides, advantages, tenants, gallery
+API /api/upload: Uploadthing/S3 интеграция
+CRUD: Gallery (массовый upload + сортировка)
+Lead таблица: фильтр + поиск + смена статуса
+Страница Settings: форма всех контактных данных + PATCH /api/settings
+Предпросмотр (Preview кнопка → публичная страница)
+Спринт 4 — SEO, оптимизация, деплой, QA
+Dev 1
+Dev 2
+next-sitemap: динамические роуты rooms + services
+Lighthouse audit: исправление CLS, LCP
+Адаптив: финальная проверка всех страниц на мобильных
+Кроссбраузерное тестирование
+Документация README.md для хостинга
+OG-images: динамическая генерация через next/og
+Bundle analyzer: разбить тяжёлые deps (Swiper, Tiptap) на dynamic import
+Prod docker-compose финальный: healthcheck, restart, volumes
+Nginx prod: HTTP→HTTPS редирект, cache headers, gzip
+Проверка безопасности: заголовки, CSP, скрытость admin
+13. Git-процесс и соглашения
+Ветки: main (production), develop (staging), feature/название-задачи, fix/название-бага
+Каждая задача — отдельная feature-ветка от develop. Мержится через PR.
+Conventional Commits: feat:, fix:, chore:, refactor:, docs:, test:
+Husky pre-commit hook: eslint --fix + prettier --write + tsc --noEmit
+Конфликты: каждый разработчик каждый день делает git merge develop в свою ветку
+Общие файлы (prisma/schema.prisma, docker-compose.yml, globals.css) — изменения только через согласованный PR с обязательным ревью
+Тег v1.0.0 при сдаче финального деплоя
+14. Чеклист готовности к сдаче
+Категория
+Критерий
+Страницы
+[ ] Главная: все 6 блоков (Hero, Предложения, Преимущества, Арендаторы, Форма, Карта)
+[ ] /offices: каталог с фильтрами, сортировкой, пагинацией, skeleton loader
+[ ] /offices/[slug]: галерея, lightbox, таблица характеристик, форма заявки
+[ ] /services и /services/[slug]: список + детальная + ServiceOptions для "Реклама"
+[ ] /gallery: сетка фото + lightbox
+[ ] /contacts: данные + форма + карта + реквизиты
+[ ] Кастомная 404 страница
+Сквозные
+[ ] TopBar, Header (мобильный бургер), Footer на всех страницах
+[ ] Плавающая кнопка "Напишите нам" + Modal с формой
+Формы
+[ ] Валидация клиент + сервер. Honeypot. Rate limit 5/15min. Email-уведомление.
+[ ] Согласие с ПДн — обязательный чекбокс
+Админка
+[ ] Скрыта: нет в HTML/JS/robots/sitemap. Доступна только по ADMIN_SLUG + пароль.
+[ ] CRUD: помещения (+ фото загрузка/сортировка), слайды, преимущества, арендаторы
+[ ] CRUD: услуги + options, галерея
+[ ] Заявки: таблица, фильтр, смена статуса
+[ ] Настройки: контакты, соцсети, карта, реквизиты
+SEO
+[ ] generateMetadata на каждой странице (title, description, canonical, OG)
+[ ] JSON-LD: Organization, LocalBusiness, Product, BreadcrumbList
+[ ] sitemap.xml включает все rooms + services. robots.txt корректный.
+Перформанс
+[ ] Lighthouse Mobile: Performance ≥ 85, SEO ≥ 95, Accessibility ≥ 85, Best Practices ≥ 90
+[ ] next/image везде с lazy, priority на первом экране, blur placeholder
+[ ] Карта и Lightbox — ленивая загрузка
+Адаптив
+[ ] Проверено на: iPhone SE (375px), iPhone 14 (390px), iPad (768px), 1280px, 1440px
+[ ] Бургер-меню на мобильных. Все сетки адаптируются.
+Деплой
+[ ] docker compose --profile prod up -d — поднимает весь проект
+[ ] .env.example заполнен. README.md с инструкцией для хостинга.
+[ ] Prisma migrate deploy работает в контейнере
+AMF Team · Техническое задание для разработки
