@@ -117,8 +117,30 @@ a.contactItem:hover {
   filter: drop-shadow(0 0 6px rgba(0, 170, 255, 0.6));
 }
 
-/* ===== Адаптив ===== */
+/* ===== Адаптив (mobile-first) ===== */
 
+/* По умолчанию скрываем второстепенные элементы */
+.phoneSecondary,
+.emailItem,
+.addressItem {
+  display: none;
+}
+
+/* 480px+ — только иконки телефонов, без текста */
+@media (min-width: 480px) {
+  .contactText {
+    display: block;
+  }
+}
+
+/* 640px+ — показываем email */
+@media (min-width: 640px) {
+  .emailItem {
+    display: flex;
+  }
+}
+
+/* 1024px+ — показываем второй телефон и адрес */
 @media (min-width: 1024px) {
   .phoneSecondary {
     display: flex;
@@ -129,26 +151,7 @@ a.contactItem:hover {
   }
 }
 
-@media (min-width: 768px) {
-  .emailItem {
-    display: flex;
-  }
-
-  .addressItem {
-    display: none; /* только на десктопе */
-  }
-}
-
-@media (max-width: 767px) {
-  .emailItem {
-    display: none;
-  }
-
-  .addressItem {
-    display: none;
-  }
-}
-
+/* до 479px — только иконки, без текста и разделителей */
 @media (max-width: 479px) {
   .contactText {
     display: none;
