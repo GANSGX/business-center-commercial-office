@@ -10,6 +10,7 @@ import styles from './Header.module.css'
 const NAV_LINKS = [
   { href: '/offices', label: 'Аренда офисов' },
   { href: '/gallery', label: 'Фотогалерея' },
+  { href: '/contacts#map', label: 'Расположение' },
   { href: '/about', label: 'О нас' },
   { href: '/contacts', label: 'Контакты' },
 ]
@@ -101,7 +102,7 @@ export function Header({ services }: HeaderProps) {
                   aria-expanded={servicesOpen}
                   aria-haspopup="menu"
                 >
-                  Услуги
+                  Доп. услуги
                   <IconChevronDown
                     size={14}
                     className={`${styles.chevron} ${servicesOpen ? styles.chevronOpen : ''}`}
@@ -198,7 +199,7 @@ export function Header({ services }: HeaderProps) {
                 onClick={() => setDrawerServicesOpen((v) => !v)}
                 aria-expanded={drawerServicesOpen}
               >
-                Услуги
+                Доп. услуги
                 <IconChevronDown
                   size={16}
                   className={`${styles.chevron} ${drawerServicesOpen ? styles.chevronOpen : ''}`}
