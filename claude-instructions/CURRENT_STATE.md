@@ -66,14 +66,18 @@ src/
 
 ### Аутентификация
 
-- `src/auth.ts` — NextAuth.js v5, credentials provider, bcrypt
+- `src/auth.config.ts` — Edge-совместимый конфиг **без Prisma** (используется в middleware)
+- `src/auth.ts` — полный NextAuth.js v5 конфиг с Prisma, credentials provider, bcrypt. Импортировать только в серверных компонентах и API роутах (не в middleware!)
 - `src/app/api/auth/[...nextauth]/route.ts` — роут
+
+> **Важно:** `auth` для проверки сессии в middleware берётся из `NextAuth(authConfig)` (auth.config.ts), а не из `@/auth`. Это нужно чтобы Prisma (Node.js) не попала в Edge Runtime.
 
 ### Middleware
 
 - `src/middleware.ts` — защита админки через `ADMIN_SLUG`
-- При неверном slug → 404 (не 401)
-- Добавляет `X-Robots-Tag: noindex` для admin-запросов
+- Использует `NextAuth(authConfig)` из `auth.config.ts` (без Prisma, Edge-safe)
+- При отсутствии сессии → 404 (не 401, не 403)
+- Добавляет `X-Robots-Tag: noindex, nofollow` для admin-запросов
 
 ### Стили
 
