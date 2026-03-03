@@ -72,6 +72,8 @@ src/
 
 > **Важно:** `auth` для проверки сессии в middleware берётся из `NextAuth(authConfig)` (auth.config.ts), а не из `@/auth`. Это нужно чтобы Prisma (Node.js) не попала в Edge Runtime.
 
+> **Про `/login`:** Страница `/login` — публичный fallback для NextAuth редиректов. Она не раскрывает `ADMIN_SLUG`. Сам вход в систему находится по `/(admin)/[adminSlug]/login/`. В Sprint 3 реализовать форму входа именно там, а `/login` — показывать пустую страницу или редирект на главную.
+
 ### Middleware
 
 - `src/middleware.ts` — защита админки через `ADMIN_SLUG`
@@ -110,6 +112,22 @@ src/
 
 - `prisma.ts` — singleton Prisma клиент
 - `jsonld.ts` — утилиты для JSON-LD (BreadcrumbList, Organization)
+
+### SiteSettings — все ключи
+
+| Ключ          | Тип значения                | Описание                                                  |
+| ------------- | --------------------------- | --------------------------------------------------------- |
+| `phones`      | JSON `string[]`             | Список телефонов (click-to-call)                          |
+| `email`       | string                      | Email контакта                                            |
+| `address`     | string                      | Адрес бизнес-центра                                       |
+| `workHours`   | string                      | Часы работы                                               |
+| `socials`     | JSON `{vk,wa,tg,avito,...}` | Ссылки на соцсети                                         |
+| `requisites`  | string (HTML)               | Реквизиты компании                                        |
+| `mapProvider` | `yandex` или `2gis`         | Провайдер карты                                           |
+| `mapLat`      | string                      | Широта метки                                              |
+| `mapLng`      | string                      | Долгота метки                                             |
+| `mapZoom`     | string                      | Зум карты                                                 |
+| `transport`   | string                      | Текст блока «Транспортная доступность» (контакты + карта) |
 
 ### Инфраструктура
 
