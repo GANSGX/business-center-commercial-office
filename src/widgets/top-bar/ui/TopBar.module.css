@@ -1,49 +1,79 @@
 .topBar {
-  background: var(--color-hero-bg);
-  color: rgba(255, 255, 255, 0.65);
+  background: linear-gradient(90deg, #081222 0%, #0a1628 50%, #081222 100%);
+  color: rgba(255, 255, 255, 0.5);
   font-size: var(--text-xs);
   line-height: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 40px;
+  height: 42px;
   gap: var(--spacing-lg);
 }
+
+/* ===== Contacts ===== */
 
 .contacts {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: 0;
   overflow: hidden;
 }
 
 .contactItem {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: inherit;
   text-decoration: none;
   white-space: nowrap;
-  transition: color var(--transition-fast);
   flex-shrink: 0;
+  transition: color var(--transition-fast);
+  padding: 0 14px;
+  position: relative;
+}
+
+/* Разделитель между элементами */
+.contactItem + .contactItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Первый элемент без левого паддинга */
+.contacts .contactItem:first-child {
+  padding-left: 0;
 }
 
 a.contactItem:hover {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .contactText {
-  font-size: var(--text-xs);
-  letter-spacing: 0.01em;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  font-weight: 400;
 }
+
+/* Второй телефон — скрываем на маленьких экранах */
+.phoneSecondary {
+  display: none;
+}
+
+/* ===== Social icons ===== */
 
 .socials {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   flex-shrink: 0;
 }
 
@@ -51,39 +81,85 @@ a.contactItem:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-sm);
-  color: rgba(255, 255, 255, 0.55);
+  width: 30px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.3);
   text-decoration: none;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
+    transform var(--transition-fast),
+    filter var(--transition-fast);
+  will-change: transform;
 }
 
 .socialLink:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.22);
 }
 
-/* На планшете убираем адрес */
-@media (max-width: 1023px) {
+/* Брендовые цвета на ховере */
+.vk:hover {
+  color: #2787f5;
+  filter: drop-shadow(0 0 6px rgba(39, 135, 245, 0.6));
+}
+
+.wa:hover {
+  color: #25d366;
+  filter: drop-shadow(0 0 6px rgba(37, 211, 102, 0.6));
+}
+
+.tg:hover {
+  color: #29b6f6;
+  filter: drop-shadow(0 0 6px rgba(41, 182, 246, 0.6));
+}
+
+.avito:hover {
+  color: #00aaff;
+  filter: drop-shadow(0 0 6px rgba(0, 170, 255, 0.6));
+}
+
+/* ===== Адаптив ===== */
+
+@media (min-width: 1024px) {
+  .phoneSecondary {
+    display: flex;
+  }
+
+  .addressItem {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .emailItem {
+    display: flex;
+  }
+
+  .addressItem {
+    display: none; /* только на десктопе */
+  }
+}
+
+@media (max-width: 767px) {
+  .emailItem {
+    display: none;
+  }
+
   .addressItem {
     display: none;
   }
 }
 
-/* На мобильных убираем email и текст, оставляем только телефоны */
-@media (max-width: 639px) {
-  .emailItem {
-    display: none;
-  }
-
+@media (max-width: 479px) {
   .contactText {
     display: none;
   }
 
   .contactItem {
+    padding: 0 8px;
     gap: 0;
+  }
+
+  .contactItem + .contactItem::before {
+    display: none;
   }
 }
