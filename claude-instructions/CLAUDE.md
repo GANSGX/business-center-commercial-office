@@ -582,18 +582,28 @@ NEXT_PUBLIC_MAP_PROVIDER=  # yandex | 2gis (единственный NEXT_PUBLIC
 ## Git workflow
 
 ```
-main          ← только релизы (merge из develop через PR)
-develop       ← общая интеграционная ветка
-feature/dev1-sprint0-infra
-feature/dev1-sprint1-homepage
-feature/dev2-sprint0-docker
-feature/dev2-sprint1-api
+main    ← только релизы (prod)
+dev-1   ← ветка разработчика GANSGX
+dev-2   ← ветка разработчика xBezumiex
+feature/sprint1-room-card     ← feature-ветки создаются от своей dev-*
+feature/sprint2-api-rooms
 ```
 
-**Ежедневно:** `git merge develop` в свою ветку перед началом работы.
-**Конфликты:** `prisma/schema.prisma`, `globals.css`, `docker-compose.yml` — решать совместно.
-**Коммиты:** Conventional Commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
-**PR:** обязателен для merge в develop. Self-review допускается если нет второго разработчика.
+**Алгоритм работы:**
+
+1. Взять задачу на Канбан, назначить себя, перевести в In Progress
+2. Создать feature-ветку от своей `dev-*`:
+   ```bash
+   git checkout dev-1
+   git pull origin dev-1
+   git checkout -b feature/sprint1-название
+   ```
+3. Сделать работу, коммиты — Conventional Commits: `feat:`, `fix:`, `chore:`, `refactor:`
+4. Запушить, создать PR с `Closes #N` → merge в свою `dev-*`
+5. После merge в `dev-*` → синхронизировать в `main` через PR
+
+**Конфликты:** `prisma/schema.prisma`, `globals.css`, `docker-compose.yml` — решать совместно, не трогать без согласования обоих.
+**Коммиты:** без подписи Claude. Только содержательные conventional commits.
 
 ---
 
@@ -623,10 +633,48 @@ npx ts-node scripts/create-admin.ts
 
 ---
 
+## Prisma 7 — важные особенности
+
+> Проект использует **Prisma 7**, которая имеет breaking changes относительно Prisma 5/6.
+
+1. **Импорты** — НЕ из `@prisma/client`, а из `@/generated/prisma/client`:
+
+   ```ts
+   import { PrismaClient, RoomStatus } from '@/generated/prisma/client'
+   // или для скриптов вне src/:
+   import { PrismaClient } from '../src/generated/prisma/client'
+   ```
+
+2. **Адаптер обязателен** — `new PrismaClient()` без аргументов не работает. Всегда так:
+
+   ```ts
+   import { PrismaPg } from '@prisma/adapter-pg'
+   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+   const prisma = new PrismaClient({ adapter })
+   ```
+
+3. **Singleton** — в коде приложения всегда импортировать готовый клиент:
+
+   ```ts
+   import { prisma } from '@/shared/lib/prisma'
+   ```
+
+   НЕ создавать новый PrismaClient в каждом файле.
+
+4. **schema.prisma** — `url` убран из datasource, datasource подключается через `prisma.config.ts` автоматически.
+
+5. **После изменения schema.prisma** всегда запускать:
+   ```bash
+   npx prisma migrate dev --name "описание"
+   npx prisma generate
+   ```
+
+---
+
 ## Файлы которые нельзя трогать без согласования обоих разработчиков
 
 - `prisma/schema.prisma`
 - `src/styles/globals.css`
 - `docker-compose.yml`
-- `src/app/middleware.ts`
+- `src/middleware.ts`
 - `.env.example`

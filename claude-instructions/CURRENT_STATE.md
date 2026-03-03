@@ -62,10 +62,11 @@ src/
 - `prisma/schema.prisma` — полная схема со всеми моделями
 - `prisma/seed.ts` — тестовые данные (6 офисов, слайды, преимущества, услуги, галерея)
 - Миграции запускать: `npx prisma migrate dev`
+- **Prisma 7**: импорты из `@/generated/prisma/client`, всегда нужен `PrismaPg` adapter. Подробнее — в `CLAUDE.md` раздел «Prisma 7».
 
 ### Аутентификация
 
-- `auth.ts` — NextAuth.js v5, credentials provider, bcrypt
+- `src/auth.ts` — NextAuth.js v5, credentials provider, bcrypt
 - `src/app/api/auth/[...nextauth]/route.ts` — роут
 
 ### Middleware
