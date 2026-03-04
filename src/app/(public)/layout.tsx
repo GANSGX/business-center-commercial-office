@@ -1,4 +1,4 @@
-import { TopBar } from '@/widgets/top-bar'
+// import { TopBar } from '@/widgets/top-bar' // временно скрыт
 import { Header } from '@/widgets/header'
 import styles from './layout.module.css'
 
@@ -25,7 +25,7 @@ const mockServices = [
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.page}>
-      <TopBar {...mockSettings} />
+      {/* <TopBar {...mockSettings} /> временно скрыт */}
       <Header services={mockServices} />
       <main>{children}</main>
     </div>
