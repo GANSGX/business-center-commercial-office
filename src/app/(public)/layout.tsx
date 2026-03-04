@@ -1,5 +1,6 @@
-import { TopBar } from '@/widgets/top-bar'
+// import { TopBar } from '@/widgets/top-bar' // временно скрыт
 import { Header } from '@/widgets/header'
+import styles from './layout.module.css'
 
 // TODO Sprint 1: заменить на fetch('/api/settings') и fetch('/api/services') с ISR revalidate
 const mockSettings = {
@@ -23,10 +24,10 @@ const mockServices = [
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <TopBar {...mockSettings} />
+    <div className={styles.page}>
+      {/* <TopBar {...mockSettings} /> временно скрыт */}
       <Header services={mockServices} />
       <main>{children}</main>
-    </>
+    </div>
   )
 }

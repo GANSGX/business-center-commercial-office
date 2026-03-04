@@ -1,26 +1,68 @@
-/* ===== Header ===== */
+/* ===== Dark Premium Glass Header ===== */
 
 .header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  transition:
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
-}
-
-.header.scrolled {
-  border-color: transparent;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.09);
+  padding: 14px 24px 0;
+  background: transparent;
+  pointer-events: none;
 }
 
 .inner {
+  pointer-events: all;
   display: flex;
   align-items: center;
   height: 72px;
-  gap: var(--spacing-lg);
+  padding: 0 14px 0 12px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+
+  /* Dark glass */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    rgba(6, 5, 14, 0.78);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+
+  /* Эффект вдавленности + тень */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    inset 0 2px 12px rgba(0, 0, 0, 0.28),
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 4px 14px rgba(0, 0, 0, 0.28);
+
+  transition:
+    background var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.scrolled .inner {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(0, 0, 0, 0.08) 100%
+    ),
+    rgba(4, 3, 10, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    inset 0 2px 16px rgba(0, 0, 0, 0.35),
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 /* ===== Logo ===== */
@@ -31,27 +73,35 @@
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
+  padding: 0 26px 0 12px;
+  margin-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logoMark {
-  width: 40px;
-  height: 40px;
-  background: var(--color-accent);
-  border-radius: var(--radius-md);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #2563eb 0%, #1b4fd8 100%);
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background var(--transition-fast);
+  transition: box-shadow var(--transition-fast);
+  box-shadow:
+    0 2px 8px rgba(27, 79, 216, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .logo:hover .logoMark {
-  background: var(--color-accent-hover);
+  box-shadow:
+    0 4px 14px rgba(27, 79, 216, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .logoMark span {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -63,15 +113,15 @@
 }
 
 .logoTitle {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  color: var(--color-text-primary);
-  letter-spacing: -0.3px;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.2px;
 }
 
 .logoSub {
-  font-size: 11px;
-  color: var(--color-text-muted);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
   font-weight: 400;
   margin-top: 1px;
 }
@@ -86,22 +136,36 @@
 }
 
 .navLink {
-  padding: 8px 14px;
-  font-size: var(--text-sm);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.52);
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
+  white-space: nowrap;
+  border: 1px solid transparent;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
-  white-space: nowrap;
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.navLink:hover,
+.navLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .navLink.active {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* ===== Services dropdown ===== */
@@ -111,28 +175,39 @@
 }
 
 .navDropdownTrigger {
+  height: 36px;
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 8px 14px;
-  font-size: var(--text-sm);
+  padding: 0 14px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.52);
   cursor: pointer;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
   background: none;
-  border: none;
+  border: 1px solid transparent;
   font-family: inherit;
   white-space: nowrap;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.navDropdownTrigger:hover,
+.navDropdownTrigger:hover {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 .navDropdownTrigger.active {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .chevron {
@@ -140,25 +215,35 @@
   align-items: center;
   flex-shrink: 0;
   transition: transform var(--transition-fast);
+  opacity: 0.4;
 }
 
 .chevronOpen {
   transform: rotate(180deg);
 }
 
+/* Dropdown — тёмное стекло */
 .dropdown {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
   min-width: 240px;
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--color-border);
-  padding: 6px;
+
+  background: rgba(8, 6, 18, 0.92);
+  backdrop-filter: blur(32px) saturate(2.2);
+  -webkit-backdrop-filter: blur(32px) saturate(2.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  padding: 7px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-6px);
   transition:
     opacity var(--transition-base),
     visibility var(--transition-base),
@@ -169,46 +254,62 @@
 .dropdownOpen {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 
 .dropdownLink {
   display: block;
-  padding: 10px 14px;
+  padding: 10px 16px;
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
+  border: 1px solid transparent;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .dropdownLink:hover {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* ===== CTA button ===== */
 
 .ctaButton {
+  height: 38px;
   display: inline-flex;
   align-items: center;
-  padding: 9px 22px;
-  background: var(--color-accent);
+  padding: 0 24px;
+  background: linear-gradient(135deg, #2563eb 0%, #1b4fd8 100%);
   color: #ffffff;
-  font-size: var(--text-sm);
+  font-size: 13px;
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: auto;
-  transition: background var(--transition-fast);
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 3px 12px rgba(27, 79, 216, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .ctaButton:hover {
-  background: var(--color-accent-hover);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow:
+    0 4px 18px rgba(27, 79, 216, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
 }
 
 /* ===== Burger ===== */
@@ -217,16 +318,22 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  color: var(--color-text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.65);
   flex-shrink: 0;
-  transition: background var(--transition-fast);
+  border: 1px solid transparent;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .burger:hover {
-  background: var(--color-bg-secondary);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* ===== Overlay ===== */
@@ -234,7 +341,8 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 22, 40, 0.55);
+  background: rgba(4, 2, 10, 0.65);
+  backdrop-filter: blur(4px);
   z-index: 150;
   opacity: 0;
   visibility: hidden;
@@ -248,22 +356,31 @@
   visibility: visible;
 }
 
-/* ===== Mobile drawer ===== */
+/* ===== Mobile drawer — тёмное стекло ===== */
 
 .drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(340px, 88vw);
-  background: var(--color-surface);
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: min(320px, calc(100vw - 24px));
+  border-radius: 24px;
+
+  background: rgba(8, 6, 18, 0.94);
+  backdrop-filter: blur(48px) saturate(2.2);
+  -webkit-backdrop-filter: blur(48px) saturate(2.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
   z-index: 160;
-  transform: translateX(100%);
+  transform: translateX(calc(100% + 24px));
   transition: transform var(--transition-slow);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.15);
 }
 
 .drawerOpen {
@@ -274,8 +391,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--color-border);
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   flex-shrink: 0;
 }
 
@@ -283,26 +400,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.38);
+  border: 1px solid transparent;
   transition:
     background var(--transition-fast),
+    border-color var(--transition-fast),
     color var(--transition-fast);
 }
 
 .drawerClose:hover {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .drawerNav {
-  padding: 12px;
+  padding: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .drawerLink {
@@ -310,21 +430,24 @@
   padding: 12px 16px;
   font-size: var(--text-base);
   font-weight: 500;
-  color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.58);
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
+  border: 1px solid transparent;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .drawerLink:hover,
 .drawerLink.active {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
-/* ===== Accordion (services in drawer) ===== */
+/* ===== Accordion ===== */
 
 .accordionTrigger {
   width: 100%;
@@ -334,21 +457,23 @@
   padding: 12px 16px;
   font-size: var(--text-base);
   font-weight: 500;
-  color: var(--color-text-primary);
+  color: rgba(255, 255, 255, 0.58);
   cursor: pointer;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
   background: none;
-  border: none;
+  border: 1px solid transparent;
   font-family: inherit;
   transition:
     color var(--transition-fast),
-    background var(--transition-fast);
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .accordionTrigger:hover,
 .accordionOpen {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .accordionContent {
@@ -363,26 +488,26 @@
 
 .accordionLink {
   display: block;
-  padding: 9px 16px 9px 34px;
+  padding: 9px 16px 9px 32px;
   font-size: var(--text-sm);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.42);
   text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 10px;
   transition:
     color var(--transition-fast),
     background var(--transition-fast);
 }
 
 .accordionLink:hover {
-  color: var(--color-accent);
-  background: var(--color-accent-light);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ===== Drawer CTA ===== */
 
 .drawerCta {
-  padding: 16px 20px 24px;
-  border-top: 1px solid var(--color-border);
+  padding: 14px 18px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
   flex-shrink: 0;
 }
 
@@ -392,20 +517,29 @@
   justify-content: center;
   width: 100%;
   padding: 14px;
-  background: var(--color-accent);
+  background: linear-gradient(135deg, #2563eb 0%, #1b4fd8 100%);
   color: #ffffff;
   font-size: var(--text-base);
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: 14px;
   text-decoration: none;
-  transition: background var(--transition-fast);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 3px 12px rgba(27, 79, 216, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .ctaButtonFull:hover {
-  background: var(--color-accent-hover);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow:
+    0 4px 18px rgba(27, 79, 216, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* ===== Responsive breakpoints ===== */
+/* ===== Responsive ===== */
 
 @media (max-width: 1023px) {
   .nav,
@@ -416,6 +550,12 @@
   .burger {
     display: flex;
     margin-left: auto;
+  }
+
+  .logo {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
   }
 }
 

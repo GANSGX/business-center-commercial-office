@@ -72,7 +72,7 @@ export function Header({ services }: HeaderProps) {
   return (
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
-        <div className={`container ${styles.inner}`}>
+        <div className={styles.inner}>
           {/* Logo */}
           <Link href="/" className={styles.logo} aria-label="На главную">
             <div className={styles.logoMark}>
