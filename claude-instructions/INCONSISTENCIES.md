@@ -130,17 +130,9 @@ pages: {
 
 ---
 
-### [WARN-1] TopBar виджет отсутствует в TASKS.md и CLAUDE.md
+### ~~[WARN-1] TopBar виджет~~ — ЗАКРЫТО ✅
 
-**Все 3 ТЗ документа** явно требуют TopBar как отдельный сквозной элемент:
-
-> "TopBar — тонкая полоска над шапкой: телефоны (click-to-call), email, адрес, иконки соцсетей (VK, WhatsApp, Telegram, Avito)"
-
-**В CLAUDE.md** список виджетов: header, footer, hero-slider, room-card, advantages, tenants, lead-form, map, gallery-grid, floating-cta — **TopBar нет**.
-
-**В TASKS.md** задача S1-D1-09 описывает только Header (логотип + навигация), TopBar не упоминается.
-
-**Нужно:** Либо добавить `widgets/top-bar/` как отдельный виджет, либо включить TopBar в задачу на Header.
+TopBar **удалён из проекта** — согласовано с заказчиком 2026-03-04. Проект будет без TopBar.
 
 ---
 

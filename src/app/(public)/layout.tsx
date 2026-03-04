@@ -1,19 +1,7 @@
-// import { TopBar } from '@/widgets/top-bar' // временно скрыт
 import { Header } from '@/widgets/header'
 import styles from './layout.module.css'
 
-// TODO Sprint 1: заменить на fetch('/api/settings') и fetch('/api/services') с ISR revalidate
-const mockSettings = {
-  phones: ['+7 (383) 000-00-00', '+7 (913) 000-00-00'],
-  email: 'info@businesscenter.ru',
-  address: 'г. Новосибирск, ул. Ленина, 105',
-  socials: {
-    vk: 'https://vk.com/example',
-    wa: 'https://wa.me/73830000000',
-    tg: 'https://t.me/example',
-  },
-}
-
+// TODO Sprint 1: заменить на fetch('/api/services') с ISR revalidate
 const mockServices = [
   { title: 'Парковка', slug: 'parking' },
   { title: 'Реклама внутри здания', slug: 'advertising' },
@@ -25,7 +13,6 @@ const mockServices = [
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.page}>
-      {/* <TopBar {...mockSettings} /> временно скрыт */}
       <Header services={mockServices} />
       <main>{children}</main>
     </div>
