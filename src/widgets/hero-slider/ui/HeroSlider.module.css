@@ -113,6 +113,177 @@
   justify-content: flex-end;
 }
 
+/* ─── Scroll hint (слайд 1, правая сторона) ── */
+
+.scrollHint {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: 28%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.scrollPhrase {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.scrollPhrase span {
+  display: block;
+  white-space: nowrap;
+  background: linear-gradient(
+    150deg,
+    #f5c96a 0%,
+    #ffffff 35%,
+    #f0a830 60%,
+    #e8c470 85%,
+    #c87d28 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scrollArrowWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(230, 168, 88, 0.75);
+  opacity: 0;
+}
+
+/* ─── Typewriter lines ─────────────────────── */
+
+.scrollLabel {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ─── Floating pills (слайд 2, левая сторона) ─ */
+
+.floatingPills {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 30%;
+  bottom: 0;
+}
+
+.floatingPill1 {
+  position: absolute;
+  top: 34%;
+  left: 20%;
+  transform: rotate(-2deg);
+}
+
+.floatingPill2 {
+  position: absolute;
+  top: 52%;
+  left: 38%;
+  transform: rotate(1.5deg);
+}
+
+.floatingPill3 {
+  position: absolute;
+  top: 68%;
+  left: 16%;
+  transform: rotate(-1deg);
+}
+
+.floatingPill4 {
+  position: absolute;
+  top: 22%;
+  left: 42%;
+  transform: rotate(2.5deg);
+}
+
+.floatingPill5 {
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  transform: rotate(-1.5deg);
+}
+
+.floatingPill6 {
+  position: absolute;
+  top: 44%;
+  left: 7%;
+  transform: rotate(1deg);
+}
+
+.floatingPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.pillIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+/* ─── Pill color variants ──────────────────── */
+
+.pillAmber {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.28);
+  color: rgba(252, 196, 99, 0.92);
+}
+
+.pillPurple {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.28);
+  color: rgba(196, 181, 253, 0.92);
+}
+
+.pillRed {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.22);
+  color: rgba(252, 165, 165, 0.92);
+}
+
+.pillBlue {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.28);
+  color: rgba(147, 197, 253, 0.92);
+}
+
+.pillGreen {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.28);
+  color: rgba(110, 231, 183, 0.92);
+}
+
+.pillOrange {
+  background: rgba(251, 146, 60, 0.1);
+  border-color: rgba(251, 146, 60, 0.28);
+  color: rgba(253, 186, 116, 0.92);
+}
+
 /* ─── Glass card ──────────────────────────── */
 
 .content {
@@ -216,6 +387,175 @@
   to {
     opacity: 0;
     transform: translateX(-72px) translateY(-8px);
+  }
+}
+
+/* ─── Анимации scroll hint ──────────────────── */
+
+/* Выход блока при смене слайда */
+:global(.swiper-slide-prev) .scrollHint {
+  animation: scrollHintOut 0.5s ease forwards;
+}
+
+/* Текст плавно появляется при активации слайда */
+:global(.swiper-slide-active) .scrollPhrase {
+  animation: phraseIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both 0.3s;
+}
+
+/* Стрелка появляется после текста */
+:global(.swiper-slide-active) .scrollArrowWrap {
+  animation:
+    arrowFadeIn 0.45s ease both 0.9s,
+    scrollBounce 1.6s ease-in-out infinite 1.4s;
+}
+
+/* ─── Анимации floating pills ─────────────── */
+
+:global(.swiper-slide-active) .floatingPill1 {
+  animation: pillIn1 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.45s;
+}
+
+:global(.swiper-slide-active) .floatingPill2 {
+  animation: pillIn2 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.62s;
+}
+
+:global(.swiper-slide-active) .floatingPill3 {
+  animation: pillIn3 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.78s;
+}
+
+:global(.swiper-slide-active) .floatingPill4 {
+  animation: pillIn4 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.55s;
+}
+
+:global(.swiper-slide-active) .floatingPill5 {
+  animation: pillIn5 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.7s;
+}
+
+:global(.swiper-slide-active) .floatingPill6 {
+  animation: pillIn6 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.35s;
+}
+
+:global(.swiper-slide-prev) .floatingPills {
+  animation: pillsOut 0.5s ease forwards;
+}
+
+@keyframes scrollBounce {
+  0% {
+    transform: translateY(0);
+  }
+  55% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollHintOut {
+  to {
+    opacity: 0;
+    transform: translateY(-50%) translateX(24px);
+  }
+}
+
+@keyframes phraseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes arrowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pillIn1 {
+  from {
+    opacity: 0;
+    transform: rotate(-2deg) translate(-20px, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2deg) translate(0, 0);
+  }
+}
+
+@keyframes pillIn2 {
+  from {
+    opacity: 0;
+    transform: rotate(1.5deg) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(1.5deg) scale(1);
+  }
+}
+
+@keyframes pillIn3 {
+  from {
+    opacity: 0;
+    transform: rotate(-1deg) translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1deg) translateX(0);
+  }
+}
+
+@keyframes pillIn4 {
+  from {
+    opacity: 0;
+    transform: rotate(2.5deg) translateY(-14px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(2.5deg) translateY(0) scale(1);
+  }
+}
+
+@keyframes pillIn5 {
+  from {
+    opacity: 0;
+    transform: rotate(-1.5deg) translate(14px, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.5deg) translate(0, 0);
+  }
+}
+
+@keyframes pillIn6 {
+  from {
+    opacity: 0;
+    transform: rotate(1deg) translateX(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(1deg) translateX(0);
+  }
+}
+
+@keyframes pillsOut {
+  to {
+    opacity: 0;
+    transform: translateX(-16px);
   }
 }
 
@@ -475,10 +815,16 @@
     min-height: 580px;
   }
 
+  .scrollHint,
+  .floatingPills {
+    display: none;
+  }
+
   .contentWrap {
     top: 80px;
     align-items: flex-end;
     padding-bottom: 72px;
+    gap: 0;
   }
 
   .content {
@@ -513,5 +859,29 @@
 
   .label {
     font-size: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .hero {
+    min-height: 520px;
+  }
+
+  .content {
+    padding: 20px 16px;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+  }
+
+  .subtitle {
+    font-size: var(--text-sm);
+  }
+
+  .btnPrimary,
+  .btnGlass {
+    padding: 13px 20px;
+    font-size: var(--text-sm);
   }
 }

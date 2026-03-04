@@ -9,6 +9,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL ?? 'http://localhost:3000'),
   title: {
     default: 'Бизнес-центр — аренда офисов',
     template: '%s | Бизнес-центр',

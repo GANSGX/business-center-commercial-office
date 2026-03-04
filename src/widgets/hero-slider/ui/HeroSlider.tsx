@@ -109,6 +109,121 @@ function IconCulture() {
   )
 }
 
+function IconChevronDown() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  )
+}
+
+function IconSubway() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="4" y="2" width="16" height="14" rx="4" />
+      <path d="M4 10h16M8 18l-2 4M16 18l2 4" />
+      <circle cx="8.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+function IconBuilding() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M9 9h6M9 13h6M9 17h4" />
+    </svg>
+  )
+}
+
+function IconShield() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3L4 7v5c0 5.25 4.5 9 8 9s8-3.75 8-9V7l-8-4z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  )
+}
+
+function IconParking() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
+    </svg>
+  )
+}
+
+function IconAward() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+    </svg>
+  )
+}
+
 const ADVANTAGE_ICONS = {
   location: IconLocation,
   transport: IconTransport,
@@ -155,14 +270,81 @@ export function HeroSlider() {
                 src={slide.image}
                 alt=""
                 fill
-                priority
+                priority={index === 0}
                 sizes="100vw"
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
               <div className={styles.overlay} />
             </div>
 
-            {/* Контент */}
+            {/* Слайд 1 — атмосферная фраза + scroll (правая сторона, абсолютно) */}
+            {slide.type === 'welcome' && (
+              <div className={styles.scrollHint}>
+                <p className={styles.scrollPhrase}>
+                  <span>Место,</span>
+                  <span>где рождаются</span>
+                  <span>решения</span>
+                </p>
+                <div className={styles.scrollArrowWrap}>
+                  <span className={styles.scrollLabel}>Узнать больше</span>
+                  <IconChevronDown />
+                </div>
+              </div>
+            )}
+
+            {/* Слайд 2 — плавающие пилюли хаотично (левая сторона, абсолютно) */}
+            {slide.type === 'benefits' && (
+              <div className={styles.floatingPills}>
+                <div
+                  className={`${styles.floatingPill} ${styles.floatingPill1} ${styles.pillAmber}`}
+                >
+                  <span className={styles.pillIcon}>
+                    <IconLocation />
+                  </span>
+                  <span>ул. Коммунистическая, 35</span>
+                </div>
+                <div
+                  className={`${styles.floatingPill} ${styles.floatingPill2} ${styles.pillPurple}`}
+                >
+                  <span className={styles.pillIcon}>
+                    <IconBuilding />
+                  </span>
+                  <span>от 8 до 150 м²</span>
+                </div>
+                <div className={`${styles.floatingPill} ${styles.floatingPill3} ${styles.pillRed}`}>
+                  <span className={styles.pillIcon}>
+                    <IconShield />
+                  </span>
+                  <span>Охрана 24/7</span>
+                </div>
+                <div
+                  className={`${styles.floatingPill} ${styles.floatingPill4} ${styles.pillBlue}`}
+                >
+                  <span className={styles.pillIcon}>
+                    <IconSubway />
+                  </span>
+                  <span>7 мин до метро</span>
+                </div>
+                <div
+                  className={`${styles.floatingPill} ${styles.floatingPill5} ${styles.pillGreen}`}
+                >
+                  <span className={styles.pillIcon}>
+                    <IconParking />
+                  </span>
+                  <span>Бесплатная парковка</span>
+                </div>
+                <div
+                  className={`${styles.floatingPill} ${styles.floatingPill6} ${styles.pillOrange}`}
+                >
+                  <span className={styles.pillIcon}>
+                    <IconAward />
+                  </span>
+                  <span>Класс Б+</span>
+                </div>
+              </div>
+            )}
+
+            {/* Карточка */}
             <div
               className={`${styles.contentWrap} ${
                 slide.type === 'welcome' ? styles.contentWrapLeft : styles.contentWrapRight
