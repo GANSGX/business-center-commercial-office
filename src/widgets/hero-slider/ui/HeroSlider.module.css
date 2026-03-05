@@ -829,9 +829,9 @@
   }
 
   .contentWrap {
-    top: 80px;
-    align-items: flex-end;
-    padding-bottom: 72px;
+    top: 72px;
+    align-items: center;
+    padding-bottom: 0;
     gap: 0;
   }
 
