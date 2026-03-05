@@ -1,37 +1,22 @@
 import styles from './Advantages.module.css'
 
+// Bento-layout (4 cols):
+// Row 1: [Access 24/7 — wide×2] [Metro — wide×2]
+// Row 2: [Location] [Flexible — wide×2] [Security]
+// Row 3: [Parking] [Infra] [Internet — wide×2]
+
 const ADVANTAGES = [
-  {
-    id: 'location',
-    number: '01',
-    accentClass: 'accentAmber',
-    icon: (
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 13 6 13s6-7.75 6-13c0-3.314-2.686-6-6-6Z" />
-        <circle cx="12" cy="8" r="2" />
-      </svg>
-    ),
-    title: 'Удобное расположение',
-    text: 'Центр Новосибирска — ул. Коммунистическая, 35',
-  },
+  // ── Row 1 ──────────────────────────────
   {
     id: 'access',
-    number: '02',
+    wide: true,
     accentClass: 'accentBlue',
+    stat: '24/7',
+    statLabel: 'Доступ',
     icon: (
       <svg
-        width="26"
-        height="26"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -44,63 +29,19 @@ const ADVANTAGES = [
         <path d="M12 6v6l4 2" />
       </svg>
     ),
-    title: 'Доступ 24/7',
-    text: 'Круглосуточный вход без ограничений',
-  },
-  {
-    id: 'security',
-    number: '03',
-    accentClass: 'accentRed',
-    icon: (
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M12 3L4 7v5c0 5.25 4.5 9 8 9s8-3.75 8-9V7l-8-4z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-    title: 'Охрана',
-    text: 'Видеонаблюдение и охранники круглосуточно',
-  },
-  {
-    id: 'parking',
-    number: '04',
-    accentClass: 'accentGreen',
-    icon: (
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="3" />
-        <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
-      </svg>
-    ),
-    title: 'Парковка',
-    text: 'Бесплатная охраняемая парковка для арендаторов',
+    title: 'Круглосуточный доступ',
+    text: 'Работайте в удобное время без ограничений',
   },
   {
     id: 'metro',
-    number: '05',
+    wide: true,
     accentClass: 'accentPurple',
+    stat: '7 мин',
+    statLabel: 'До метро',
     icon: (
       <svg
-        width="26"
-        height="26"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -116,16 +57,19 @@ const ADVANTAGES = [
       </svg>
     ),
     title: 'Метро рядом',
-    text: '7 минут пешком до «Площадь Ленина»',
+    text: 'Пешком до станции «Площадь Ленина»',
   },
+  // ── Row 2 ──────────────────────────────
   {
-    id: 'infra',
-    number: '06',
-    accentClass: 'accentOrange',
+    id: 'location',
+    wide: false,
+    accentClass: 'accentAmber',
+    stat: null,
+    statLabel: null,
     icon: (
       <svg
-        width="26"
-        height="26"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -134,21 +78,23 @@ const ADVANTAGES = [
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <path d="M9 22V12h6v10" />
+        <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 13 6 13s6-7.75 6-13c0-3.314-2.686-6-6-6Z" />
+        <circle cx="12" cy="8" r="2" />
       </svg>
     ),
-    title: 'Развитая инфраструктура',
-    text: 'Кафе, банки, магазины в шаговой доступности',
+    title: 'Удобное расположение',
+    text: 'Центр Новосибирска, ул. Коммунистическая, 35',
   },
   {
     id: 'flexible',
-    number: '07',
+    wide: true,
     accentClass: 'accentTeal',
+    stat: 'от 15 м²',
+    statLabel: 'Офисы',
     icon: (
       <svg
-        width="26"
-        height="26"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -163,16 +109,94 @@ const ADVANTAGES = [
       </svg>
     ),
     title: 'Гибкие условия',
-    text: 'Офисы от 15\u00a0м², аренда от 1 месяца',
+    text: 'Офисы на любой формат бизнеса, аренда от 1 месяца',
+  },
+  {
+    id: 'security',
+    wide: false,
+    accentClass: 'accentRed',
+    stat: null,
+    statLabel: null,
+    icon: (
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 3L4 7v5c0 5.25 4.5 9 8 9s8-3.75 8-9V7l-8-4z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
+    title: 'Охрана',
+    text: 'Видеонаблюдение и охранники круглосуточно',
+  },
+  // ── Row 3 ──────────────────────────────
+  {
+    id: 'parking',
+    wide: false,
+    accentClass: 'accentGreen',
+    stat: null,
+    statLabel: null,
+    icon: (
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="3" />
+        <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
+      </svg>
+    ),
+    title: 'Парковка',
+    text: 'Бесплатная охраняемая парковка',
+  },
+  {
+    id: 'infra',
+    wide: false,
+    accentClass: 'accentOrange',
+    stat: null,
+    statLabel: null,
+    icon: (
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <path d="M9 22V12h6v10" />
+      </svg>
+    ),
+    title: 'Инфраструктура',
+    text: 'Кафе, банки, магазины в шаговой доступности',
   },
   {
     id: 'internet',
-    number: '08',
+    wide: true,
     accentClass: 'accentIndigo',
+    stat: null,
+    statLabel: null,
     icon: (
       <svg
-        width="26"
-        height="26"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -203,19 +227,38 @@ export function Advantages() {
           <p className={styles.subtitle}>Всё, что нужно для продуктивной работы — уже включено</p>
         </div>
 
-        {/* Сетка */}
+        {/* Bento-grid */}
         <ul className={styles.grid} role="list">
           {ADVANTAGES.map((item) => (
-            <li key={item.id} className={`${styles.card} ${styles[item.accentClass]}`}>
-              {/* Декоративный номер */}
-              <span className={styles.cardNumber} aria-hidden="true">
-                {item.number}
-              </span>
-              {/* Иконка */}
-              <span className={styles.iconWrap}>{item.icon}</span>
+            <li
+              key={item.id}
+              className={[
+                styles.card,
+                styles[item.accentClass],
+                item.wide ? styles.cardWide : '',
+                item.stat ? styles.cardStat : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              {/* Иконка + лейбл */}
+              <div className={styles.cardTop}>
+                <span className={styles.iconWrap}>{item.icon}</span>
+                {item.statLabel && <span className={styles.statLabel}>{item.statLabel}</span>}
+              </div>
+
+              {/* Большое stat-число для широких карточек */}
+              {item.stat && (
+                <p className={styles.statNumber} aria-hidden="true">
+                  {item.stat}
+                </p>
+              )}
+
               {/* Текст */}
-              <strong className={styles.cardTitle}>{item.title}</strong>
-              <p className={styles.cardText}>{item.text}</p>
+              <div className={styles.cardBottom}>
+                <strong className={styles.cardTitle}>{item.title}</strong>
+                <p className={styles.cardText}>{item.text}</p>
+              </div>
             </li>
           ))}
         </ul>

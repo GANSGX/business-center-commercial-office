@@ -1,6 +1,7 @@
 import { HeroSlider } from '@/widgets/hero-slider'
 import { OffersPreview } from '@/widgets/offers-preview'
 import { Advantages } from '@/widgets/advantages'
+import styles from './HomePage.module.css'
 
 // TODO Sprint 1: добавить секции по мере готовности виджетов:
 // Tenants → LeadForm → Map
@@ -9,8 +10,11 @@ export function HomePage() {
   return (
     <>
       <HeroSlider />
-      <OffersPreview />
-      <Advantages />
+      {/* Единый тёмный контейнер — один background, нет границы между секциями */}
+      <div className={styles.darkPanel}>
+        <OffersPreview />
+        <Advantages />
+      </div>
     </>
   )
 }
