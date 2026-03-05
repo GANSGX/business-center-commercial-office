@@ -267,29 +267,36 @@ export function HeroSlider() {
 
   // Блюр героя + пауза автоплея при скролле вниз (OffersPreview перекрывает слайдер)
   useEffect(() => {
+    let rafId: number | null = null
+    const vh = window.innerHeight
+
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const vh = window.innerHeight
+      if (rafId !== null) return
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+        const scrollY = window.scrollY
 
-      // Пауза автоплея
-      const swiper = swiperRef.current
-      if (swiper) {
-        if (scrollY > vh * 0.08) {
-          swiper.autoplay.stop()
-        } else {
-          swiper.autoplay.start()
+        const swiper = swiperRef.current
+        if (swiper) {
+          if (scrollY > vh * 0.08) {
+            swiper.autoplay.stop()
+          } else {
+            swiper.autoplay.start()
+          }
         }
-      }
 
-      // Прогрессивный блюр: 0px при scrollY=0, 24px при scrollY=40% vh
-      const hero = heroRef.current
-      if (hero) {
-        const progress = Math.min(scrollY / (vh * 0.4), 1)
-        hero.style.filter = progress > 0 ? `blur(${(progress * 24).toFixed(1)}px)` : ''
-      }
+        const hero = heroRef.current
+        if (hero) {
+          const progress = Math.min(scrollY / (vh * 0.4), 1)
+          hero.style.filter = progress > 0 ? `blur(${(progress * 24).toFixed(1)}px)` : ''
+        }
+      })
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   return (

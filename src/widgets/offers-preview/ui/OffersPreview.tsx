@@ -107,7 +107,11 @@ export function OffersPreview() {
         {/* Сетка карточек */}
         <div className={styles.grid}>
           {MOCK_OFFICES.map((office) => (
-            <article key={office.id} className={styles.card}>
+            <article
+              key={office.id}
+              className={styles.card}
+              aria-label={`Офис ${office.number}, ${formatArea(office.area)}, ${office.floor} этаж`}
+            >
               {/* Фото */}
               <div className={styles.cardPhoto}>
                 <div className={styles.photoPlaceholder} aria-hidden="true" />
@@ -149,7 +153,11 @@ export function OffersPreview() {
                     <span className={styles.priceLabel}>от</span>
                     <span className={styles.price}>{formatPrice(office.price)}</span>
                   </div>
-                  <button type="button" className={styles.ctaBtn}>
+                  <button
+                    type="button"
+                    className={styles.ctaBtn}
+                    aria-label={`Оставить заявку на офис ${office.number}`}
+                  >
                     Оставить заявку
                   </button>
                 </div>
