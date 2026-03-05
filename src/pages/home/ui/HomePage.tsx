@@ -1,12 +1,14 @@
 import { HeroSlider } from '@/widgets/hero-slider'
+import { OffersPreview } from '@/widgets/offers-preview'
 
 // TODO Sprint 1: добавить секции по мере готовности виджетов:
-// AктуальныеПредложения → Advantages → Tenants → LeadForm → Map
+// Advantages → Tenants → LeadForm → Map
 
 export function HomePage() {
   return (
     <>
       <HeroSlider />
+      <OffersPreview />
     </>
   )
 }

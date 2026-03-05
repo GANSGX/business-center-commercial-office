@@ -6,9 +6,9 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
 
   images: {
-    domains: [
-      'utfs.io', // Uploadthing
-      's3.amazonaws.com', // S3
+    remotePatterns: [
+      { protocol: 'https', hostname: 'utfs.io' },
+      { protocol: 'https', hostname: 's3.amazonaws.com' },
     ],
     formats: ['image/avif', 'image/webp'],
   },
