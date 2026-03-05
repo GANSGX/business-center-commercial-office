@@ -4,26 +4,9 @@
   position: relative;
   width: 100%;
   background: transparent;
-  padding: 0 0 112px;
-  overflow: hidden;
-}
-
-/* Декоративное свечение */
-.section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1000px, 100%);
-  height: 500px;
-  background: radial-gradient(
-    ellipse 70% 55% at 50% 5%,
-    rgba(139, 85, 35, 0.08) 0%,
-    rgba(245, 158, 11, 0.03) 40%,
-    transparent 70%
-  );
-  pointer-events: none;
+  /* margin-top перекрывает возможный 1px rendering-gap между секциями */
+  margin-top: -1px;
+  padding: 1px 0 112px;
 }
 
 .inner {
