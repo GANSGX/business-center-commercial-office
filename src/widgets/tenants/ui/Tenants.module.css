@@ -4,8 +4,7 @@
   position: relative;
   width: 100%;
   background: transparent;
-  padding: 80px 0 96px;
-  overflow: hidden;
+  padding: 16px 0 96px;
 }
 
 /* ─── Header ─────────────────────────────────── */
@@ -15,8 +14,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
-  margin-bottom: 56px;
+  gap: 12px;
+  margin-bottom: 48px;
   padding: 0 24px;
 }
 
@@ -72,29 +71,31 @@
   max-width: 440px;
 }
 
+/* ─── Marquee area (overflow clipping zone) ──── */
+
+.marqueeArea {
+  position: relative;
+  overflow: hidden;
+}
+
 /* ─── Marquee rows ───────────────────────────── */
 
 .marqueeWrap {
-  position: relative;
-  width: 100%;
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .marqueeWrap:last-of-type {
   margin-bottom: 0;
 }
 
+/* gap заменён на margin-right на .logo,
+   чтобы translateX(-50%) делил трек ровно пополам */
 .marqueeTrack {
   display: flex;
-  gap: 14px;
+  gap: 0;
   width: max-content;
   will-change: transform;
-}
-
-/* Pause on hover */
-.marqueeWrap:hover .marqueeTrack {
-  animation-play-state: paused;
 }
 
 /* Row 1 — scrolls left */
@@ -130,12 +131,14 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 22px 14px 14px;
+  gap: 11px;
+  padding: 12px 20px 12px 12px;
   border-radius: 100px;
   white-space: nowrap;
   flex-shrink: 0;
   cursor: default;
+  /* Spacing between cards — margin-right гарантирует ровный -50% */
+  margin-right: 14px;
 
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -154,7 +157,7 @@
   transform: scale(1.04);
 }
 
-/* Letter badge */
+/* Icon badge */
 .logoMark {
   display: flex;
   align-items: center;
@@ -162,10 +165,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 800;
   flex-shrink: 0;
-  letter-spacing: 0;
 }
 
 /* Company name */
@@ -176,7 +176,7 @@
   letter-spacing: -0.01em;
 }
 
-/* ─── Color variants for logoMark ────────────── */
+/* ─── Color variants ─────────────────────────── */
 
 .color_blue .logoMark {
   background: rgba(59, 130, 246, 0.18);
@@ -250,7 +250,7 @@
   border-color: rgba(251, 146, 60, 0.12);
 }
 
-/* ─── Edge fade masks ────────────────────────── */
+/* ─── Edge fade masks (только над marqueeArea) ── */
 
 .fadeLeft,
 .fadeRight {
@@ -276,21 +276,25 @@
 
 @media (max-width: 768px) {
   .section {
-    padding: 64px 0 80px;
+    padding: 8px 0 72px;
   }
 
   .head {
-    margin-bottom: 44px;
+    margin-bottom: 36px;
   }
 
   .logo {
-    padding: 12px 18px 12px 12px;
+    padding: 10px 16px 10px 10px;
   }
 
   .logoMark {
     width: 30px;
     height: 30px;
-    font-size: 0.8rem;
+  }
+
+  .logoMark svg {
+    width: 15px;
+    height: 15px;
   }
 
   .fadeLeft,
@@ -301,10 +305,10 @@
 
 @media (max-width: 480px) {
   .section {
-    padding: 52px 0 64px;
+    padding: 8px 0 56px;
   }
 
   .head {
-    margin-bottom: 36px;
+    margin-bottom: 28px;
   }
 }
