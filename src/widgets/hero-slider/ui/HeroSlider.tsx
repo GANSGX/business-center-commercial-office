@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, EffectFade } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
@@ -232,6 +232,7 @@ const ADVANTAGE_ICONS = {
 
 export function HeroSlider() {
   const swiperRef = useRef<SwiperType | null>(null)
+  const heroRef = useRef<HTMLElement | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [progressWidth, setProgressWidth] = useState(0)
 
@@ -243,8 +244,56 @@ export function HeroSlider() {
     swiperRef.current?.slideToLoop(index)
   }, [])
 
+  const scrollToOffers = useCallback(() => {
+    const target = document.getElementById('offers')
+    if (!target) return
+    const start = window.scrollY
+    const end = target.getBoundingClientRect().top + start
+    const duration = 1100
+    let startTime: number | null = null
+
+    const easeInOutQuart = (t: number) =>
+      t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp
+      const elapsed = timestamp - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      window.scrollTo(0, start + (end - start) * easeInOutQuart(progress))
+      if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }, [])
+
+  // Блюр героя + пауза автоплея при скролле вниз (OffersPreview перекрывает слайдер)
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const vh = window.innerHeight
+
+      // Пауза автоплея
+      const swiper = swiperRef.current
+      if (swiper) {
+        if (scrollY > vh * 0.08) {
+          swiper.autoplay.stop()
+        } else {
+          swiper.autoplay.start()
+        }
+      }
+
+      // Прогрессивный блюр: 0px при scrollY=0, 24px при scrollY=40% vh
+      const hero = heroRef.current
+      if (hero) {
+        const progress = Math.min(scrollY / (vh * 0.4), 1)
+        hero.style.filter = progress > 0 ? `blur(${(progress * 24).toFixed(1)}px)` : ''
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <section className={styles.hero} aria-label="Деловой центр «На Октябрьской»">
+    <section ref={heroRef} className={styles.hero} aria-label="Деловой центр «На Октябрьской»">
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -285,10 +334,15 @@ export function HeroSlider() {
                   <span>где рождаются</span>
                   <span>решения</span>
                 </p>
-                <div className={styles.scrollArrowWrap}>
+                <button
+                  type="button"
+                  className={styles.scrollArrowWrap}
+                  onClick={scrollToOffers}
+                  aria-label="Перейти к актуальным предложениям"
+                >
                   <span className={styles.scrollLabel}>Узнать больше</span>
                   <IconChevronDown />
-                </div>
+                </button>
               </div>
             )}
 
