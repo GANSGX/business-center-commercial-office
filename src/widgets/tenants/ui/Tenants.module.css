@@ -113,13 +113,14 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    /* -33.333% = одна копия из трёх, бесшовный цикл на любом экране */
+    transform: translateX(-33.333%);
   }
 }
 
 @keyframes marqueeRight {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-33.333%);
   }
   to {
     transform: translateX(0);
