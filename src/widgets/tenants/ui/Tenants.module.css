@@ -158,15 +158,21 @@
   transform: scale(1.04);
 }
 
-/* Icon badge */
+/* Logo badge — содержит SVG-иконку компании */
 .logoMark {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   flex-shrink: 0;
+}
+
+.logoMark svg {
+  width: 22px;
+  height: 22px;
+  display: block;
 }
 
 /* Company name */
