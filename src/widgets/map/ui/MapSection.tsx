@@ -15,14 +15,19 @@ const ADDRESS = 'ул. Коммунистическая, 35, Новосибир�
 const TRANSPORT =
   'Остановка «Коммунистическая» — автобусы № ...\nДо центра города — 5 минут на транспорте'
 
-function get2GISUrl(lat: string, lng: string, zoom: string) {
-  return `https://2gis.ru/novosibirsk/geo/${lng},${lat}?m=${lng},${lat}/${zoom}`
+function getYandexEmbedUrl(lat: string, lng: string, zoom: string) {
+  return `https://yandex.ru/map-widget/v1/?ll=${lng}%2C${lat}&z=${zoom}&pt=${lng}%2C${lat}&l=map`
+}
+
+function getYandexUrl(lat: string, lng: string) {
+  return `https://yandex.ru/maps/?pt=${lng},${lat}&z=16&l=map`
 }
 
 export function MapSection() {
   const { ref, isVisible } = useIntersection({ rootMargin: '200px', freezeOnceVisible: true })
 
-  const mapUrl = get2GISUrl(MAP_LAT, MAP_LNG, MAP_ZOOM)
+  const embedUrl = getYandexEmbedUrl(MAP_LAT, MAP_LNG, MAP_ZOOM)
+  const mapUrl = getYandexUrl(MAP_LAT, MAP_LNG)
 
   return (
     <section
@@ -99,7 +104,7 @@ export function MapSection() {
             target="_blank"
             rel="noopener noreferrer"
             className={styles.openBtn}
-            aria-label="Открыть адрес в 2GIS"
+            aria-label="Открыть адрес в Яндекс Картах"
           >
             <svg
               width="16"
@@ -116,7 +121,7 @@ export function MapSection() {
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />
             </svg>
-            Открыть в 2GIS
+            Открыть в Яндекс Картах
           </a>
         </div>
 
@@ -125,9 +130,9 @@ export function MapSection() {
           <div className={styles.mapFrame} aria-label="Карта расположения">
             {isVisible ? (
               <iframe
-                src={`https://widgets.2gis.com/widget?type=firmsonmap&options=%7B%22pos%22%3A%7B%22lat%22%3A${MAP_LAT}%2C%22lon%22%3A${MAP_LNG}%2C%22zoom%22%3A${MAP_ZOOM}%7D%7D`}
+                src={embedUrl}
                 className={styles.iframe}
-                title="Расположение бизнес-центра на карте 2GIS"
+                title="Расположение бизнес-центра на Яндекс Картах"
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
