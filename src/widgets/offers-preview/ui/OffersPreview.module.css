@@ -407,7 +407,7 @@
 @media (max-width: 768px) {
   .section {
     border-radius: 20px 20px 0 0;
-    padding: 48px 0 72px;
+    padding: 108px 0 72px;
   }
 
   .sectionHead {
@@ -424,6 +424,6 @@
 
 @media (max-width: 480px) {
   .section {
-    padding: 40px 0 64px;
+    padding: 104px 0 64px;
   }
 }

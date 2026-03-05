@@ -419,9 +419,14 @@ export function HeroSlider() {
                     <h1 className={styles.title}>{slide.title}</h1>
                     <p className={styles.subtitle}>{slide.subtitle}</p>
                     <div className={styles.actions}>
-                      <Link href={slide.primaryCta.href} className={styles.btnPrimary}>
+                      <button
+                        type="button"
+                        className={styles.btnPrimary}
+                        onClick={scrollToOffers}
+                        aria-label="Перейти к актуальным предложениям"
+                      >
                         {slide.primaryCta.text}
-                      </Link>
+                      </button>
                       <Link href={slide.secondaryCta.href} className={styles.btnGlass}>
                         {slide.secondaryCta.text}
                       </Link>
