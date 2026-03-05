@@ -4,7 +4,8 @@
   position: relative;
   width: 100%;
   background: transparent;
-  padding: 16px 0 96px;
+  /* padding-top: 0 — секция вплотную к Advantages как продолжение */
+  padding: 0 0 96px;
 }
 
 /* ─── Header ─────────────────────────────────── */

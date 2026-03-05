@@ -6,7 +6,7 @@
   background: transparent;
   /* margin-top перекрывает возможный 1px rendering-gap между секциями */
   margin-top: -1px;
-  padding: 1px 0 112px;
+  padding: 1px 0 56px;
 }
 
 .inner {
@@ -383,7 +383,7 @@
 
 @media (max-width: 768px) {
   .section {
-    padding: 0 0 80px;
+    padding: 0 0 48px;
   }
 
   .head {
