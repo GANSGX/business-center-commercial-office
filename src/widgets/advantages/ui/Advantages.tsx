@@ -3,10 +3,12 @@ import styles from './Advantages.module.css'
 const ADVANTAGES = [
   {
     id: 'location',
+    number: '01',
+    accentClass: 'accentAmber',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -19,16 +21,17 @@ const ADVANTAGES = [
         <circle cx="12" cy="8" r="2" />
       </svg>
     ),
-    colorClass: 'iconAmber',
     title: 'Удобное расположение',
-    text: 'Центр Новосибирска, ул. Коммунистическая, 35',
+    text: 'Центр Новосибирска — ул. Коммунистическая, 35',
   },
   {
     id: 'access',
+    number: '02',
+    accentClass: 'accentBlue',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -41,16 +44,17 @@ const ADVANTAGES = [
         <path d="M12 6v6l4 2" />
       </svg>
     ),
-    colorClass: 'iconBlue',
     title: 'Доступ 24/7',
     text: 'Круглосуточный вход без ограничений',
   },
   {
     id: 'security',
+    number: '03',
+    accentClass: 'accentRed',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -63,16 +67,17 @@ const ADVANTAGES = [
         <path d="M9 12l2 2 4-4" />
       </svg>
     ),
-    colorClass: 'iconRed',
     title: 'Охрана',
-    text: 'Видеонаблюдение и охрана 24 часа в сутки',
+    text: 'Видеонаблюдение и охранники круглосуточно',
   },
   {
     id: 'parking',
+    number: '04',
+    accentClass: 'accentGreen',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -85,16 +90,17 @@ const ADVANTAGES = [
         <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
       </svg>
     ),
-    colorClass: 'iconGreen',
     title: 'Парковка',
     text: 'Бесплатная охраняемая парковка для арендаторов',
   },
   {
     id: 'metro',
+    number: '05',
+    accentClass: 'accentPurple',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -109,16 +115,17 @@ const ADVANTAGES = [
         <circle cx="15.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
       </svg>
     ),
-    colorClass: 'iconPurple',
     title: 'Метро рядом',
     text: '7 минут пешком до «Площадь Ленина»',
   },
   {
     id: 'infra',
+    number: '06',
+    accentClass: 'accentOrange',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -131,16 +138,17 @@ const ADVANTAGES = [
         <path d="M9 22V12h6v10" />
       </svg>
     ),
-    colorClass: 'iconOrange',
     title: 'Развитая инфраструктура',
-    text: 'Кафе, банки, магазины — всё в шаговой доступности',
+    text: 'Кафе, банки, магазины в шаговой доступности',
   },
   {
     id: 'flexible',
+    number: '07',
+    accentClass: 'accentTeal',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -154,16 +162,17 @@ const ADVANTAGES = [
         <path d="M12 12v4M10 14h4" />
       </svg>
     ),
-    colorClass: 'iconTeal',
     title: 'Гибкие условия',
-    text: 'Офисы от 15 м², аренда от 1 месяца',
+    text: 'Офисы от 15\u00a0м², аренда от 1 месяца',
   },
   {
     id: 'internet',
+    number: '08',
+    accentClass: 'accentIndigo',
     icon: (
       <svg
-        width="24"
-        height="24"
+        width="26"
+        height="26"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -176,7 +185,6 @@ const ADVANTAGES = [
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </svg>
     ),
-    colorClass: 'iconIndigo',
     title: 'Высокоскоростной интернет',
     text: 'Оптоволоконный интернет в каждый офис',
   },
@@ -192,14 +200,20 @@ export function Advantages() {
           <h2 className={styles.title} id="advantages-title">
             Преимущества бизнес-центра
           </h2>
-          <p className={styles.subtitle}>Всё, что нужно для комфортной работы — уже включено</p>
+          <p className={styles.subtitle}>Всё, что нужно для продуктивной работы — уже включено</p>
         </div>
 
         {/* Сетка */}
         <ul className={styles.grid} role="list">
           {ADVANTAGES.map((item) => (
-            <li key={item.id} className={styles.card}>
-              <span className={`${styles.iconWrap} ${styles[item.colorClass]}`}>{item.icon}</span>
+            <li key={item.id} className={`${styles.card} ${styles[item.accentClass]}`}>
+              {/* Декоративный номер */}
+              <span className={styles.cardNumber} aria-hidden="true">
+                {item.number}
+              </span>
+              {/* Иконка */}
+              <span className={styles.iconWrap}>{item.icon}</span>
+              {/* Текст */}
               <strong className={styles.cardTitle}>{item.title}</strong>
               <p className={styles.cardText}>{item.text}</p>
             </li>
