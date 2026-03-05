@@ -812,6 +812,11 @@
 }
 
 @media (max-width: 1024px) {
+  .contentWrap {
+    align-items: flex-start;
+    padding-top: 64px;
+  }
+
   .content {
     padding: 36px 36px;
     max-width: 500px;
@@ -829,9 +834,10 @@
   }
 
   .contentWrap {
-    top: 80px;
-    align-items: flex-end;
-    padding-bottom: 72px;
+    top: 72px;
+    align-items: flex-start;
+    padding-top: 48px;
+    padding-bottom: 0;
     gap: 0;
   }
 

@@ -5,6 +5,8 @@
 .section {
   position: relative;
   z-index: 2;
+  width: 100%;
+  overflow-x: hidden;
 
   /* Прозрачное стекло — hero размыт через JS на слое ниже */
   background: rgba(8, 6, 22, 0.55);
@@ -22,8 +24,10 @@
 
 .inner {
   max-width: 1248px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 /* ─── Шапка секции ──────────────────────────────────── */
@@ -419,10 +423,6 @@
 }
 
 @media (max-width: 480px) {
-  .inner {
-    padding: 0 16px;
-  }
-
   .section {
     padding: 40px 0 64px;
   }
