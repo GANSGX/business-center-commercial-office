@@ -175,6 +175,15 @@
   display: block;
 }
 
+/* Favicon от Google API — сброс фона, масштаб */
+.faviconImg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+
 /* Company name */
 .logoName {
   font-size: var(--text-sm);
