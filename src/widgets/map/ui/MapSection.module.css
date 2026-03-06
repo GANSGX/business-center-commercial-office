@@ -30,7 +30,7 @@
 .inner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 1248px;
   margin: 0 auto;
   padding: 0 var(--container-padding);
   display: grid;

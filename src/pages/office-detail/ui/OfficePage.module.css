@@ -38,10 +38,9 @@
 /* ── Хлебные крошки — поверх фото, выровнены по хедеру ── */
 
 /* padding: 0 24px совпадает с outer-padding хедера.
-   position: absolute относительно .page (position: relative).
-   z-index: 100 — выше heroSection (1) и container (3), всегда видны. */
+   position: fixed — всегда видны при скроле, поверх всего. */
 .breadcrumb {
-  position: absolute;
+  position: fixed;
   top: calc(86px + 18px);
   left: 0;
   right: 0;
@@ -50,7 +49,7 @@
   padding: 0 24px;
 }
 
-/* max-width 1200px + margin 0 auto → левый край = левый край inner хедера */
+/* Внутри .breadcrumb { padding: 0 24px } — поэтому 1200px, не 1248px */
 .breadcrumbList {
   max-width: 1200px;
   margin: 0 auto;
@@ -218,12 +217,7 @@
 .container {
   position: relative;
   z-index: 3;
-  /* Прозрачный фон — позволяет backdrop-filter блюрить фото за элементом.
-     overflow: hidden/clip намеренно НЕ используется: оба ломают backdrop-filter в Chrome.
-     border-radius клипает собственный фон контейнера; дочерние элементы не вылезают
-     за углы т.к. весь контент имеет собственный отступ и border-radius. */
-  background: rgba(8, 6, 22, 0.55);
-  overflow: hidden;
+  background: rgba(8, 6, 22, 0.92);
   border-radius: 32px 32px 0 0;
   box-shadow:
     0 -1px 0 rgba(255, 255, 255, 0.1),
@@ -252,23 +246,9 @@
 .containerInner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 1248px;
   margin: 0 auto;
   padding: 0 24px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 48px;
-  padding: 56px 0 96px;
-  align-items: start;
-}
-
-/* ── Левая колонка ── */
-
-.main {
-  min-width: 0;
 }
 
 .title {
@@ -277,7 +257,22 @@
   color: rgba(255, 255, 255, 0.95);
   letter-spacing: -0.03em;
   line-height: 1.15;
-  margin-bottom: 40px;
+  padding-top: 56px;
+  margin-bottom: 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  padding-bottom: 96px;
+  align-items: start;
+}
+
+/* ── Левая колонка ── */
+
+.main {
+  min-width: 0;
 }
 
 .section {
@@ -484,6 +479,8 @@
 .sidebar {
   position: sticky;
   top: calc(86px + 24px);
+  padding-top: 52px;
+  padding-right: 14px;
 }
 
 .sidebarCard {

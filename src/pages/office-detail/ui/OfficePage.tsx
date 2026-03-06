@@ -1,3 +1,6 @@
+'use client'
+
+import { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/shared/ui'
 import type { Room, RoomStatus } from '@/entities/room'
@@ -37,10 +40,33 @@ function SpecRow({ label, value }: SpecRowProps) {
 
 export function OfficePage({ room }: Props) {
   const statusLabel = { FREE: 'Свободен', RESERVED: 'Забронирован', RENTED: 'Сдан' }[room.status]
+  const heroRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let rafId: number | null = null
+    const vh = window.innerHeight
+
+    const handleScroll = () => {
+      if (rafId !== null) return
+      rafId = requestAnimationFrame(() => {
+        rafId = null
+        const progress = Math.min(window.scrollY / (vh * 0.4), 1)
+        if (heroRef.current) {
+          heroRef.current.style.filter = progress > 0 ? `blur(${(progress * 24).toFixed(1)}px)` : ''
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   return (
     <div className={styles.page}>
-      {/* Хлебные крошки — вне heroSection, чтобы z-index на уровне страницы работал корректно */}
+      {/* Хлебные крошки — fixed, всегда поверх */}
       <nav className={styles.breadcrumb} aria-label="Хлебные крошки">
         <ol className={styles.breadcrumbList}>
           <li>
@@ -66,7 +92,7 @@ export function OfficePage({ room }: Props) {
       </nav>
 
       {/* ── Hero-секция: тёмный фон, уходит под хедер ── */}
-      <div className={styles.heroSection}>
+      <div ref={heroRef} className={styles.heroSection}>
         {/* Галерея — заполняет весь heroSection */}
         <div className={styles.galleryFill}>
           {room.photos.length > 0 ? (
@@ -108,11 +134,10 @@ export function OfficePage({ room }: Props) {
       {/* ── Основной контент — dark glass panel ── */}
       <div className={styles.container}>
         <div className={styles.containerInner}>
+          <h1 className={styles.title}>{room.title}</h1>
           <div className={styles.layout}>
             {/* ── Левая колонка ── */}
             <div className={styles.main}>
-              <h1 className={styles.title}>{room.title}</h1>
-
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Характеристики</h2>
                 <dl className={styles.specs}>
