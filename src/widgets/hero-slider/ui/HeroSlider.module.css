@@ -111,7 +111,7 @@
   justify-content: flex-start;
 }
 
-/* Слайд 2 — карточка справа */
+/* Слайд 2 — карточка справа, правый край совпадает с хедером */
 .contentWrapRight {
   justify-content: flex-end;
 }
@@ -295,7 +295,7 @@
 /* ─── Glass card ──────────────────────────── */
 
 .content {
-  max-width: 560px;
+  max-width: 620px;
   width: 100%;
   padding: 44px 48px;
   border-radius: var(--radius-2xl);
@@ -811,6 +811,14 @@
   }
 }
 
+/* Pills и scrollHint перекрываются с карточкой при ширине ≤ 1280px */
+@media (max-width: 1280px) {
+  .floatingPills,
+  .scrollHint {
+    display: none;
+  }
+}
+
 @media (max-width: 1024px) {
   .contentWrap {
     align-items: flex-start;
@@ -819,7 +827,7 @@
 
   .content {
     padding: 36px 36px;
-    max-width: 500px;
+    max-width: 520px;
   }
 }
 

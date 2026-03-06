@@ -4,7 +4,6 @@
   position: relative;
   width: 100%;
   padding: 80px 0 120px;
-  overflow: hidden;
 }
 
 /* Зелёный ambient glow — ассоциация с картой/навигацией */
@@ -31,7 +30,7 @@
 .inner {
   position: relative;
   z-index: 1;
-  max-width: var(--container-max);
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-padding);
   display: grid;
@@ -260,5 +259,15 @@
 
   .title {
     font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 375px) {
+  .section {
+    padding: 40px 0 64px;
+  }
+
+  .title {
+    font-size: var(--text-xl);
   }
 }

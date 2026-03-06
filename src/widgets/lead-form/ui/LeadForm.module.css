@@ -1,10 +1,25 @@
 /* ===== LeadForm — секция 1.5 ===== */
 
+/* Compact wrapper — используется внутри Modal */
+.compactWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Внутри модалки success занимает меньше места */
+.compactWrapper .success {
+  padding: 32px 16px;
+}
+
+/* Внутри модалки форма без лишних отступов */
+.compactWrapper .form {
+  gap: 16px;
+}
+
 .section {
   position: relative;
   width: 100%;
   padding: 80px 0 120px;
-  overflow: hidden;
 }
 
 /* Синий ambient glow — отличает от amber-glow в Tenants */
@@ -30,7 +45,7 @@
 .inner {
   position: relative;
   z-index: 1;
-  max-width: var(--container-max);
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--container-padding);
   display: grid;
@@ -580,5 +595,16 @@
 
   .success {
     padding: 40px 16px;
+  }
+}
+
+@media (max-width: 375px) {
+  .section {
+    padding: 40px 0 64px;
+  }
+
+  .card {
+    padding: 18px 14px;
+    border-radius: 16px;
   }
 }

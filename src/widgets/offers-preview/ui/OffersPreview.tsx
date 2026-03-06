@@ -83,7 +83,7 @@ export function OffersPreview() {
             <span className={styles.sectionLabel}>Прямо сейчас</span>
             <h2 className={styles.sectionTitle}>Актуальные предложения</h2>
             <p className={styles.sectionSubtitle}>
-              Свободные офисы в «На Октябрьской» — выберите подходящий и оставьте заявку
+              Свободные офисы в нашем бизнес-центре — выберите подходящий и оставьте заявку
             </p>
           </div>
           <Link href="/offices" className={styles.allLink}>

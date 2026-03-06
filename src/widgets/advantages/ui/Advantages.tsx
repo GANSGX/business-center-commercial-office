@@ -12,7 +12,7 @@ const ADVANTAGES = [
     wide: true,
     accentClass: 'accentBlue',
     stat: '24/7',
-    statLabel: 'Доступ',
+    tag: 'Круглосуточно',
     icon: (
       <svg
         width="22"
@@ -36,8 +36,8 @@ const ADVANTAGES = [
     id: 'metro',
     wide: true,
     accentClass: 'accentPurple',
-    stat: '7 мин',
-    statLabel: 'До метро',
+    stat: '5–10 мин',
+    tag: 'До метро',
     icon: (
       <svg
         width="22"
@@ -65,7 +65,7 @@ const ADVANTAGES = [
     wide: false,
     accentClass: 'accentAmber',
     stat: null,
-    statLabel: null,
+    tag: 'Центр города',
     icon: (
       <svg
         width="22"
@@ -90,7 +90,7 @@ const ADVANTAGES = [
     wide: true,
     accentClass: 'accentTeal',
     stat: 'от 15 м²',
-    statLabel: 'Офисы',
+    tag: 'Аренда',
     icon: (
       <svg
         width="22"
@@ -116,7 +116,7 @@ const ADVANTAGES = [
     wide: false,
     accentClass: 'accentRed',
     stat: null,
-    statLabel: null,
+    tag: 'Охрана 24/7',
     icon: (
       <svg
         width="22"
@@ -142,7 +142,7 @@ const ADVANTAGES = [
     wide: false,
     accentClass: 'accentGreen',
     stat: null,
-    statLabel: null,
+    tag: 'Бесплатно',
     icon: (
       <svg
         width="22"
@@ -167,7 +167,7 @@ const ADVANTAGES = [
     wide: false,
     accentClass: 'accentOrange',
     stat: null,
-    statLabel: null,
+    tag: 'Рядом',
     icon: (
       <svg
         width="22"
@@ -192,7 +192,7 @@ const ADVANTAGES = [
     wide: true,
     accentClass: 'accentIndigo',
     stat: null,
-    statLabel: null,
+    tag: 'Оптоволокно',
     icon: (
       <svg
         width="22"
@@ -241,13 +241,13 @@ export function Advantages() {
                 .filter(Boolean)
                 .join(' ')}
             >
-              {/* Иконка + лейбл */}
+              {/* Иконка + тег */}
               <div className={styles.cardTop}>
                 <span className={styles.iconWrap}>{item.icon}</span>
-                {item.statLabel && <span className={styles.statLabel}>{item.statLabel}</span>}
+                <span className={styles.tag}>{item.tag}</span>
               </div>
 
-              {/* Большое stat-число для широких карточек */}
+              {/* Большое stat-число */}
               {item.stat && (
                 <p className={styles.statNumber} aria-hidden="true">
                   {item.stat}

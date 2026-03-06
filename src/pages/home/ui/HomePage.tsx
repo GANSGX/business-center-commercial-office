@@ -2,8 +2,9 @@ import { HeroSlider } from '@/widgets/hero-slider'
 import { OffersPreview } from '@/widgets/offers-preview'
 import { Advantages } from '@/widgets/advantages'
 import { Tenants } from '@/widgets/tenants'
-import { LeadForm } from '@/widgets/lead-form'
-import { MapSection } from '@/widgets/map'
+import { LeadFormLazy } from '@/widgets/lead-form'
+import { MapSectionLazy } from '@/widgets/map'
+import { Footer } from '@/widgets/footer'
 import styles from './HomePage.module.css'
 
 export function HomePage() {
@@ -15,8 +16,9 @@ export function HomePage() {
         <OffersPreview />
         <Advantages />
         <Tenants />
-        <LeadForm />
-        <MapSection />
+        <LeadFormLazy />
+        <MapSectionLazy />
+        <Footer />
       </div>
     </>
   )

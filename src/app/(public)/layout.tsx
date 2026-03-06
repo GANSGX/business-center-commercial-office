@@ -1,4 +1,6 @@
 import { Header } from '@/widgets/header'
+import { CookieBannerLazy } from '@/widgets/cookie-banner'
+import { LeadModal } from '@/widgets/lead-form'
 import styles from './layout.module.css'
 
 // TODO Sprint 1: заменить на fetch('/api/services') с ISR revalidate
@@ -15,6 +17,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <div className={styles.page}>
       <Header services={mockServices} />
       <main>{children}</main>
+      <LeadModal />
+      <CookieBannerLazy />
     </div>
   )
 }

@@ -541,7 +541,7 @@
 
 /* ===== Responsive ===== */
 
-@media (max-width: 1023px) {
+@media (max-width: 1200px) {
   .nav,
   .ctaButton {
     display: none;
@@ -559,9 +559,24 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1201px) {
   .overlay,
   .drawer {
     display: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .inner {
+    padding: 0 14px;
+    height: 56px;
+  }
+
+  .logoTitle {
+    font-size: 12px;
+  }
+
+  .logoSub {
+    font-size: 9px;
   }
 }

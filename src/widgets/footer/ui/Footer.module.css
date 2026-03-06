@@ -1,0 +1,409 @@
+/* ===== Footer — стеклянный island, зеркало шапки ===== */
+
+/* Обёртка — padding как у header (14px 24px 0), но снизу */
+.footer {
+  padding: 0 24px 40px;
+}
+
+/* Стеклянный контейнер — 1-в-1 с header .inner */
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    rgba(6, 5, 14, 0.78);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    inset 0 2px 12px rgba(0, 0, 0, 0.28),
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+/* ═══════════════════════════════════════
+   Верхний блок — бренд + навигация
+═══════════════════════════════════════ */
+
+.top {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 56px;
+  padding-bottom: 36px;
+}
+
+/* ── Бренд ── */
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.logoMark {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow:
+    0 2px 8px rgba(139, 85, 35, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: box-shadow var(--transition-fast);
+}
+
+.logo:hover .logoMark {
+  box-shadow:
+    0 4px 14px rgba(139, 85, 35, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.logoMark span {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logoTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.2px;
+}
+
+.logoSub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.32);
+  line-height: 1.65;
+}
+
+/* ── Контакты в бренд-блоке ── */
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.42);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  line-height: 1.5;
+}
+
+a.contactItem:hover {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.contactIcon {
+  flex-shrink: 0;
+  color: rgba(155, 97, 51, 0.75);
+  margin-top: 2px;
+}
+
+/* ── Навигационные колонки ── */
+
+.nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.navColTitle {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.navLink {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  line-height: 1.5;
+}
+
+.navLink:hover {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* ═══════════════════════════════════════
+   Разделитель
+═══════════════════════════════════════ */
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* ═══════════════════════════════════════
+   Регистрационные данные (РФ)
+═══════════════════════════════════════ */
+
+.legal {
+  padding: 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.legal p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   Нижняя строка
+═══════════════════════════════════════ */
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 14px;
+  flex-wrap: wrap;
+}
+
+/* Левая группа: копирайт + политика */
+.bottomLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.copy {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.privacyLink {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.28);
+  text-decoration: none;
+  width: fit-content;
+  transition: color var(--transition-fast);
+}
+
+.privacyLink:hover {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Правая группа: подпись + иконки */
+.socialsGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.socialsLabel {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.22);
+  white-space: nowrap;
+}
+
+/* ── Соцсети с оригинальными брендовыми цветами ── */
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.socialBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* ВКонтакте #0077FF */
+.socialVk {
+  color: rgba(0, 119, 255, 0.5);
+  border-color: rgba(0, 119, 255, 0.12);
+}
+.socialVk:hover {
+  color: #0077ff;
+  background: rgba(0, 119, 255, 0.1);
+  border-color: rgba(0, 119, 255, 0.3);
+}
+
+/* WhatsApp #25D366 */
+.socialWa {
+  color: rgba(37, 211, 102, 0.5);
+  border-color: rgba(37, 211, 102, 0.12);
+}
+.socialWa:hover {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.1);
+  border-color: rgba(37, 211, 102, 0.3);
+}
+
+/* Telegram #229ED9 */
+.socialTg {
+  color: rgba(34, 158, 217, 0.5);
+  border-color: rgba(34, 158, 217, 0.12);
+}
+.socialTg:hover {
+  color: #229ed9;
+  background: rgba(34, 158, 217, 0.1);
+  border-color: rgba(34, 158, 217, 0.3);
+}
+
+/* ═══════════════════════════════════════
+   Адаптив
+═══════════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  .inner {
+    padding: 32px;
+  }
+
+  .top {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-bottom: 28px;
+  }
+
+  .nav {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 0 24px 32px;
+  }
+
+  .inner {
+    padding: 28px 24px;
+    border-radius: 20px;
+  }
+
+  .nav {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 0 24px 24px;
+  }
+
+  .inner {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .nav {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .socialsGroup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 375px) {
+  .footer {
+    padding: 0 24px 20px;
+  }
+
+  .inner {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .logoTitle {
+    font-size: 12px;
+  }
+}

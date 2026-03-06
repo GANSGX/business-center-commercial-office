@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { IconMenu, IconClose, IconChevronDown } from '@/shared/ui/icons'
+import { LogoLink } from '@/shared/ui'
+import { useLeadModal } from '@/features/lead-submit'
 import type { HeaderProps } from '../types'
 import styles from './Header.module.css'
 
@@ -17,6 +19,7 @@ const NAV_LINKS = [
 
 export function Header({ services }: HeaderProps) {
   const pathname = usePathname()
+  const openModal = useLeadModal((s) => s.open)
   const [scrolled, setScrolled] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
@@ -64,6 +67,14 @@ export function Header({ services }: HeaderProps) {
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
+  const handleCta = useCallback(() => {
+    if (pathname === '/') {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      openModal()
+    }
+  }, [pathname, openModal])
+
   const isActive = (href: string) =>
     pathname === href || (href !== '/' && (pathname ?? '').startsWith(href + '/'))
 
@@ -74,15 +85,15 @@ export function Header({ services }: HeaderProps) {
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
           {/* Logo */}
-          <Link href="/" className={styles.logo} aria-label="На главную">
+          <LogoLink className={styles.logo} aria-label="На главную">
             <div className={styles.logoMark}>
               <span>БЦ</span>
             </div>
             <div className={styles.logoText}>
-              <span className={styles.logoTitle}>БизнесЦентр</span>
-              <span className={styles.logoSub}>Аренда офисов</span>
+              <span className={styles.logoTitle}>Коммунистическая-35</span>
+              <span className={styles.logoSub}>Бизнес-центр</span>
             </div>
-          </Link>
+          </LogoLink>
 
           {/* Desktop navigation */}
           <nav className={styles.nav} aria-label="Основная навигация">
@@ -140,9 +151,9 @@ export function Header({ services }: HeaderProps) {
           </nav>
 
           {/* Desktop CTA */}
-          <Link href="/contacts" className={styles.ctaButton}>
+          <button onClick={handleCta} className={styles.ctaButton}>
             Оставить заявку
-          </Link>
+          </button>
 
           {/* Burger button */}
           <button
@@ -170,14 +181,14 @@ export function Header({ services }: HeaderProps) {
         aria-hidden={!drawerOpen}
       >
         <div className={styles.drawerHeader}>
-          <Link href="/" className={styles.logo} onClick={closeDrawer}>
+          <LogoLink className={styles.logo} aria-label="На главную" onClick={closeDrawer}>
             <div className={styles.logoMark}>
               <span>БЦ</span>
             </div>
             <div className={styles.logoText}>
-              <span className={styles.logoTitle}>БизнесЦентр</span>
+              <span className={styles.logoTitle}>Коммунистическая-35</span>
             </div>
-          </Link>
+          </LogoLink>
           <button className={styles.drawerClose} onClick={closeDrawer} aria-label="Закрыть меню">
             <IconClose size={20} />
           </button>
@@ -235,9 +246,15 @@ export function Header({ services }: HeaderProps) {
         </nav>
 
         <div className={styles.drawerCta}>
-          <Link href="/contacts" className={styles.ctaButtonFull} onClick={closeDrawer}>
+          <button
+            className={styles.ctaButtonFull}
+            onClick={() => {
+              closeDrawer()
+              handleCta()
+            }}
+          >
             Оставить заявку
-          </Link>
+          </button>
         </div>
       </aside>
     </>

@@ -4,30 +4,17 @@ import { useRef } from 'react'
 import { useIntersection } from '@/shared/hooks/useIntersection'
 import styles from './MapSection.module.css'
 
-// Координаты и зум берутся из SiteSettings (через пропсы).
-// TODO Sprint 2: подключить реальные данные из /api/settings
-// Заглушка — ул. Коммунистическая, 35, Новосибирск
-const MAP_LAT = '55.030456'
-const MAP_LNG = '82.919659'
-const MAP_ZOOM = '16'
+const MAP_EMBED_URL =
+  'https://yandex.com/map-widget/v1/?ll=82.919235%2C55.023694&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NzA5MjMxNBJV0KDQvtGB0YHQuNGPLCDQndC-0LLQvtGB0LjQsdC40YDRgdC6LCDQmtC-0LzQvNGD0L3QuNGB0YLQuNGH0LXRgdC60LDRjyDRg9C70LjRhtCwLCAzNSIKDSfXpUIVKBhcQg%2C%2C&pt=82.919659%2C55.030456&z=17'
+const MAP_URL =
+  'https://yandex.com/maps/65/novosibirsk/house/kommunisticheskaya_ulitsa_35/bEsYfwVgS0cEQFtvfXxzcnlrbQ==/'
 
-const ADDRESS = 'ул. Коммунистическая, 35, Новосибирск'
+const ADDRESS = '630007, г. Новосибирск, ул. Коммунистическая, 35'
 const TRANSPORT =
-  'Остановка «Коммунистическая» — автобусы № ...\nДо центра города — 5 минут на транспорте'
-
-function getYandexEmbedUrl(lat: string, lng: string, zoom: string) {
-  return `https://yandex.ru/map-widget/v1/?ll=${lng}%2C${lat}&z=${zoom}&pt=${lng}%2C${lat}&l=map`
-}
-
-function getYandexUrl(lat: string, lng: string) {
-  return `https://yandex.ru/maps/?pt=${lng},${lat}&z=16&l=map`
-}
+  'Метро «Площадь Ленина» — 5–10 минут пешком\nОстановки автобусов — в 2 минутах от входа'
 
 export function MapSection() {
   const { ref, isVisible } = useIntersection({ rootMargin: '200px', freezeOnceVisible: true })
-
-  const embedUrl = getYandexEmbedUrl(MAP_LAT, MAP_LNG, MAP_ZOOM)
-  const mapUrl = getYandexUrl(MAP_LAT, MAP_LNG)
 
   return (
     <section
@@ -100,7 +87,7 @@ export function MapSection() {
 
           {/* Кнопка открыть в 2GIS */}
           <a
-            href={mapUrl}
+            href={MAP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.openBtn}
@@ -130,7 +117,7 @@ export function MapSection() {
           <div className={styles.mapFrame} aria-label="Карта расположения">
             {isVisible ? (
               <iframe
-                src={embedUrl}
+                src={MAP_EMBED_URL}
                 className={styles.iframe}
                 title="Расположение бизнес-центра на Яндекс Картах"
                 loading="lazy"

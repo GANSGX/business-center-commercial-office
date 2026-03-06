@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import styles from './Tenants.module.css'
 
 // TODO Sprint 1 S1-D2-03: заменить на данные из /api/tenants
@@ -30,13 +31,14 @@ function LogoCard({ tenant }: { tenant: (typeof TENANTS)[number] }) {
   return (
     <div className={`${styles.logo} ${styles[`color_${tenant.color}`]}`} aria-hidden="true">
       <span className={styles.logoMark}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={`${FAVICON_API}?domain=${tenant.domain}&sz=128`}
           alt={tenant.name}
-          width="26"
-          height="26"
+          width={26}
+          height={26}
           className={styles.faviconImg}
+          loading="lazy"
+          unoptimized
         />
       </span>
       <span className={styles.logoName}>{tenant.name}</span>
@@ -52,7 +54,9 @@ export function Tenants() {
         <h2 className={styles.title} id="tenants-title">
           Наши арендаторы
         </h2>
-        <p className={styles.subtitle}>Ведущие компании Новосибирска выбирают «На Октябрьской»</p>
+        <p className={styles.subtitle}>
+          Ведущие компании Новосибирска выбирают «Коммунистическая-35»
+        </p>
       </div>
 
       <div className={styles.marqueeArea}>

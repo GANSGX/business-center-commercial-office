@@ -1,4 +1,5 @@
 export { Button } from './Button/Button'
+export { LogoLink } from './LogoLink/LogoLink'
 export { Badge } from './Badge/Badge'
 export { Input } from './Input/Input'
 export { Textarea } from './Textarea/Textarea'

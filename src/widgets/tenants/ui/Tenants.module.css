@@ -329,3 +329,18 @@
     margin-bottom: 28px;
   }
 }
+
+@media (max-width: 375px) {
+  .section {
+    padding: 8px 0 44px;
+  }
+
+  .logo {
+    padding: 8px 12px 8px 8px;
+    gap: 7px;
+  }
+
+  .logoName {
+    font-size: 11px;
+  }
+}

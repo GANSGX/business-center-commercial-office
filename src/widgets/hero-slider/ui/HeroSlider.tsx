@@ -18,10 +18,10 @@ const MOCK_SLIDES: HeroSlide[] = [
   {
     id: '1',
     type: 'welcome',
-    label: 'Деловой центр «На Октябрьской»',
+    label: 'Бизнес-центр «Коммунистическая-35»',
     title: 'Пространство для вашего бизнеса',
     subtitle:
-      'Современные офисы в центре Новосибирска — гибкие условия аренды, развитая инфраструктура и выгодное расположение.',
+      'Современные офисы, переговорные комнаты и открытые пространства — всё для комфортной работы вашей команды.',
     primaryCta: { text: 'Свободные офисы', href: '/offices' },
     secondaryCta: { text: 'Подобрать офис', href: '/offices#filter' },
     image: '/images/hero-1.png',
@@ -30,22 +30,22 @@ const MOCK_SLIDES: HeroSlide[] = [
     id: '2',
     type: 'benefits',
     label: 'Почему выбирают нас',
-    title: '«На Октябрьской»',
+    title: '«Коммунистическая-35»',
     advantages: [
       {
         icon: 'location',
-        title: 'Удобное расположение',
-        text: '7 минут ходьбы до метро «Площадь Ленина»',
+        title: 'Рядом с метро',
+        text: '5–10 минут пешком до метро «Площадь Ленина»',
       },
       {
         icon: 'transport',
-        title: 'Развитая транспортная сеть',
-        text: 'Отличная транспортная развязка, удобная парковка',
+        title: 'Транспортная доступность',
+        text: 'Городской транспорт курсирует по всем направлениям, есть парковка',
       },
       {
         icon: 'culture',
-        title: 'Культурный квартал',
-        text: 'Рядом с КДЦ имени Маяковского',
+        title: 'Развитая инфраструктура',
+        text: 'Банки, рестораны, кафе и торговые точки — всё в шаговой доступности',
       },
     ],
     image: '/images/hero-2.png',
@@ -279,9 +279,9 @@ export function HeroSlider() {
         const swiper = swiperRef.current
         if (swiper) {
           if (scrollY > vh * 0.08) {
-            swiper.autoplay.stop()
+            swiper.autoplay?.stop()
           } else {
-            swiper.autoplay.start()
+            swiper.autoplay?.start()
           }
         }
 
@@ -300,7 +300,7 @@ export function HeroSlider() {
   }, [])
 
   return (
-    <section ref={heroRef} className={styles.hero} aria-label="Деловой центр «На Октябрьской»">
+    <section ref={heroRef} className={styles.hero} aria-label="Бизнес-центр «Коммунистическая-35»">
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -327,6 +327,7 @@ export function HeroSlider() {
                 alt=""
                 fill
                 priority={index === 0}
+                fetchPriority={index === 0 ? 'high' : 'low'}
                 sizes="100vw"
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
@@ -384,7 +385,7 @@ export function HeroSlider() {
                   <span className={styles.pillIcon}>
                     <IconSubway />
                   </span>
-                  <span>7 мин до метро</span>
+                  <span>5–10 мин до метро «Площадь Ленина»</span>
                 </div>
                 <div
                   className={`${styles.floatingPill} ${styles.floatingPill5} ${styles.pillGreen}`}
