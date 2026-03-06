@@ -151,7 +151,12 @@ export function Header({ services }: HeaderProps) {
           </nav>
 
           {/* Desktop CTA */}
-          <button onClick={handleCta} className={styles.ctaButton}>
+          <button
+            type="button"
+            onClick={handleCta}
+            className={styles.ctaButton}
+            aria-haspopup={pathname !== '/' ? 'dialog' : undefined}
+          >
             Оставить заявку
           </button>
 
@@ -247,7 +252,9 @@ export function Header({ services }: HeaderProps) {
 
         <div className={styles.drawerCta}>
           <button
+            type="button"
             className={styles.ctaButtonFull}
+            aria-haspopup={pathname !== '/' ? 'dialog' : undefined}
             onClick={() => {
               closeDrawer()
               handleCta()

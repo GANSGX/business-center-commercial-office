@@ -17,15 +17,14 @@
 
 /* Само модальное окно: тёмная стеклянная панель */
 .modal {
-  background: rgba(13, 22, 42, 0.95);
+  background: rgba(13, 22, 42, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-2xl);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,
     0 32px 80px rgba(0, 0, 0, 0.6),
     0 0 100px rgba(27, 79, 216, 0.07);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  /* backdrop-filter убран — оверлей уже блюрит фон, двойной blur дорог */
   width: 100%;
   max-width: 560px;
   max-height: 90vh;
@@ -166,6 +165,7 @@
 
   .modal {
     max-width: 100%;
+    max-height: 92vh;
     max-height: 92dvh;
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
     animation: slideUpSheet var(--transition-base) both;
@@ -201,10 +201,22 @@
 /* Маленький мобильный */
 @media (max-width: 480px) {
   .modal {
+    max-height: 95vh;
     max-height: 95dvh;
   }
 
   .body {
     padding: var(--spacing-md);
+  }
+}
+
+/* Отключаем анимации для пользователей с настройкой "уменьшить движение" */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+  }
+
+  .modal {
+    animation: none;
   }
 }
