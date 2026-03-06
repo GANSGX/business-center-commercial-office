@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'utfs.io' },
       { protocol: 'https', hostname: 's3.amazonaws.com' },
       { protocol: 'https', hostname: 'www.google.com' },
+      { protocol: 'https', hostname: 'picsum.photos' },
     ],
     formats: ['image/avif', 'image/webp'],
   },

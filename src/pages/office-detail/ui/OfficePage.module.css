@@ -1,63 +1,95 @@
-/* ===== OfficePage — страница карточки офиса ===== */
+/* ===== OfficePage — страница карточки офиса =====
+   Header: padding-top 14px + .inner height 72px = 86px total
+   margin-top: -86px тянет фото-секцию за хедер (как hero-slider)
+================================================================ */
 
 .page {
   background: var(--color-bg);
   min-height: 100vh;
 }
 
-/* ── Breadcrumb ── */
+/* ══════════════════════════════════════════
+   Фото-секция / Hero
+══════════════════════════════════════════ */
 
-.breadcrumbNav {
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+.photoSection {
+  margin-top: -86px; /* уходит под sticky-хедер */
+  height: 520px;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-hero-bg);
+}
+
+/* ── Хлебные крошки — плавающий стеклянный оверлей ── */
+
+.breadcrumb {
+  position: absolute;
+  top: calc(86px + 20px); /* ниже хедера */
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .breadcrumbList {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 14px var(--container-padding);
+  padding: 0 var(--container-padding);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 0;
   align-items: center;
+  gap: 4px;
   list-style: none;
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.breadcrumbList li + li::before {
-  content: '/';
-  margin: 0 8px;
-  color: var(--color-border);
-}
-
-.breadcrumbList a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.breadcrumbList a:hover {
-  color: var(--color-accent);
-}
-
-.breadcrumbList li:last-child {
-  color: var(--color-text-primary);
-  font-weight: 500;
-}
-
-/* ── Фото / Hero секция ── */
-
-.photoSection {
-  background: var(--color-hero-bg);
-  height: 420px;
-  position: relative;
+  flex-wrap: nowrap;
   overflow: hidden;
 }
 
-.photoImg {
-  object-fit: cover;
+.crumbLink {
+  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
 }
+
+.crumbLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.crumbSep {
+  color: rgba(255, 255, 255, 0.22);
+  font-size: var(--text-xs);
+  flex-shrink: 0;
+  user-select: none;
+  padding: 0 2px;
+}
+
+.crumbCurrent {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  padding: 5px 4px;
+}
+
+/* ── Плейсхолдер (нет фото) ── */
 
 .photoPlaceholder {
   position: absolute;
@@ -68,23 +100,59 @@
   justify-content: center;
   gap: 16px;
   background: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    rgba(27, 79, 216, 0.12) 0%,
+    ellipse 70% 60% at 50% 55%,
+    rgba(27, 79, 216, 0.14) 0%,
     rgba(99, 102, 241, 0.06) 45%,
-    transparent 75%
+    transparent 70%
   );
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.2);
   font-size: var(--text-sm);
 }
 
+/* ── Нижний градиент для читаемости бейджей ── */
+
+.photoGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Бейджи (статус + этаж) — снизу-слева ── */
+
 .photoBadges {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 8px;
-  z-index: 1;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  /* растягиваем через псевдо-контейнер */
+  pointer-events: none;
+}
+
+/* Подстраиваем под реальный контейнер */
+@media (min-width: 1280px) {
+  .photoBadges {
+    left: calc((100% - var(--container-max)) / 2);
+    right: auto;
+    max-width: var(--container-max);
+    padding: 0 var(--container-padding);
+  }
 }
 
 .floorTag {
@@ -102,7 +170,9 @@
   letter-spacing: 0.02em;
 }
 
-/* ── Основной layout ── */
+/* ══════════════════════════════════════════
+   Основной layout
+══════════════════════════════════════════ */
 
 .container {
   max-width: var(--container-max);
@@ -147,7 +217,7 @@
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
-/* ── Характеристики — таблица ── */
+/* ── Таблица характеристик ── */
 
 .specs {
   display: grid;
@@ -179,7 +249,7 @@
   border-bottom: none;
 }
 
-/* ── Описание (HTML из Tiptap) ── */
+/* ── Описание ── */
 
 .description {
   font-size: var(--text-base);
@@ -190,29 +260,25 @@
 .description p {
   margin-bottom: 16px;
 }
-
 .description p:last-child {
   margin-bottom: 0;
 }
-
 .description h2,
 .description h3 {
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 24px 0 12px;
 }
-
 .description ul,
 .description ol {
   padding-left: 24px;
   margin-bottom: 16px;
 }
-
 .description li {
   margin-bottom: 6px;
 }
 
-/* ── Подходит для (теги) ── */
+/* ── Теги "Подходит для" ── */
 
 .tags {
   display: flex;
@@ -233,11 +299,13 @@
   border: 1px solid rgba(27, 79, 216, 0.15);
 }
 
-/* ── Боковая панель ── */
+/* ══════════════════════════════════════════
+   Боковая панель
+══════════════════════════════════════════ */
 
 .sidebar {
   position: sticky;
-  top: calc(80px + 24px);
+  top: calc(86px + 24px); /* ниже хедера */
 }
 
 .sidebarCard {
@@ -274,7 +342,6 @@
   display: flex;
 }
 
-/* CTA кнопка */
 .ctaBtn {
   width: 100%;
   padding: 14px 20px;
@@ -313,11 +380,9 @@
   transform: translateY(0);
 }
 
-/* Мини характеристики в сайдбаре */
 .sidebarSpecs {
   display: flex;
   flex-direction: column;
-  gap: 0;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -354,9 +419,9 @@
   line-height: 1.5;
 }
 
-/* ═══════════════════════════════════════
-   Адаптив — mobile-first
-═══════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   Адаптив
+══════════════════════════════════════════ */
 
 @media (max-width: 1024px) {
   .layout {
@@ -371,7 +436,6 @@
   }
 
   .sidebarCard {
-    /* На планшете — горизонтальный layout карточки */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px 24px;
@@ -381,7 +445,6 @@
   .priceBlock {
     grid-column: 1 / -1;
   }
-
   .sidebarNote {
     grid-column: 1 / -1;
   }
@@ -389,7 +452,7 @@
 
 @media (max-width: 768px) {
   .photoSection {
-    height: 260px;
+    height: 380px;
   }
 
   .title {
@@ -410,11 +473,15 @@
     display: flex;
     flex-direction: column;
   }
+
+  .crumbCurrent {
+    max-width: 180px;
+  }
 }
 
 @media (max-width: 480px) {
   .photoSection {
-    height: 220px;
+    height: 280px;
   }
 
   .layout {
@@ -443,5 +510,19 @@
   .specValue {
     padding-top: 2px;
     padding-bottom: 10px;
+  }
+
+  .photoBadges {
+    bottom: 20px;
+  }
+
+  .crumbCurrent {
+    max-width: 140px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaBtn {
+    transition: none;
   }
 }

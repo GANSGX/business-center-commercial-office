@@ -26,7 +26,11 @@ export const MOCK_ROOMS: Room[] = [
     suitableFor: ['IT-компании', 'Дизайн-студии', 'Маркетинг', 'Консалтинг'],
     status: 'FREE',
     showOnHome: true,
-    photos: [],
+    photos: [
+      { id: 'p1', url: 'https://picsum.photos/seed/off-a1/1200/800', order: 0 },
+      { id: 'p2', url: 'https://picsum.photos/seed/off-a2/1200/800', order: 1 },
+      { id: 'p3', url: 'https://picsum.photos/seed/off-a3/1200/800', order: 2 },
+    ],
   },
   {
     id: '2',
@@ -51,7 +55,7 @@ export const MOCK_ROOMS: Room[] = [
     suitableFor: ['Юридические услуги', 'Бухгалтерия', 'Психология', 'Медицинские услуги'],
     status: 'FREE',
     showOnHome: true,
-    photos: [],
+    photos: [{ id: 'p4', url: 'https://picsum.photos/seed/off-b1/1200/800', order: 0 }],
   },
   {
     id: '3',
@@ -76,7 +80,10 @@ export const MOCK_ROOMS: Room[] = [
     suitableFor: ['IT-компании', 'Рекламные агентства', 'Стартапы', 'Образование'],
     status: 'FREE',
     showOnHome: true,
-    photos: [],
+    photos: [
+      { id: 'p5', url: 'https://picsum.photos/seed/off-c1/1200/800', order: 0 },
+      { id: 'p6', url: 'https://picsum.photos/seed/off-c2/1200/800', order: 1 },
+    ],
   },
   {
     id: '4',

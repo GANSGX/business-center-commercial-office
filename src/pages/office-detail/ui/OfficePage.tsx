@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Badge } from '@/shared/ui'
 import type { Room, RoomStatus } from '@/entities/room'
+import { PhotoGallery } from '@/features/gallery-lightbox'
 import { OfficeCtaButton } from './OfficeCtaButton'
 import styles from './OfficePage.module.css'
 
@@ -40,40 +40,45 @@ export function OfficePage({ room }: Props) {
 
   return (
     <div className={styles.page}>
-      {/* ── Breadcrumb ── */}
-      <nav className={styles.breadcrumbNav} aria-label="Хлебные крошки">
-        <ol className={styles.breadcrumbList}>
-          <li>
-            <Link href="/">Главная</Link>
-          </li>
-          <li>
-            <Link href="/offices">Аренда офисов</Link>
-          </li>
-          <li aria-current="page">{room.title}</li>
-        </ol>
-      </nav>
-
-      {/* ── Фото / Hero ── */}
+      {/* ── Фото / Hero — уходит за хедер ── */}
       <div className={styles.photoSection} aria-label="Фотографии офиса">
+        {/* Хлебные крошки поверх фото */}
+        <nav className={styles.breadcrumb} aria-label="Хлебные крошки">
+          <ol className={styles.breadcrumbList}>
+            <li>
+              <Link href="/" className={styles.crumbLink}>
+                Главная
+              </Link>
+            </li>
+            <li aria-hidden="true" className={styles.crumbSep}>
+              ›
+            </li>
+            <li>
+              <Link href="/offices" className={styles.crumbLink}>
+                Аренда офисов
+              </Link>
+            </li>
+            <li aria-hidden="true" className={styles.crumbSep}>
+              ›
+            </li>
+            <li className={styles.crumbCurrent} aria-current="page">
+              {room.title}
+            </li>
+          </ol>
+        </nav>
+
+        {/* Фото-галерея или плейсхолдер */}
         {room.photos.length > 0 ? (
-          <Image
-            src={room.photos[0].url}
-            alt={`${room.title} — фото`}
-            fill
-            className={styles.photoImg}
-            priority
-            fetchPriority="high"
-            sizes="100vw"
-          />
+          <PhotoGallery photos={room.photos} alt={room.title} />
         ) : (
           <div className={styles.photoPlaceholder} aria-hidden="true">
             <svg
-              width="48"
-              height="48"
+              width="52"
+              height="52"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="1.2"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -84,6 +89,11 @@ export function OfficePage({ room }: Props) {
             <span>Фотографии появятся после публикации</span>
           </div>
         )}
+
+        {/* Нижний градиент для читаемости бейджей */}
+        <div className={styles.photoGradient} aria-hidden="true" />
+
+        {/* Статус + этаж */}
         <div className={styles.photoBadges}>
           <Badge status={toStatus(room.status)} />
           <span className={styles.floorTag}>{room.floor}&thinsp;этаж</span>
@@ -97,7 +107,6 @@ export function OfficePage({ room }: Props) {
           <div className={styles.main}>
             <h1 className={styles.title}>{room.title}</h1>
 
-            {/* Характеристики */}
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Характеристики</h2>
               <dl className={styles.specs}>
@@ -117,11 +126,10 @@ export function OfficePage({ room }: Props) {
               </dl>
             </section>
 
-            {/* Описание */}
             {room.description && (
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Описание</h2>
-                {/* TODO Sprint 2: sanitize HTML через sanitize-html перед рендером */}
+                {/* TODO Sprint 2: sanitize HTML via sanitize-html */}
                 <div
                   className={styles.description}
                   dangerouslySetInnerHTML={{ __html: room.description }}
@@ -129,7 +137,6 @@ export function OfficePage({ room }: Props) {
               </section>
             )}
 
-            {/* Подходит для */}
             {room.suitableFor.length > 0 && (
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Подходит для</h2>
@@ -159,7 +166,6 @@ export function OfficePage({ room }: Props) {
               </div>
 
               {room.status !== 'RENTED' && <OfficeCtaButton />}
-
               {room.status === 'RENTED' && <OfficeCtaButton label="Уточнить наличие" />}
 
               <dl className={styles.sidebarSpecs}>
