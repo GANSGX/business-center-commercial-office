@@ -40,162 +40,171 @@ export function OfficePage({ room }: Props) {
 
   return (
     <div className={styles.page}>
-      {/* ── Фото / Hero — уходит за хедер ── */}
-      <div className={styles.photoSection} aria-label="Фотографии офиса">
-        {/* Хлебные крошки поверх фото */}
-        <nav className={styles.breadcrumb} aria-label="Хлебные крошки">
-          <ol className={styles.breadcrumbList}>
-            <li>
-              <Link href="/" className={styles.crumbLink}>
-                Главная
-              </Link>
-            </li>
-            <li aria-hidden="true" className={styles.crumbSep}>
-              ›
-            </li>
-            <li>
-              <Link href="/offices" className={styles.crumbLink}>
-                Аренда офисов
-              </Link>
-            </li>
-            <li aria-hidden="true" className={styles.crumbSep}>
-              ›
-            </li>
-            <li className={styles.crumbCurrent} aria-current="page">
-              {room.title}
-            </li>
-          </ol>
-        </nav>
+      {/* Хлебные крошки — вне heroSection, чтобы z-index на уровне страницы работал корректно */}
+      <nav className={styles.breadcrumb} aria-label="Хлебные крошки">
+        <ol className={styles.breadcrumbList}>
+          <li>
+            <Link href="/" className={styles.crumbLink}>
+              Главная
+            </Link>
+          </li>
+          <li aria-hidden="true" className={styles.crumbSep}>
+            ›
+          </li>
+          <li>
+            <Link href="/offices" className={styles.crumbLink}>
+              Аренда офисов
+            </Link>
+          </li>
+          <li aria-hidden="true" className={styles.crumbSep}>
+            ›
+          </li>
+          <li className={styles.crumbCurrent} aria-current="page">
+            {room.title}
+          </li>
+        </ol>
+      </nav>
 
-        {/* Фото-галерея или плейсхолдер */}
-        {room.photos.length > 0 ? (
-          <PhotoGallery photos={room.photos} alt={room.title} />
-        ) : (
-          <div className={styles.photoPlaceholder} aria-hidden="true">
-            <svg
-              width="52"
-              height="52"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            <span>Фотографии появятся после публикации</span>
-          </div>
-        )}
-
-        {/* Нижний градиент для читаемости бейджей */}
-        <div className={styles.photoGradient} aria-hidden="true" />
-
-        {/* Статус + этаж */}
-        <div className={styles.photoBadges}>
-          <Badge status={toStatus(room.status)} />
-          <span className={styles.floorTag}>{room.floor}&thinsp;этаж</span>
+      {/* ── Hero-секция: тёмный фон, уходит под хедер ── */}
+      <div className={styles.heroSection}>
+        {/* Галерея — заполняет весь heroSection */}
+        <div className={styles.galleryFill}>
+          {room.photos.length > 0 ? (
+            <PhotoGallery
+              photos={room.photos}
+              alt={room.title}
+              overlaySlot={
+                <>
+                  <div className={styles.photoGradient} aria-hidden="true" />
+                  <div className={styles.photoBadges}>
+                    <Badge status={toStatus(room.status)} />
+                    <span className={styles.floorTag}>{room.floor}&thinsp;этаж</span>
+                  </div>
+                </>
+              }
+            />
+          ) : (
+            <div className={styles.photoPlaceholder} aria-hidden="true">
+              <svg
+                width="52"
+                height="52"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              <span>Фотографии появятся после публикации</span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ── Основной контент ── */}
+      {/* ── Основной контент — dark glass panel ── */}
       <div className={styles.container}>
-        <div className={styles.layout}>
-          {/* ── Левая колонка ── */}
-          <div className={styles.main}>
-            <h1 className={styles.title}>{room.title}</h1>
+        <div className={styles.containerInner}>
+          <div className={styles.layout}>
+            {/* ── Левая колонка ── */}
+            <div className={styles.main}>
+              <h1 className={styles.title}>{room.title}</h1>
 
-            <section className={styles.section}>
-              <h2 className={styles.sectionTitle}>Характеристики</h2>
-              <dl className={styles.specs}>
-                {room.roomNumber && <SpecRow label="Номер офиса" value={room.roomNumber} />}
-                {room.type && <SpecRow label="Тип" value={room.type} />}
-                <SpecRow label="Площадь" value={formatArea(room.area)} />
-                <SpecRow label="Этаж" value={String(room.floor)} />
-                {room.layoutType && <SpecRow label="Планировка" value={room.layoutType} />}
-                <SpecRow label="Вода в офисе" value={room.water ? 'Есть' : 'Нет'} />
-                <SpecRow label="Санузел" value={room.wc ? 'Есть' : 'Нет'} />
-                <SpecRow label="Окна" value={room.windows ? 'Есть' : 'Нет'} />
-                {room.entrance && <SpecRow label="Вход" value={room.entrance} />}
-                {room.rentType && <SpecRow label="Тип аренды" value={room.rentType} />}
-                {room.internet && <SpecRow label="Интернет" value={room.internet} />}
-                {room.minRentTerm && <SpecRow label="Мин. срок аренды" value={room.minRentTerm} />}
-                <SpecRow label="Статус" value={statusLabel} />
-              </dl>
-            </section>
-
-            {room.description && (
               <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Описание</h2>
-                {/* TODO Sprint 2: sanitize HTML via sanitize-html */}
-                <div
-                  className={styles.description}
-                  dangerouslySetInnerHTML={{ __html: room.description }}
-                />
+                <h2 className={styles.sectionTitle}>Характеристики</h2>
+                <dl className={styles.specs}>
+                  {room.roomNumber && <SpecRow label="Номер офиса" value={room.roomNumber} />}
+                  {room.type && <SpecRow label="Тип" value={room.type} />}
+                  <SpecRow label="Площадь" value={formatArea(room.area)} />
+                  <SpecRow label="Этаж" value={String(room.floor)} />
+                  {room.layoutType && <SpecRow label="Планировка" value={room.layoutType} />}
+                  <SpecRow label="Вода в офисе" value={room.water ? 'Есть' : 'Нет'} />
+                  <SpecRow label="Санузел" value={room.wc ? 'Есть' : 'Нет'} />
+                  <SpecRow label="Окна" value={room.windows ? 'Есть' : 'Нет'} />
+                  {room.entrance && <SpecRow label="Вход" value={room.entrance} />}
+                  {room.rentType && <SpecRow label="Тип аренды" value={room.rentType} />}
+                  {room.internet && <SpecRow label="Интернет" value={room.internet} />}
+                  {room.minRentTerm && (
+                    <SpecRow label="Мин. срок аренды" value={room.minRentTerm} />
+                  )}
+                  <SpecRow label="Статус" value={statusLabel} />
+                </dl>
               </section>
-            )}
 
-            {room.suitableFor.length > 0 && (
-              <section className={styles.section}>
-                <h2 className={styles.sectionTitle}>Подходит для</h2>
-                <ul className={styles.tags} aria-label="Типы бизнеса">
-                  {room.suitableFor.map((tag) => (
-                    <li key={tag} className={styles.tag}>
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-          </div>
+              {room.description && (
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Описание</h2>
+                  {/* TODO Sprint 2: sanitize HTML via sanitize-html */}
+                  <div
+                    className={styles.description}
+                    dangerouslySetInnerHTML={{ __html: room.description }}
+                  />
+                </section>
+              )}
 
-          {/* ── Боковая панель ── */}
-          <aside className={styles.sidebar} aria-label="Условия аренды">
-            <div className={styles.sidebarCard}>
-              <div className={styles.priceBlock}>
-                <span className={styles.priceValue}>{formatPrice(room.priceMonth)}</span>
-                {room.priceM2 && (
-                  <span className={styles.priceM2}>{Math.round(room.priceM2)}&thinsp;₽/м²</span>
-                )}
-              </div>
-
-              <div className={styles.sidebarBadge}>
-                <Badge status={toStatus(room.status)} />
-              </div>
-
-              {room.status !== 'RENTED' && <OfficeCtaButton />}
-              {room.status === 'RENTED' && <OfficeCtaButton label="Уточнить наличие" />}
-
-              <dl className={styles.sidebarSpecs}>
-                <div className={styles.sidebarSpecRow}>
-                  <dt>Площадь</dt>
-                  <dd>{formatArea(room.area)}</dd>
-                </div>
-                <div className={styles.sidebarSpecRow}>
-                  <dt>Этаж</dt>
-                  <dd>{room.floor}</dd>
-                </div>
-                {room.layoutType && (
-                  <div className={styles.sidebarSpecRow}>
-                    <dt>Планировка</dt>
-                    <dd>{room.layoutType}</dd>
-                  </div>
-                )}
-                {room.minRentTerm && (
-                  <div className={styles.sidebarSpecRow}>
-                    <dt>Мин. срок</dt>
-                    <dd>{room.minRentTerm}</dd>
-                  </div>
-                )}
-              </dl>
-
-              <p className={styles.sidebarNote}>
-                Бесплатный просмотр помещения в любой рабочий день
-              </p>
+              {room.suitableFor.length > 0 && (
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Подходит для</h2>
+                  <ul className={styles.tags} aria-label="Типы бизнеса">
+                    {room.suitableFor.map((tag) => (
+                      <li key={tag} className={styles.tag}>
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
             </div>
-          </aside>
+
+            {/* ── Боковая панель ── */}
+            <aside className={styles.sidebar} aria-label="Условия аренды">
+              <div className={styles.sidebarCard}>
+                <div className={styles.priceBlock}>
+                  <span className={styles.priceValue}>{formatPrice(room.priceMonth)}</span>
+                  {room.priceM2 && (
+                    <span className={styles.priceM2}>{Math.round(room.priceM2)}&thinsp;₽/м²</span>
+                  )}
+                </div>
+
+                <div className={styles.sidebarBadge}>
+                  <Badge status={toStatus(room.status)} />
+                </div>
+
+                {room.status !== 'RENTED' && <OfficeCtaButton />}
+                {room.status === 'RENTED' && <OfficeCtaButton label="Уточнить наличие" />}
+
+                <dl className={styles.sidebarSpecs}>
+                  <div className={styles.sidebarSpecRow}>
+                    <dt>Площадь</dt>
+                    <dd>{formatArea(room.area)}</dd>
+                  </div>
+                  <div className={styles.sidebarSpecRow}>
+                    <dt>Этаж</dt>
+                    <dd>{room.floor}</dd>
+                  </div>
+                  {room.layoutType && (
+                    <div className={styles.sidebarSpecRow}>
+                      <dt>Планировка</dt>
+                      <dd>{room.layoutType}</dd>
+                    </div>
+                  )}
+                  {room.minRentTerm && (
+                    <div className={styles.sidebarSpecRow}>
+                      <dt>Мин. срок</dt>
+                      <dd>{room.minRentTerm}</dd>
+                    </div>
+                  )}
+                </dl>
+
+                <p className={styles.sidebarNote}>
+                  Бесплатный просмотр помещения в любой рабочий день
+                </p>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     </div>

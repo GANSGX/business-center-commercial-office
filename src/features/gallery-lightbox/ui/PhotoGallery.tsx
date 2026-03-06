@@ -8,20 +8,30 @@ import styles from './PhotoGallery.module.css'
 interface Props {
   photos: RoomPhoto[]
   alt: string
+  overlaySlot?: React.ReactNode
 }
 
-export function PhotoGallery({ photos, alt }: Props) {
+export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
+  const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   const openLightbox = (index: number) => setLightboxIndex(index)
   const closeLightbox = () => setLightboxIndex(null)
 
-  const prev = useCallback(() => {
+  const prevActive = useCallback(() => {
+    setActiveIndex((i) => (i - 1 + photos.length) % photos.length)
+  }, [photos.length])
+
+  const nextActive = useCallback(() => {
+    setActiveIndex((i) => (i + 1) % photos.length)
+  }, [photos.length])
+
+  const prevLightbox = useCallback(() => {
     setLightboxIndex((i) => (i !== null ? (i - 1 + photos.length) % photos.length : null))
   }, [photos.length])
 
-  const next = useCallback(() => {
+  const nextLightbox = useCallback(() => {
     setLightboxIndex((i) => (i !== null ? (i + 1) % photos.length : null))
   }, [photos.length])
 
@@ -29,8 +39,8 @@ export function PhotoGallery({ photos, alt }: Props) {
     if (lightboxIndex === null) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeLightbox()
-      if (e.key === 'ArrowLeft') prev()
-      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prevLightbox()
+      if (e.key === 'ArrowRight') nextLightbox()
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
@@ -39,35 +49,105 @@ export function PhotoGallery({ photos, alt }: Props) {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-  }, [lightboxIndex, prev, next])
+  }, [lightboxIndex, prevLightbox, nextLightbox])
 
   if (photos.length === 0) return null
 
-  const mainPhoto = photos[0]
-
   return (
-    <>
-      {/* Main image */}
-      <button
-        type="button"
-        className={styles.mainBtn}
-        onClick={() => openLightbox(0)}
-        aria-label="Открыть галерею фотографий"
-      >
-        <Image
-          src={mainPhoto.url}
-          alt={alt}
-          fill
-          className={styles.mainImg}
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-        />
+    <div className={styles.gallery}>
+      {/* ── Главное фото ── */}
+      <div className={styles.mainArea}>
+        {/* Клик на фото — открывает лайтбокс */}
+        <button
+          type="button"
+          className={styles.mainBtn}
+          onClick={() => openLightbox(activeIndex)}
+          aria-label="Открыть полноэкранный просмотр"
+        >
+          <Image
+            src={photos[activeIndex].url}
+            alt={`${alt} — фото ${activeIndex + 1}`}
+            fill
+            className={styles.mainImg}
+            priority
+            fetchPriority="high"
+            sizes="(max-width: 1248px) 100vw, 1200px"
+          />
+          <span className={styles.zoomHint} aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <line x1="11" y1="8" x2="11" y2="14" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+            Открыть
+          </span>
+        </button>
+
+        {/* Стрелки переключения главного фото */}
+        {photos.length > 1 && (
+          <>
+            <button
+              type="button"
+              className={`${styles.galleryNav} ${styles.galleryNavPrev}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                prevActive()
+              }}
+              aria-label="Предыдущее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={`${styles.galleryNav} ${styles.galleryNavNext}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                nextActive()
+              }}
+              aria-label="Следующее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Счётчик фото */}
         {photos.length > 1 && (
           <span className={styles.photoCount} aria-hidden="true">
             <svg
-              width="14"
-              height="14"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -77,37 +157,41 @@ export function PhotoGallery({ photos, alt }: Props) {
               <circle cx="8.5" cy="8.5" r="1.5" />
               <polyline points="21 15 16 10 5 21" />
             </svg>
-            {photos.length}
+            {activeIndex + 1} / {photos.length}
           </span>
         )}
-      </button>
 
-      {/* Thumbnails strip */}
-      {photos.length > 1 && (
-        <div className={styles.thumbs} role="list" aria-label="Фотографии офиса">
-          {photos.map((photo, i) => (
-            <button
-              key={photo.id}
-              type="button"
-              role="listitem"
-              className={`${styles.thumb} ${i === 0 ? styles.thumbActive : ''}`}
-              onClick={() => openLightbox(i)}
-              aria-label={`Фото ${i + 1}`}
-            >
-              <Image
-                src={photo.url}
-                alt={`${alt} — фото ${i + 1}`}
-                fill
-                className={styles.thumbImg}
-                sizes="96px"
-                loading="lazy"
-              />
-            </button>
-          ))}
-        </div>
-      )}
+        {/* ── Превью-полоска (поверх фото) ── */}
+        {photos.length > 1 && (
+          <div className={styles.thumbsRow} role="list" aria-label="Все фото офиса">
+            {photos.map((photo, i) => (
+              <button
+                key={photo.id}
+                type="button"
+                role="listitem"
+                className={`${styles.thumb} ${i === activeIndex ? styles.thumbActive : ''}`}
+                onClick={() => setActiveIndex(i)}
+                aria-label={`Фото ${i + 1}`}
+                aria-pressed={i === activeIndex}
+              >
+                <Image
+                  src={photo.url}
+                  alt={`${alt} — фото ${i + 1}`}
+                  fill
+                  className={styles.thumbImg}
+                  sizes="100px"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )}
 
-      {/* Lightbox */}
+        {/* Бейджи и градиент от родителя */}
+        {overlaySlot}
+      </div>
+
+      {/* ── Лайтбокс ── */}
       {lightboxIndex !== null && (
         <div
           className={styles.overlay}
@@ -142,7 +226,7 @@ export function PhotoGallery({ photos, alt }: Props) {
               <button
                 type="button"
                 className={`${styles.navBtn} ${styles.navPrev}`}
-                onClick={prev}
+                onClick={prevLightbox}
                 aria-label="Предыдущее фото"
               >
                 <svg
@@ -161,7 +245,7 @@ export function PhotoGallery({ photos, alt }: Props) {
               <button
                 type="button"
                 className={`${styles.navBtn} ${styles.navNext}`}
-                onClick={next}
+                onClick={nextLightbox}
                 aria-label="Следующее фото"
               >
                 <svg
@@ -192,15 +276,24 @@ export function PhotoGallery({ photos, alt }: Props) {
           </div>
 
           {photos.length > 1 && (
-            <div className={styles.lightboxDots} aria-hidden="true">
-              {photos.map((_, i) => (
+            <div className={styles.lightboxThumbs} aria-label="Все фото">
+              {photos.map((photo, i) => (
                 <button
-                  key={i}
+                  key={photo.id}
                   type="button"
-                  className={`${styles.dot} ${i === lightboxIndex ? styles.dotActive : ''}`}
+                  className={`${styles.lbThumb} ${i === lightboxIndex ? styles.lbThumbActive : ''}`}
                   onClick={() => setLightboxIndex(i)}
                   aria-label={`Фото ${i + 1}`}
-                />
+                >
+                  <Image
+                    src={photo.url}
+                    alt={`фото ${i + 1}`}
+                    fill
+                    className={styles.lbThumbImg}
+                    sizes="80px"
+                    loading="lazy"
+                  />
+                </button>
               ))}
             </div>
           )}
@@ -210,6 +303,6 @@ export function PhotoGallery({ photos, alt }: Props) {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }

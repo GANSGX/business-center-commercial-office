@@ -1,17 +1,33 @@
-/* ===== PhotoGallery + Lightbox ===== */
+/* ===== PhotoGallery + Lightbox =====
+   Полноэкранный режим: gallery/mainArea заполняют родительский контейнер (100%).
+   Все UI-элементы (стрелки, превью, счётчик) positioned absolute внутри mainArea.
+================================================================ */
 
-/* ── Кнопка-обёртка главного фото ── */
+/* ── Корневой враппер ── */
+
+.gallery {
+  position: relative;
+  height: 100%;
+}
+
+/* ── Главное фото — заполняет весь родитель ── */
+
+.mainArea {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a0a;
+}
 
 .mainBtn {
   position: absolute;
   inset: 0;
-  cursor: zoom-in;
   background: none;
   border: none;
   padding: 0;
+  cursor: zoom-in;
   display: block;
-  width: 100%;
-  height: 100%;
+  z-index: 1;
 }
 
 .mainImg {
@@ -23,86 +39,197 @@
   transform: scale(1.03);
 }
 
-/* Счётчик фото (правый нижний угол) */
+/* Подсказка "Открыть" */
+.zoomHint {
+  position: absolute;
+  top: calc(86px + 20px);
+  /* Правый край pill = правый край inner хедера.
+     Header: 24px outer + auto-margin + 14px inner-right = 38px base.
+     На широких экранах: + (viewport − 1248px) / 2 */
+  right: calc(38px + max(0px, (100% - 1248px) / 2));
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  /* Идентично .inner хедера — одинаково читаемо на любом фоне */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    rgba(6, 5, 14, 0.85);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    0 4px 16px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+  pointer-events: none;
+}
+
+.mainBtn:hover .zoomHint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Стрелки переключения ── */
+
+.galleryNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.mainArea:hover .galleryNav {
+  opacity: 1;
+}
+
+.galleryNav:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.galleryNavPrev {
+  left: 24px;
+}
+
+.galleryNavPrev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.galleryNavNext {
+  right: 24px;
+}
+
+.galleryNavNext:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* ── Счётчик фото (сверху справа, ниже хедера) ── */
+
 .photoCount {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  z-index: 2;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 100px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 13px;
   font-weight: 600;
   pointer-events: none;
 }
 
-/* ── Превью-полоска ── */
+/* ── Превью-полоска (поверх фото, над градиентом) ── */
 
-.thumbs {
+.thumbsRow {
   position: absolute;
-  bottom: 16px;
+  bottom: 108px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 8px;
-  z-index: 2;
+  z-index: 4;
   padding: 0 8px;
   max-width: calc(100% - 160px);
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.thumbs::-webkit-scrollbar {
+.thumbsRow::-webkit-scrollbar {
   display: none;
 }
 
 .thumb {
   position: relative;
-  width: 72px;
-  height: 48px;
+  flex-shrink: 0;
+  width: 80px;
+  height: 54px;
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0;
   transition:
     border-color var(--transition-fast),
-    transform var(--transition-fast);
-  background: rgba(0, 0, 0, 0.4);
-  padding: 0;
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .thumb:hover {
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.65);
   transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .thumbActive {
-  border-color: #fff;
+  border-color: rgba(245, 201, 106, 0.9);
+  box-shadow: 0 0 0 1px rgba(245, 201, 106, 0.4);
 }
 
 .thumbImg {
   object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-/* ── Lightbox overlay ── */
+.thumb:hover .thumbImg {
+  transform: scale(1.06);
+}
+
+/* ══════════════════════════════════════════
+   Лайтбокс
+══════════════════════════════════════════ */
 
 .overlay {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.97);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   animation: fadeIn 200ms ease;
 }
 
@@ -115,7 +242,6 @@
   }
 }
 
-/* Кнопка закрытия */
 .closeBtn {
   position: absolute;
   top: 20px;
@@ -141,7 +267,6 @@
   color: #fff;
 }
 
-/* Навигация prev/next */
 .navBtn {
   position: absolute;
   top: 50%;
@@ -184,60 +309,93 @@
   transform: translateY(-50%) translateX(2px);
 }
 
-/* Основное изображение в лайтбоксе */
 .lightboxImg {
   position: relative;
-  width: min(92vw, calc(92vh * 1.5));
+  width: min(92vw, calc(82vh * 1.5));
   height: min(72vh, calc(92vw / 1.5));
   border-radius: 12px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .fullImg {
   object-fit: contain;
 }
 
-/* Точки-индикаторы */
-.lightboxDots {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+.lightboxThumbs {
   display: flex;
   gap: 8px;
+  max-width: 80vw;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  border: none;
+.lightboxThumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.lbThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 48px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   padding: 0;
-  transition:
-    background var(--transition-fast),
-    transform var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
-.dotActive {
-  background: #fff;
-  transform: scale(1.3);
+.lbThumb:hover {
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Счётчик */
+.lbThumbActive {
+  border-color: rgba(245, 201, 106, 0.9);
+}
+
+.lbThumbImg {
+  object-fit: cover;
+}
+
 .lightboxCounter {
   position: absolute;
-  bottom: 24px;
+  bottom: 20px;
   right: 24px;
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.35);
   font-weight: 500;
 }
 
 /* ── Адаптив ── */
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .galleryNav {
+    opacity: 1;
+    width: 42px;
+    height: 42px;
+  }
+
+  .galleryNavPrev {
+    left: 14px;
+  }
+  .galleryNavNext {
+    right: 14px;
+  }
+
+  .thumbsRow {
+    bottom: 94px;
+    max-width: calc(100% - 100px);
+  }
+
+  .thumb {
+    width: 64px;
+    height: 44px;
+    border-radius: 6px;
+  }
+
   .navBtn {
     width: 40px;
     height: 40px;
@@ -246,23 +404,33 @@
   .navPrev {
     left: 8px;
   }
-
   .navNext {
     right: 8px;
   }
 
   .lightboxImg {
     width: 96vw;
-    height: 60vh;
+    height: 56vh;
   }
 
-  .thumbs {
-    max-width: calc(100% - 100px);
+  .photoCount {
+    bottom: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .thumbsRow {
+    bottom: 84px;
+    gap: 6px;
   }
 
   .thumb {
-    width: 56px;
-    height: 38px;
+    width: 52px;
+    height: 36px;
+  }
+
+  .lightboxThumbs {
+    max-width: 96vw;
   }
 }
 
@@ -270,8 +438,10 @@
   .overlay {
     animation: none;
   }
-
   .mainImg {
+    transition: none;
+  }
+  .thumbImg {
     transition: none;
   }
 }
