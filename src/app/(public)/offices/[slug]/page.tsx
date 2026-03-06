@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getRoomBySlug } from '@/entities/room'
 import { OfficePage } from '@/pages/office-detail'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
+import { sanitizeRichText } from '@/shared/lib/sanitize'
 
 export const revalidate = 60
 
@@ -73,7 +74,12 @@ export default async function OfficeSlugPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <OfficePage room={room} />
+      <OfficePage
+        room={{
+          ...room,
+          description: room.description ? sanitizeRichText(room.description) : null,
+        }}
+      />
     </>
   )
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { HomePage } from '@/pages/home'
 
+const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
+
 export const metadata: Metadata = {
   title: 'Аренда офисов в Новосибирске — Бизнес-центр «Коммунистическая-35»',
   description:
@@ -20,12 +22,70 @@ export const metadata: Metadata = {
       },
     ],
   },
-  // TODO Sprint 1 S1-D2-07: добавить JSON-LD Organization + LocalBusiness
+  alternates: {
+    canonical: '/',
+  },
+}
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Бизнес-центр «Коммунистическая-35»',
+  url: BASE_URL,
+  logo: `${BASE_URL}/images/logo.png`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Коммунистическая, 35',
+    addressLocality: 'Новосибирск',
+    addressRegion: 'Новосибирская область',
+    addressCountry: 'RU',
+  },
+}
+
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Бизнес-центр «Коммунистическая-35»',
+  description:
+    'Аренда офисов от 8 до 150 м² в центре Новосибирска. Класс Б+, 5–10 минут до метро, парковка, охрана 24/7.',
+  url: BASE_URL,
+  image: `${BASE_URL}/images/hero-1.png`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Коммунистическая, 35',
+    addressLocality: 'Новосибирск',
+    addressRegion: 'Новосибирская область',
+    addressCountry: 'RU',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 54.9736,
+    longitude: 82.9282,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00',
+    closes: '18:00',
+  },
+  priceRange: '₽₽',
 }
 
 // ISR — обновление каждые 5 минут
 export const revalidate = 300
 
 export default function Page() {
-  return <HomePage />
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
+      <HomePage />
+    </>
+  )
 }

@@ -162,7 +162,6 @@ export function OfficePage({ room }: Props) {
               {room.description && (
                 <section className={styles.section}>
                   <h2 className={styles.sectionTitle}>Описание</h2>
-                  {/* TODO Sprint 2: sanitize HTML via sanitize-html */}
                   <div
                     className={styles.description}
                     dangerouslySetInnerHTML={{ __html: room.description }}

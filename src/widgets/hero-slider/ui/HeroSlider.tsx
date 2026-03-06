@@ -6,6 +6,17 @@ import { Autoplay, EffectFade } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
 import Image from 'next/image'
 import Link from 'next/link'
+import {
+  IconChevronDown,
+  IconLocation,
+  IconTransport,
+  IconCulture,
+  IconSubway,
+  IconBuilding,
+  IconShield,
+  IconParking,
+  IconAward,
+} from '@/shared/ui/icons'
 import type { HeroSlide } from '../types'
 import styles from './HeroSlider.module.css'
 
@@ -13,7 +24,6 @@ import 'swiper/css'
 import 'swiper/css/effect-fade'
 
 // TODO Sprint 1 S1-D2-03: заменить на данные из /api/hero-slides
-// Фото: разместить в public/images/hero-1.jpg и hero-2.jpg (1920×1080, WebP)
 const MOCK_SLIDES: HeroSlide[] = [
   {
     id: '1',
@@ -51,178 +61,6 @@ const MOCK_SLIDES: HeroSlide[] = [
     image: '/images/hero-2.png',
   },
 ]
-
-function IconLocation() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 13 6 13s6-7.75 6-13c0-3.314-2.686-6-6-6Z" />
-      <circle cx="12" cy="8" r="2" />
-    </svg>
-  )
-}
-
-function IconTransport() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="8" width="18" height="10" rx="3" />
-      <path d="M7 18v2M17 18v2M3 12h18" />
-      <path d="M7 8V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3" />
-    </svg>
-  )
-}
-
-function IconCulture() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11" />
-    </svg>
-  )
-}
-
-function IconChevronDown() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  )
-}
-
-function IconSubway() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="4" y="2" width="16" height="14" rx="4" />
-      <path d="M4 10h16M8 18l-2 4M16 18l2 4" />
-      <circle cx="8.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-      <circle cx="15.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
-    </svg>
-  )
-}
-
-function IconBuilding() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M9 9h6M9 13h6M9 17h4" />
-    </svg>
-  )
-}
-
-function IconShield() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3L4 7v5c0 5.25 4.5 9 8 9s8-3.75 8-9V7l-8-4z" />
-      <path d="M9 12l2 2 4-4" />
-    </svg>
-  )
-}
-
-function IconParking() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="3" />
-      <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
-    </svg>
-  )
-}
-
-function IconAward() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="8" r="6" />
-      <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
-    </svg>
-  )
-}
 
 const ADVANTAGE_ICONS = {
   location: IconLocation,
@@ -349,7 +187,7 @@ export function HeroSlider() {
                   aria-label="Перейти к актуальным предложениям"
                 >
                   <span className={styles.scrollLabel}>Узнать больше</span>
-                  <IconChevronDown />
+                  <IconChevronDown size={24} />
                 </button>
               </div>
             )}

@@ -1,17 +1,17 @@
 import type { MetadataRoute } from 'next'
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
-  const adminSlug = process.env.ADMIN_SLUG ?? '_admin'
+const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
+const ADMIN_SLUG = process.env.ADMIN_SLUG ?? '_admin'
 
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: [`/${adminSlug}/`, '/api/'],
+        disallow: [`/${ADMIN_SLUG}/`],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${BASE_URL}/sitemap.xml`,
   }
 }
