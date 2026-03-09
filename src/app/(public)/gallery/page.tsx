@@ -4,6 +4,8 @@ import type { GalleryImage } from '@/entities/gallery'
 
 export const revalidate = 600
 
+const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
+
 export const metadata: Metadata = {
   title: 'Фотогалерея — Бизнес-центр Коммунистическая, 35',
   description:
@@ -11,6 +13,22 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Фотогалерея — БЦ Коммунистическая, 35',
     description: 'Интерьеры и пространства бизнес-центра: офисы, переговорные, коворкинг.',
+    url: `${BASE_URL}/gallery`,
+    type: 'website',
+    images: [
+      {
+        url: `${BASE_URL}/og-gallery.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'Фотогалерея бизнес-центра Коммунистическая, 35',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Фотогалерея — БЦ Коммунистическая, 35',
+    description: 'Интерьеры и пространства бизнес-центра: офисы, переговорные, коворкинг.',
+    images: [`${BASE_URL}/og-gallery.jpg`],
   },
   alternates: {
     canonical: '/gallery',

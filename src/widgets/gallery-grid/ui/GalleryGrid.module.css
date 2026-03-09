@@ -163,7 +163,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.97);
   display: flex;
   flex-direction: column;
@@ -183,6 +183,11 @@
   }
 }
 
+/* Скрываем хедер когда открыт лайтбокс */
+:global([data-lightbox-open]) :global(header) {
+  display: none;
+}
+
 /* Кнопка закрытия */
 .closeBtn {
   position: absolute;
@@ -192,21 +197,22 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: rgba(255, 255, 255, 0.75);
+  background: rgba(20, 20, 20, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   transition:
     background var(--transition-fast),
-    color var(--transition-fast);
+    border-color var(--transition-fast);
 }
 
 .closeBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+  background: rgba(50, 50, 50, 0.95);
+  border-color: rgba(255, 255, 255, 0.65);
 }
 
 /* Стрелки навигации */
@@ -218,22 +224,23 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(20, 20, 20, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   transition:
     background var(--transition-fast),
-    color var(--transition-fast),
+    border-color var(--transition-fast),
     transform var(--transition-fast);
 }
 
 .navBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+  background: rgba(50, 50, 50, 0.95);
+  border-color: rgba(255, 255, 255, 0.65);
 }
 
 .navPrev {
