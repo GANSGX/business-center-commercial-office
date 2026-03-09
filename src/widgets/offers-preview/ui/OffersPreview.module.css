@@ -412,6 +412,18 @@
     grid-template-columns: 1fr;
     gap: 14px;
   }
+
+  .cardFooter {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .ctaBtn {
+    flex-shrink: 0;
+    font-size: var(--text-xs);
+    padding: 9px 12px;
+  }
 }
 
 @media (max-width: 480px) {

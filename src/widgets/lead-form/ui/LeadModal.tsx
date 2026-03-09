@@ -11,7 +11,7 @@ const LeadForm = dynamic(() => import('./LeadForm').then((m) => ({ default: m.Le
 })
 
 export function LeadModal() {
-  const { isOpen, close } = useLeadModal()
+  const { isOpen, officeLabel, close } = useLeadModal()
   const pathname = usePathname()
 
   // Закрываем модалку при переходе на другую страницу
@@ -19,8 +19,10 @@ export function LeadModal() {
     close()
   }, [pathname, close])
 
+  const title = officeLabel ? `Заявка — ${officeLabel}` : 'Оставить заявку'
+
   return (
-    <Modal open={isOpen} onClose={close} title="Оставить заявку">
+    <Modal open={isOpen} onClose={close} title={title}>
       <LeadForm compact />
     </Modal>
   )

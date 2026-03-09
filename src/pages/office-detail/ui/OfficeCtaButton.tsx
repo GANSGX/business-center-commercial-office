@@ -10,7 +10,7 @@ interface Props {
 export function OfficeCtaButton({ label = 'Оставить заявку' }: Props) {
   const open = useLeadModal((s) => s.open)
   return (
-    <button type="button" onClick={open} className={styles.ctaBtn}>
+    <button type="button" onClick={() => open()} className={styles.ctaBtn}>
       {label}
     </button>
   )
