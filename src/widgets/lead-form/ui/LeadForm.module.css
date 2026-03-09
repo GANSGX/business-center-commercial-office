@@ -570,8 +570,12 @@
     padding: 64px 0 96px;
   }
 
+  .inner {
+    padding: 0 10px;
+  }
+
   .card {
-    padding: 28px 24px;
+    padding: 28px 20px;
   }
 
   .row {
@@ -601,6 +605,10 @@
 @media (max-width: 375px) {
   .section {
     padding: 40px 0 64px;
+  }
+
+  .inner {
+    padding: 0 8px;
   }
 
   .card {

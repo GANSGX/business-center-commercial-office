@@ -435,6 +435,10 @@
     padding: 0 0 48px;
   }
 
+  .inner {
+    padding: 0 10px;
+  }
+
   .head {
     padding-top: 64px;
     margin-bottom: 40px;
@@ -474,6 +478,10 @@
 }
 
 @media (max-width: 375px) {
+  .inner {
+    padding: 0 8px;
+  }
+
   .head {
     padding-top: 44px;
   }

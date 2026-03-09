@@ -1,0 +1,534 @@
+/* ===== GalleryGrid — masonry-style CSS Grid + Lightbox =====
+   Паттерн каждые 5 элементов:
+   5n+1 → big   (2col × 2row)
+   5n   → wide  (2col × 1row)
+   rest → normal (1col × 1row)
+================================================================ */
+
+/* ── Сетка ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 260px;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── Элемент с анимацией появления ── */
+
+.item {
+  position: relative;
+  animation: itemReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.04s);
+}
+
+@keyframes itemReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* BIG: 2 колонки × 2 ряда */
+.item:nth-child(5n + 1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* WIDE: 2 колонки × 1 ряд */
+.item:nth-child(5n) {
+  grid-column: span 2;
+}
+
+/* ── Кнопка-обёртка ── */
+
+.itemBtn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  cursor: zoom-in;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Фото ── */
+
+.itemImg {
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.itemBtn:hover .itemImg {
+  transform: scale(1.07);
+}
+
+/* ── Оверлей ── */
+
+.itemOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  transition: background var(--transition-base);
+  pointer-events: none;
+}
+
+.itemBtn:hover .itemOverlay {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Иконка зума */
+.zoomIcon {
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transform: translateY(8px) scale(0.9);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemBtn:hover .zoomIcon {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Подпись — прижата ко дну */
+.itemCaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 14px 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, transparent 100%);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.01em;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
+}
+
+.itemBtn:hover .itemCaption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Пустое состояние ── */
+
+.empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: var(--text-sm);
+}
+
+/* ══════════════════════════════════════════
+   Лайтбокс
+══════════════════════════════════════════ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.97);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  animation: fadeIn 180ms ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Кнопка закрытия */
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+/* Стрелки навигации */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.navBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.navPrev {
+  left: 16px;
+}
+
+.navPrev:hover {
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.navNext {
+  right: 16px;
+}
+
+.navNext:hover {
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* Фигура с фото */
+.lightboxFigure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  max-width: 92vw;
+}
+
+.lightboxImg {
+  position: relative;
+  width: min(88vw, calc(78vh * 1.5));
+  height: min(68vh, calc(88vw / 1.5));
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.fullImg {
+  object-fit: contain;
+}
+
+/* Подпись в лайтбоксе */
+.lightboxCaption {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin: 0;
+}
+
+/* Превью-полоска */
+.thumbsStrip {
+  display: flex;
+  gap: 6px;
+  max-width: min(88vw, 800px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+
+.thumbsStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 72px;
+  height: 48px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.04);
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.thumb:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+.thumbActive {
+  border-color: rgba(245, 201, 106, 0.9);
+  box-shadow: 0 0 0 1px rgba(245, 201, 106, 0.3);
+}
+
+.thumbImg {
+  object-fit: cover;
+}
+
+/* Счётчик */
+.counter {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ══════════════════════════════════════════
+   Адаптив
+══════════════════════════════════════════ */
+
+/* ── 1024px — планшет ── */
+@media (max-width: 1024px) {
+  .grid {
+    grid-auto-rows: 220px;
+    gap: 7px;
+  }
+}
+
+/* ── 768px — планшет узкий / большой телефон ── */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 170px;
+    gap: 5px;
+  }
+
+  /* Убираем сложные span */
+  .item:nth-child(5n + 1),
+  .item:nth-child(5n) {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  /* Первый — широкий */
+  .item:first-child {
+    grid-column: span 2;
+  }
+
+  /* Анимация без задержки — на мобилке stagger не нужен */
+  .item {
+    animation-delay: 0s !important;
+  }
+
+  /* Оверлей всегда чуть виден — hover на тач не работает */
+  .itemOverlay {
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .zoomIcon {
+    display: none;
+  }
+
+  .itemCaption {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Лайтбокс */
+  .navBtn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navPrev {
+    left: 8px;
+  }
+
+  .navNext {
+    right: 8px;
+  }
+
+  .lightboxImg {
+    width: 96vw;
+    height: 52vh;
+  }
+
+  .thumb {
+    width: 60px;
+    height: 40px;
+  }
+}
+
+/* ── 600px — телефон ── */
+@media (max-width: 600px) {
+  .grid {
+    grid-auto-rows: 150px;
+    gap: 4px;
+  }
+
+  .lightboxImg {
+    width: 100vw;
+    height: 50vh;
+    border-radius: var(--radius-md);
+  }
+
+  .closeBtn {
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .navBtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .navPrev {
+    left: 4px;
+  }
+
+  .navNext {
+    right: 4px;
+  }
+
+  .lightboxCaption {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ── 480px — телефон узкий ── */
+@media (max-width: 480px) {
+  .grid {
+    grid-auto-rows: 130px;
+    gap: 3px;
+  }
+
+  .itemCaption {
+    font-size: var(--text-xs);
+    padding: 20px 10px 8px;
+  }
+
+  .lightboxImg {
+    height: 46vh;
+  }
+
+  .thumb {
+    width: 52px;
+    height: 34px;
+  }
+
+  .thumbsStrip {
+    gap: 4px;
+  }
+
+  .counter {
+    bottom: 12px;
+    right: 14px;
+    font-size: var(--text-xs);
+  }
+}
+
+/* ── 360px — маленький телефон ── */
+@media (max-width: 360px) {
+  .grid {
+    grid-auto-rows: 110px;
+    gap: 3px;
+  }
+
+  .lightboxImg {
+    height: 42vh;
+  }
+
+  .thumb {
+    width: 44px;
+    height: 30px;
+    border-radius: 4px;
+  }
+
+  .thumbsStrip {
+    gap: 3px;
+    max-width: 100vw;
+  }
+
+  .navBtn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+  }
+
+  .overlay {
+    animation: none;
+  }
+
+  .itemImg {
+    transition: none;
+  }
+
+  .itemCaption,
+  .zoomIcon {
+    transition: none;
+  }
+}

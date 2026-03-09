@@ -247,6 +247,10 @@
     padding: 64px 0 96px;
   }
 
+  .inner {
+    padding: 0 10px;
+  }
+
   .mapFrame {
     aspect-ratio: 4 / 3;
   }
@@ -265,6 +269,10 @@
 @media (max-width: 375px) {
   .section {
     padding: 40px 0 64px;
+  }
+
+  .inner {
+    padding: 0 8px;
   }
 
   .title {

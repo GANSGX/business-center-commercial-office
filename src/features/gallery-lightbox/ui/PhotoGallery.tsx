@@ -15,6 +15,7 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const touchStartX = useRef<number | null>(null)
 
   const openLightbox = (index: number) => setLightboxIndex(index)
   const closeLightbox = () => setLightboxIndex(null)
@@ -26,6 +27,17 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
   const nextActive = useCallback(() => {
     setActiveIndex((i) => (i + 1) % photos.length)
   }, [photos.length])
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 40) dx < 0 ? nextActive() : prevActive()
+    touchStartX.current = null
+  }
 
   const prevLightbox = useCallback(() => {
     setLightboxIndex((i) => (i !== null ? (i - 1 + photos.length) % photos.length : null))
@@ -56,7 +68,7 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
   return (
     <div className={styles.gallery}>
       {/* ── Главное фото ── */}
-      <div className={styles.mainArea}>
+      <div className={styles.mainArea} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         {/* Клик на фото — открывает лайтбокс */}
         <button
           type="button"

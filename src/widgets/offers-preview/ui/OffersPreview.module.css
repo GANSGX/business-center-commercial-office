@@ -398,6 +398,10 @@
     padding: 108px 0 72px;
   }
 
+  .inner {
+    padding: 0 10px;
+  }
+
   .sectionHead {
     flex-direction: column;
     align-items: flex-start;
@@ -419,5 +423,9 @@
 @media (max-width: 375px) {
   .section {
     padding: 88px 0 48px;
+  }
+
+  .inner {
+    padding: 0 8px;
   }
 }

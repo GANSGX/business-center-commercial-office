@@ -611,6 +611,7 @@
    Адаптив
 ══════════════════════════════════════════ */
 
+/* ── 1024px — планшет ── */
 @media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
@@ -621,6 +622,8 @@
   .sidebar {
     position: static;
     order: -1;
+    padding-top: 0;
+    padding-right: 0;
   }
 
   .sidebarCard {
@@ -633,46 +636,62 @@
   .priceBlock {
     grid-column: 1 / -1;
   }
+
   .sidebarNote {
     grid-column: 1 / -1;
   }
 }
 
+/* ── 768px — планшет узкий ── */
 @media (max-width: 768px) {
+  .breadcrumb {
+    display: none;
+  }
+
   .heroSection {
-    min-height: 500px;
+    min-height: 440px;
+  }
+
+  /* Плашки — на мобиле переезжают под хедер (top вместо bottom) */
+  .photoBadges {
+    bottom: auto;
+    top: 90px;
+    left: 16px;
   }
 
   .containerInner {
-    padding: 0 16px;
-  }
-
-  .layout {
-    gap: 28px;
-    padding: 40px 0 56px;
+    padding: 0 10px;
   }
 
   .title {
-    font-size: var(--text-2xl);
-    margin-bottom: 28px;
+    font-size: clamp(var(--text-xl), 5vw, var(--text-2xl));
+    padding-top: 40px;
+    margin-bottom: 24px;
   }
 
-  .specs {
-    grid-template-columns: minmax(120px, 160px) 1fr;
-  }
-
-  .specTerm,
-  .specValue {
-    padding: 10px 14px;
+  .layout {
+    gap: 24px;
+    padding: 36px 0 52px;
   }
 
   .sidebarCard {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    padding: 22px;
   }
 
-  .crumbCurrent {
-    max-width: 180px;
+  .specs {
+    grid-template-columns: minmax(110px, 150px) 1fr;
+  }
+
+  .specTerm,
+  .specValue {
+    padding: 10px 12px;
+  }
+
+  .section {
+    margin-bottom: 36px;
   }
 
   .container {
@@ -680,41 +699,154 @@
   }
 }
 
-@media (max-width: 480px) {
+/* ── 600px — большой телефон ── */
+@media (max-width: 600px) {
   .heroSection {
-    min-height: 420px;
+    min-height: 380px;
   }
 
-  .layout {
-    padding: 32px 0 48px;
+  .title {
+    font-size: var(--text-xl);
+    padding-top: 32px;
   }
 
-  .sidebarCard {
-    padding: 20px;
+  /* Таблица — 2 колонки в линию: лейбл слева, значение справа */
+  .specs {
+    grid-template-columns: auto 1fr;
+    border-radius: var(--radius-lg);
+  }
+
+  .specTerm {
+    padding: 9px 12px;
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.35);
+    white-space: nowrap;
+  }
+
+  .specValue {
+    padding: 9px 12px;
+    font-size: var(--text-xs);
+    text-align: right;
   }
 
   .priceValue {
     font-size: var(--text-2xl);
   }
 
-  .specs {
-    grid-template-columns: 1fr;
+  .sidebarCard {
+    padding: 18px;
+    gap: 14px;
   }
 
-  .specTerm {
-    padding-bottom: 0;
-    border-bottom: none;
+  .tag {
     font-size: var(--text-xs);
-    color: rgba(255, 255, 255, 0.28);
+    padding: 5px 11px;
+  }
+}
+
+/* ── 480px — телефон ── */
+@media (max-width: 480px) {
+  .heroSection {
+    min-height: 320px;
   }
 
+  .containerInner {
+    padding: 0 10px;
+  }
+
+  .title {
+    font-size: clamp(var(--text-lg), 5vw, var(--text-xl));
+    padding-top: 28px;
+    margin-bottom: 20px;
+  }
+
+  .layout {
+    gap: 20px;
+    padding: 28px 0 44px;
+  }
+
+  .sidebarCard {
+    padding: 16px;
+    gap: 12px;
+    border-radius: var(--radius-lg);
+  }
+
+  .priceValue {
+    font-size: var(--text-xl);
+  }
+
+  .priceM2 {
+    font-size: var(--text-xs);
+  }
+
+  .description {
+    padding: 16px 16px 16px 20px;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .sectionTitle {
+    font-size: 10px;
+    padding: 5px 11px;
+    margin-bottom: 14px;
+  }
+
+  .sidebarSpecRow {
+    padding: 7px 0;
+    font-size: var(--text-xs);
+  }
+
+  .sidebarNote {
+    font-size: 11px;
+  }
+}
+
+/* ── 360px — маленький телефон ── */
+@media (max-width: 360px) {
+  .heroSection {
+    min-height: 280px;
+  }
+
+  .containerInner {
+    padding: 0 8px;
+  }
+
+  .title {
+    font-size: var(--text-base);
+    padding-top: 24px;
+    margin-bottom: 16px;
+  }
+
+  .layout {
+    padding: 24px 0 36px;
+    gap: 16px;
+  }
+
+  .sidebarCard {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .priceValue {
+    font-size: var(--text-lg);
+  }
+
+  .specTerm,
   .specValue {
-    padding-top: 2px;
-    padding-bottom: 10px;
+    padding: 6px 8px;
+    font-size: var(--text-xs);
   }
 
-  .crumbCurrent {
-    max-width: 140px;
+  .tags {
+    gap: 6px;
+  }
+
+  .tag {
+    padding: 4px 10px;
   }
 }
 

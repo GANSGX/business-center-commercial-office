@@ -372,28 +372,18 @@
 /* ── Адаптив ── */
 
 @media (max-width: 768px) {
+  /* Стрелки скрываем — управление свайпом */
   .galleryNav {
-    opacity: 1;
-    width: 42px;
-    height: 42px;
+    display: none;
   }
 
-  .galleryNavPrev {
-    left: 14px;
-  }
-  .galleryNavNext {
-    right: 14px;
-  }
-
+  /* Превью-полоска скрываем на мобиле — вместо неё счётчик + свайп */
   .thumbsRow {
-    bottom: 94px;
-    max-width: calc(100% - 100px);
+    display: none;
   }
 
-  .thumb {
-    width: 64px;
-    height: 44px;
-    border-radius: 6px;
+  .photoCount {
+    bottom: 20px;
   }
 
   .navBtn {
@@ -412,25 +402,16 @@
     width: 96vw;
     height: 56vh;
   }
-
-  .photoCount {
-    bottom: 48px;
-  }
 }
 
 @media (max-width: 480px) {
-  .thumbsRow {
-    bottom: 84px;
-    gap: 6px;
-  }
-
-  .thumb {
-    width: 52px;
-    height: 36px;
-  }
-
   .lightboxThumbs {
     max-width: 96vw;
+  }
+
+  .lbThumb {
+    width: 56px;
+    height: 38px;
   }
 }
 

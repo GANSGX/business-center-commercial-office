@@ -297,6 +297,7 @@
   }
 
   .head {
+    padding: 0 10px;
     margin-bottom: 36px;
   }
 
@@ -333,6 +334,10 @@
 @media (max-width: 375px) {
   .section {
     padding: 8px 0 44px;
+  }
+
+  .head {
+    padding: 0 8px;
   }
 
   .logo {
