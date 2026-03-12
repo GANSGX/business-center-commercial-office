@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useLeadModal } from '@/features/lead-submit'
 import styles from './OffersPreview.module.css'
 
 // TODO Sprint 1 S1-D2-01: заменить на данные из /api/rooms
@@ -74,6 +77,8 @@ function formatArea(area: number) {
 }
 
 export function OffersPreview() {
+  const { open } = useLeadModal()
+
   return (
     <section className={styles.section} id="offers">
       <div className={styles.inner}>
@@ -157,6 +162,7 @@ export function OffersPreview() {
                     type="button"
                     className={styles.ctaBtn}
                     aria-label={`Оставить заявку на офис ${office.number}`}
+                    onClick={() => open(`Офис ${office.number}, ${formatArea(office.area)}`)}
                   >
                     Оставить заявку
                   </button>

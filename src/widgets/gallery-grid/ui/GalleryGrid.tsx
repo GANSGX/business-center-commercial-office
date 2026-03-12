@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import type { GalleryImage } from '@/entities/gallery'
 import styles from './GalleryGrid.module.css'
@@ -11,7 +12,13 @@ interface Props {
 
 export function GalleryGrid({ images }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [mounted, setMounted] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const touchStartX = useRef<number | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
 
@@ -23,6 +30,17 @@ export function GalleryGrid({ images }: Props) {
     setLightboxIndex((i) => (i !== null ? (i + 1) % images.length : null))
   }, [images.length])
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 40) dx < 0 ? next() : prev()
+    touchStartX.current = null
+  }
+
   useEffect(() => {
     if (lightboxIndex === null) return
     const onKey = (e: KeyboardEvent) => {
@@ -32,10 +50,12 @@ export function GalleryGrid({ images }: Props) {
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    document.documentElement.setAttribute('data-lightbox-open', '')
     closeRef.current?.focus()
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      document.documentElement.removeAttribute('data-lightbox-open')
     }
   }, [lightboxIndex, closeLightbox, prev, next])
 
@@ -61,6 +81,142 @@ export function GalleryGrid({ images }: Props) {
       </div>
     )
   }
+
+  const lightbox =
+    lightboxIndex !== null &&
+    mounted &&
+    createPortal(
+      <div
+        className={styles.overlay}
+        onClick={(e) => e.target === e.currentTarget && closeLightbox()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Просмотр фотографии"
+      >
+        {/* Закрыть */}
+        <button
+          ref={closeRef}
+          type="button"
+          className={styles.closeBtn}
+          onClick={closeLightbox}
+          aria-label="Закрыть"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        {/* Стрелки */}
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              className={`${styles.navBtn} ${styles.navPrev}`}
+              onClick={prev}
+              aria-label="Предыдущее фото"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={`${styles.navBtn} ${styles.navNext}`}
+              onClick={next}
+              aria-label="Следующее фото"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Фото */}
+        <figure
+          className={styles.lightboxFigure}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className={styles.lightboxImg}>
+            <Image
+              src={images[lightboxIndex].url}
+              alt={images[lightboxIndex].caption ?? `Фото ${lightboxIndex + 1}`}
+              fill
+              className={styles.fullImg}
+              sizes="100vw"
+              priority
+            />
+          </div>
+          {images[lightboxIndex].caption && (
+            <figcaption className={styles.lightboxCaption}>
+              {images[lightboxIndex].caption}
+            </figcaption>
+          )}
+        </figure>
+
+        {/* Превью-полоска */}
+        {images.length > 1 && (
+          <div className={styles.thumbsStrip} role="list" aria-label="Все фото">
+            {images.map((img, i) => (
+              <button
+                key={img.id}
+                type="button"
+                role="listitem"
+                className={`${styles.thumb} ${i === lightboxIndex ? styles.thumbActive : ''}`}
+                onClick={() => setLightboxIndex(i)}
+                aria-label={`Фото ${i + 1}`}
+                aria-pressed={i === lightboxIndex}
+              >
+                <Image
+                  src={img.url}
+                  alt={`фото ${i + 1}`}
+                  fill
+                  className={styles.thumbImg}
+                  sizes="72px"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Счётчик */}
+        <div className={styles.counter} aria-live="polite" aria-atomic="true">
+          {lightboxIndex + 1} / {images.length}
+        </div>
+      </div>,
+      document.body
+    )
 
   return (
     <>
@@ -105,132 +261,7 @@ export function GalleryGrid({ images }: Props) {
         ))}
       </ul>
 
-      {/* ── Лайтбокс ── */}
-      {lightboxIndex !== null && (
-        <div
-          className={styles.overlay}
-          onClick={(e) => e.target === e.currentTarget && closeLightbox()}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Просмотр фотографии"
-        >
-          {/* Закрыть */}
-          <button
-            ref={closeRef}
-            type="button"
-            className={styles.closeBtn}
-            onClick={closeLightbox}
-            aria-label="Закрыть"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-
-          {/* Стрелки */}
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                className={`${styles.navBtn} ${styles.navPrev}`}
-                onClick={prev}
-                aria-label="Предыдущее фото"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className={`${styles.navBtn} ${styles.navNext}`}
-                onClick={next}
-                aria-label="Следующее фото"
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </>
-          )}
-
-          {/* Фото */}
-          <figure className={styles.lightboxFigure}>
-            <div className={styles.lightboxImg}>
-              <Image
-                src={images[lightboxIndex].url}
-                alt={images[lightboxIndex].caption ?? `Фото ${lightboxIndex + 1}`}
-                fill
-                className={styles.fullImg}
-                sizes="100vw"
-                priority
-              />
-            </div>
-            {images[lightboxIndex].caption && (
-              <figcaption className={styles.lightboxCaption}>
-                {images[lightboxIndex].caption}
-              </figcaption>
-            )}
-          </figure>
-
-          {/* Превью-полоска */}
-          {images.length > 1 && (
-            <div className={styles.thumbsStrip} role="list" aria-label="Все фото">
-              {images.map((img, i) => (
-                <button
-                  key={img.id}
-                  type="button"
-                  role="listitem"
-                  className={`${styles.thumb} ${i === lightboxIndex ? styles.thumbActive : ''}`}
-                  onClick={() => setLightboxIndex(i)}
-                  aria-label={`Фото ${i + 1}`}
-                  aria-pressed={i === lightboxIndex}
-                >
-                  <Image
-                    src={img.url}
-                    alt={`фото ${i + 1}`}
-                    fill
-                    className={styles.thumbImg}
-                    sizes="72px"
-                    loading="lazy"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Счётчик */}
-          <div className={styles.counter} aria-live="polite" aria-atomic="true">
-            {lightboxIndex + 1} / {images.length}
-          </div>
-        </div>
-      )}
+      {lightbox}
     </>
   )
 }

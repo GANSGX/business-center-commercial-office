@@ -223,7 +223,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.97);
   display: flex;
   flex-direction: column;
@@ -247,24 +247,25 @@
   top: 20px;
   right: 20px;
   z-index: 10;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.85);
+  background: rgba(30, 30, 30, 0.92);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
   transition:
     background var(--transition-fast),
-    color var(--transition-fast);
+    border-color var(--transition-fast);
 }
 
 .closeBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: rgba(60, 60, 60, 0.95);
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 .navBtn {
@@ -275,22 +276,22 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition:
     background var(--transition-fast),
-    color var(--transition-fast),
+    border-color var(--transition-fast),
     transform var(--transition-fast);
 }
 
 .navBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.75);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .navPrev {
@@ -369,6 +370,11 @@
   font-weight: 500;
 }
 
+/* Скрываем хедер когда открыт лайтбокс */
+:global([data-lightbox-open]) :global(header) {
+  display: none;
+}
+
 /* ── Адаптив ── */
 
 @media (max-width: 768px) {
@@ -399,8 +405,36 @@
   }
 
   .lightboxImg {
-    width: 96vw;
-    height: 56vh;
+    width: 100vw;
+    height: 75vw;
+    max-height: 80vh;
+    border-radius: 0;
+  }
+
+  .lightboxThumbs {
+    display: none;
+  }
+
+  .lightboxCounter {
+    bottom: 16px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .closeBtn {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .navBtn {
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.6);
   }
 }
 

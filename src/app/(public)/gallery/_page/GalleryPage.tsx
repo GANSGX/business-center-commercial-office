@@ -2,16 +2,49 @@ import { GalleryHero } from './GalleryHero'
 import { GalleryGrid } from '@/widgets/gallery-grid'
 import { Footer } from '@/widgets/footer'
 import type { GalleryImage } from '@/entities/gallery'
+import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import Link from 'next/link'
 import styles from './GalleryPage.module.css'
+
+const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
 interface Props {
   images: GalleryImage[]
 }
 
+function buildImageGallery(images: GalleryImage[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    name: 'Фотогалерея бизнес-центра Коммунистическая, 35',
+    description: 'Интерьеры и пространства бизнес-центра: офисы, переговорные, коворкинг.',
+    url: `${BASE_URL}/gallery`,
+    image: images.map((img) => ({
+      '@type': 'ImageObject',
+      contentUrl: img.url,
+      name: img.caption ?? 'Фото бизнес-центра',
+      description: img.caption ?? 'Фото бизнес-центра Коммунистическая, 35',
+    })),
+  }
+}
+
 export function GalleryPage({ images }: Props) {
+  const breadcrumbJsonLd = buildBreadcrumbList([
+    { name: 'Главная', url: `${BASE_URL}/` },
+    { name: 'Фотогалерея', url: `${BASE_URL}/gallery` },
+  ])
+  const galleryJsonLd = buildImageGallery(images)
+
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(galleryJsonLd) }}
+      />
       {/* ── Hero c JS-блюром (client component) ── */}
       <GalleryHero imageCount={images.length} />
 

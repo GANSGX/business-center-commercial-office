@@ -198,8 +198,15 @@ export function OfficePage({ room }: Props) {
                   <Badge status={toStatus(room.status)} />
                 </div>
 
-                {room.status !== 'RENTED' && <OfficeCtaButton />}
-                {room.status === 'RENTED' && <OfficeCtaButton label="Уточнить наличие" />}
+                {room.status !== 'RENTED' && (
+                  <OfficeCtaButton officeLabel={`${room.title}, ${formatArea(room.area)}`} />
+                )}
+                {room.status === 'RENTED' && (
+                  <OfficeCtaButton
+                    label="Уточнить наличие"
+                    officeLabel={`${room.title}, ${formatArea(room.area)}`}
+                  />
+                )}
 
                 <dl className={styles.sidebarSpecs}>
                   <div className={styles.sidebarSpecRow}>

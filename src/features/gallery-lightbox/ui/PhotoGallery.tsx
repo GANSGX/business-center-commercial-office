@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import type { RoomPhoto } from '@/entities/room'
 import styles from './PhotoGallery.module.css'
@@ -14,8 +15,14 @@ interface Props {
 export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [mounted, setMounted] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
   const touchStartX = useRef<number | null>(null)
+  const lbTouchStartX = useRef<number | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const openLightbox = (index: number) => setLightboxIndex(index)
   const closeLightbox = () => setLightboxIndex(null)
@@ -47,6 +54,17 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
     setLightboxIndex((i) => (i !== null ? (i + 1) % photos.length : null))
   }, [photos.length])
 
+  const onLbTouchStart = (e: React.TouchEvent) => {
+    lbTouchStartX.current = e.touches[0].clientX
+  }
+
+  const onLbTouchEnd = (e: React.TouchEvent) => {
+    if (lbTouchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - lbTouchStartX.current
+    if (Math.abs(dx) > 40) dx < 0 ? nextLightbox() : prevLightbox()
+    lbTouchStartX.current = null
+  }
+
   useEffect(() => {
     if (lightboxIndex === null) return
     const onKey = (e: KeyboardEvent) => {
@@ -56,20 +74,139 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    document.documentElement.setAttribute('data-lightbox-open', '')
     closeRef.current?.focus()
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
+      document.documentElement.removeAttribute('data-lightbox-open')
     }
   }, [lightboxIndex, prevLightbox, nextLightbox])
 
   if (photos.length === 0) return null
 
+  const lightbox =
+    lightboxIndex !== null &&
+    mounted &&
+    createPortal(
+      <div
+        className={styles.overlay}
+        onClick={(e) => e.target === e.currentTarget && closeLightbox()}
+        onTouchStart={onLbTouchStart}
+        onTouchEnd={onLbTouchEnd}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Просмотр фотографии"
+      >
+        <button
+          ref={closeRef}
+          type="button"
+          className={styles.closeBtn}
+          onClick={closeLightbox}
+          aria-label="Закрыть"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        {photos.length > 1 && (
+          <>
+            <button
+              type="button"
+              className={`${styles.navBtn} ${styles.navPrev}`}
+              onClick={prevLightbox}
+              aria-label="Предыдущее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={`${styles.navBtn} ${styles.navNext}`}
+              onClick={nextLightbox}
+              aria-label="Следующее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        <div className={styles.lightboxImg} onTouchStart={onLbTouchStart} onTouchEnd={onLbTouchEnd}>
+          <Image
+            src={photos[lightboxIndex].url}
+            alt={`${alt} — фото ${lightboxIndex + 1}`}
+            fill
+            className={styles.fullImg}
+            sizes="100vw"
+            priority
+          />
+        </div>
+
+        {photos.length > 1 && (
+          <div className={styles.lightboxThumbs} aria-label="Все фото">
+            {photos.map((photo, i) => (
+              <button
+                key={photo.id}
+                type="button"
+                className={`${styles.lbThumb} ${i === lightboxIndex ? styles.lbThumbActive : ''}`}
+                onClick={() => setLightboxIndex(i)}
+                aria-label={`Фото ${i + 1}`}
+              >
+                <Image
+                  src={photo.url}
+                  alt={`фото ${i + 1}`}
+                  fill
+                  className={styles.lbThumbImg}
+                  sizes="80px"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className={styles.lightboxCounter} aria-live="polite">
+          {lightboxIndex + 1} / {photos.length}
+        </div>
+      </div>,
+      document.body
+    )
+
   return (
     <div className={styles.gallery}>
       {/* ── Главное фото ── */}
       <div className={styles.mainArea} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-        {/* Клик на фото — открывает лайтбокс */}
         <button
           type="button"
           className={styles.mainBtn}
@@ -104,7 +241,6 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
           </span>
         </button>
 
-        {/* Стрелки переключения главного фото */}
         {photos.length > 1 && (
           <>
             <button
@@ -154,7 +290,6 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
           </>
         )}
 
-        {/* Счётчик фото */}
         {photos.length > 1 && (
           <span className={styles.photoCount} aria-hidden="true">
             <svg
@@ -173,7 +308,6 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
           </span>
         )}
 
-        {/* ── Превью-полоска (поверх фото) ── */}
         {photos.length > 1 && (
           <div className={styles.thumbsRow} role="list" aria-label="Все фото офиса">
             {photos.map((photo, i) => (
@@ -199,122 +333,11 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
           </div>
         )}
 
-        {/* Бейджи и градиент от родителя */}
         {overlaySlot}
       </div>
 
-      {/* ── Лайтбокс ── */}
-      {lightboxIndex !== null && (
-        <div
-          className={styles.overlay}
-          onClick={(e) => e.target === e.currentTarget && closeLightbox()}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Просмотр фотографии"
-        >
-          <button
-            ref={closeRef}
-            type="button"
-            className={styles.closeBtn}
-            onClick={closeLightbox}
-            aria-label="Закрыть"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-
-          {photos.length > 1 && (
-            <>
-              <button
-                type="button"
-                className={`${styles.navBtn} ${styles.navPrev}`}
-                onClick={prevLightbox}
-                aria-label="Предыдущее фото"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className={`${styles.navBtn} ${styles.navNext}`}
-                onClick={nextLightbox}
-                aria-label="Следующее фото"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </>
-          )}
-
-          <div className={styles.lightboxImg}>
-            <Image
-              src={photos[lightboxIndex].url}
-              alt={`${alt} — фото ${lightboxIndex + 1}`}
-              fill
-              className={styles.fullImg}
-              sizes="100vw"
-              priority
-            />
-          </div>
-
-          {photos.length > 1 && (
-            <div className={styles.lightboxThumbs} aria-label="Все фото">
-              {photos.map((photo, i) => (
-                <button
-                  key={photo.id}
-                  type="button"
-                  className={`${styles.lbThumb} ${i === lightboxIndex ? styles.lbThumbActive : ''}`}
-                  onClick={() => setLightboxIndex(i)}
-                  aria-label={`Фото ${i + 1}`}
-                >
-                  <Image
-                    src={photo.url}
-                    alt={`фото ${i + 1}`}
-                    fill
-                    className={styles.lbThumbImg}
-                    sizes="80px"
-                    loading="lazy"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-
-          <div className={styles.lightboxCounter} aria-live="polite">
-            {lightboxIndex + 1} / {photos.length}
-          </div>
-        </div>
-      )}
+      {/* Лайтбокс рендерится через портал в document.body */}
+      {lightbox}
     </div>
   )
 }
