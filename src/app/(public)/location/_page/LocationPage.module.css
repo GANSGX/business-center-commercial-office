@@ -1,21 +1,7 @@
-/* ===== GalleryPage =====
-   Структура:
-   - .page: корневой div, тёмный фон
-   - .hero: компактная hero-секция (~50vh), уходит под хедер (margin-top: -86px)
-   - .panel: тёмная стеклянная панель (как darkPanel / OfficePage .container)
+/* ===== LocationPage =====
+   Hero + panel идентично Contacts / Gallery / About.
+   Акцент: зелёный (#10B981). Орбы: green + teal.
 ================================================================ */
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
 
 .page {
   position: relative;
@@ -24,8 +10,7 @@
 }
 
 /* ══════════════════════════════════════════
-   Хлебные крошки — fixed, не уезжают под шапку
-   Идентично OfficePage .breadcrumb
+   Хлебные крошки — fixed
 ══════════════════════════════════════════ */
 
 .breadcrumb {
@@ -39,7 +24,6 @@
 }
 
 .breadcrumbList {
-  /* 1200px (vs 1248px контента) — крошки чуть правее края контента */
   max-width: 1200px;
   margin: 0 auto;
   padding: 0;
@@ -131,8 +115,7 @@
 }
 
 /* ══════════════════════════════════════════
-   Hero — sticky, уходит под хедер.
-   При скроле панель наезжает сверху (эффект как на главной и OfficePage).
+   Hero
 ══════════════════════════════════════════ */
 
 .hero {
@@ -150,29 +133,28 @@
   background: #0a0a0a;
 }
 
-/* Декоративный синий орб (справа-сверху) */
-.orbBlue {
+/* Зелёный орб (верхний правый) */
+.orbGreen {
   position: absolute;
-  top: -5%;
-  right: 8%;
+  top: -8%;
+  right: 5%;
   width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(27, 79, 216, 0.13) 0%, transparent 65%);
+  height: 650px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.13) 0%, transparent 65%);
   pointer-events: none;
 }
 
-/* Декоративный янтарный орб (слева) */
-.orbAmber {
+/* Бирюзовый орб (левый нижний) */
+.orbTeal {
   position: absolute;
-  top: 30%;
-  left: -8%;
-  width: 550px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, transparent 65%);
+  bottom: 10%;
+  left: -10%;
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.09) 0%, transparent 65%);
   pointer-events: none;
 }
 
-/* Декоративная сетка */
 .gridMesh {
   position: absolute;
   inset: 0;
@@ -181,12 +163,10 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
   background-size: 72px 72px;
   pointer-events: none;
-  /* Затухание к низу — сетка исчезает перед панелью */
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
 }
 
-/* Контент hero */
 .heroInner {
   position: relative;
   z-index: 1;
@@ -197,7 +177,6 @@
   padding-bottom: 72px;
 }
 
-/* Лейбл над заголовком */
 .heroLabel {
   font-size: var(--text-xs);
   font-weight: 600;
@@ -207,20 +186,19 @@
   margin-bottom: 16px;
 }
 
-/* Главный заголовок с amber-градиентом */
+/* Зелёный ombre градиент заголовка */
 .heroTitle {
   font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.05;
-  background: linear-gradient(135deg, #f5e8c0 0%, #f5c96a 30%, #f0a830 60%, #e8c470 100%);
+  background: linear-gradient(135deg, #c0f7e4 0%, #5ce0b0 28%, #10b981 58%, #6ee7b7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 16px;
 }
 
-/* Подзаголовок */
 .heroSubtitle {
   font-size: clamp(var(--text-base), 1.5vw, var(--text-xl));
   color: rgba(255, 255, 255, 0.45);
@@ -230,7 +208,6 @@
   line-height: 1.6;
 }
 
-/* Мета-пилюли */
 .heroBadges {
   display: flex;
   align-items: center;
@@ -259,16 +236,16 @@
   flex-shrink: 0;
 }
 
-/* Кнопка «Смотреть фото» — интерактивная пилюля */
+/* Зелёная кнопка скролла */
 .scrollBtn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
   border-radius: 100px;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  background: rgba(245, 158, 11, 0.08);
-  color: rgba(245, 185, 80, 0.85);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.1);
+  color: rgba(52, 211, 153, 0.88);
   font-size: var(--text-sm);
   font-weight: 600;
   font-family: var(--font-sans);
@@ -282,26 +259,23 @@
 }
 
 .scrollBtn:hover {
-  background: rgba(245, 158, 11, 0.16);
-  border-color: rgba(245, 158, 11, 0.75);
-  color: rgba(252, 200, 100, 1);
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.18);
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.8);
+  color: rgba(110, 231, 183, 1);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.22);
   transform: translateY(-1px);
 }
 
 .scrollBtn:active {
   transform: translateY(0);
 }
-
 .scrollBtn svg {
   transition: transform var(--transition-fast);
 }
-
 .scrollBtn:hover svg {
   transform: translateY(2px);
 }
 
-/* Плавный переход к панели */
 .heroFade {
   position: absolute;
   bottom: -1px;
@@ -314,8 +288,7 @@
 }
 
 /* ══════════════════════════════════════════
-   Основная панель — dark glass
-   Идентично darkPanel / OfficePage .container
+   Panel — тёмный, идентично contacts
 ══════════════════════════════════════════ */
 
 .panel {
@@ -328,19 +301,18 @@
     0 -24px 64px rgba(0, 0, 0, 0.55);
 }
 
-/* Декоративный amber glow */
 .panel::after {
   content: '';
   position: absolute;
-  top: 30%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  height: 600px;
+  width: 80%;
+  height: 500px;
   background: radial-gradient(
     ellipse 55% 45% at 50% 50%,
-    rgba(139, 85, 35, 0.05) 0%,
-    rgba(245, 158, 11, 0.02) 45%,
+    rgba(16, 185, 129, 0.05) 0%,
+    rgba(20, 184, 166, 0.02) 50%,
     transparent 70%
   );
   pointer-events: none;
@@ -355,7 +327,17 @@
   padding: 56px 24px 80px;
 }
 
-/* Section label — amber pill (идентично OfficePage .sectionTitle) */
+/* ── Section ── */
+
+.section {
+  margin-bottom: 72px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+/* Зелёная ombre-плашка */
 .sectionLabel {
   position: relative;
   display: inline-flex;
@@ -369,7 +351,7 @@
   border-radius: 100px;
   background: rgba(255, 255, 255, 0.06);
   border: 1.5px solid transparent;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .sectionLabel::before {
@@ -380,11 +362,11 @@
   padding: 1.5px;
   background: linear-gradient(
     90deg,
-    rgba(100, 50, 12, 0.5) 0%,
-    rgba(195, 125, 50, 1) 30%,
-    rgba(230, 168, 88, 1) 50%,
-    rgba(195, 125, 50, 1) 70%,
-    rgba(100, 50, 12, 0.5) 100%
+    rgba(6, 80, 50, 0.5) 0%,
+    rgba(16, 185, 129, 1) 30%,
+    rgba(52, 211, 153, 1) 50%,
+    rgba(16, 185, 129, 1) 70%,
+    rgba(6, 80, 50, 0.5) 100%
   );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -394,31 +376,233 @@
   pointer-events: none;
 }
 
-/* ── CTA блок внизу ── */
+.sectionTitle {
+  font-size: clamp(var(--text-2xl), 3vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin-bottom: 32px;
+}
+
+/* ══════════════════════════════════════════
+   Карта
+══════════════════════════════════════════ */
+
+.mapLayout {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.mapInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.mapBlocks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mapBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.mapBlockIcon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: rgba(52, 211, 153, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.mapBlockLabel {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+.mapBlockValue {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.65;
+}
+
+.mapOpenBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.09);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: rgba(52, 211, 153, 0.88);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.mapOpenBtn:hover {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.5);
+  color: rgba(110, 231, 183, 1);
+  transform: translateY(-1px);
+}
+
+/* Карта — iframe */
+
+.mapFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.08) inset,
+    0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+.mapIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  filter: brightness(0.92) saturate(0.9);
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(16, 185, 129, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(52, 211, 153, 0.2);
+}
+
+/* ══════════════════════════════════════════
+   Транспортные карточки
+══════════════════════════════════════════ */
+
+.transportGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.transportCard {
+  padding: 24px 22px;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%),
+    rgba(6, 5, 16, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-top-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.transportCardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.transportIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: rgba(52, 211, 153, 0.9);
+}
+
+.transportCardTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: -0.01em;
+}
+
+.transportList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.transportItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+
+.transportDot {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.6);
+  margin-top: 7px;
+}
+
+/* ══════════════════════════════════════════
+   CTA блок
+══════════════════════════════════════════ */
 
 .cta {
-  margin-top: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
   padding: 40px 48px;
   border-radius: var(--radius-2xl);
   background:
     linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.06) 0%,
-      rgba(255, 255, 255, 0.02) 50%,
-      rgba(0, 0, 0, 0.06) 100%
+      rgba(16, 185, 129, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 60%,
+      rgba(0, 0, 0, 0.05) 100%
     ),
-    rgba(6, 5, 16, 0.65);
-  backdrop-filter: blur(32px) saturate(2);
-  -webkit-backdrop-filter: blur(32px) saturate(2);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-top-color: rgba(255, 255, 255, 0.16);
+    rgba(6, 5, 16, 0.6);
+  border: 1px solid rgba(16, 185, 129, 0.14);
+  border-top-color: rgba(16, 185, 129, 0.25);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 4px 24px rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+    inset 0 1px 0 rgba(16, 185, 129, 0.12),
+    0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 .ctaContent {
@@ -445,16 +629,16 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 14px 28px;
+  padding: 14px 32px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(10, 140, 90, 0.95) 100%);
   color: #ffffff;
   font-size: var(--text-base);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
   box-shadow:
-    0 4px 20px rgba(139, 85, 35, 0.38),
+    0 4px 20px rgba(16, 185, 129, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   transition:
     background var(--transition-base),
@@ -463,9 +647,9 @@
 }
 
 .ctaBtn:hover {
-  background: linear-gradient(135deg, #ad7242 0%, #8b5523 100%);
+  background: linear-gradient(135deg, rgba(20, 210, 145, 0.95) 0%, rgba(14, 165, 105, 1) 100%);
   box-shadow:
-    0 8px 28px rgba(139, 85, 35, 0.52),
+    0 8px 28px rgba(16, 185, 129, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
 }
@@ -478,18 +662,25 @@
    Адаптив
 ══════════════════════════════════════════ */
 
-/* ── 1024px — планшет ── */
 @media (max-width: 1024px) {
   .panelInner {
     padding: 48px 20px 64px;
   }
-
+  .mapLayout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .mapFrame {
+    aspect-ratio: 16 / 9;
+  }
+  .transportGrid {
+    grid-template-columns: 1fr 1fr;
+  }
   .cta {
     padding: 32px 28px;
   }
 }
 
-/* ── 768px — планшет узкий ── */
 @media (max-width: 768px) {
   .breadcrumb {
     display: none;
@@ -503,20 +694,17 @@
   }
 
   .heroInner {
-    padding: 96px 20px 32px;
+    padding: 96px 24px 32px;
   }
-
   .heroLabel {
     font-size: 10px;
     letter-spacing: 0.1em;
     margin-bottom: 10px;
   }
-
   .heroSubtitle {
     font-size: var(--text-sm);
     margin-bottom: 20px;
   }
-
   .heroBadge,
   .scrollBtn {
     font-size: 12px;
@@ -526,13 +714,21 @@
   .panel {
     border-radius: 20px 20px 0 0;
   }
-
   .panelInner {
-    padding: 36px 10px 52px;
+    padding: 36px 20px 52px;
+  }
+  .section {
+    margin-bottom: 52px;
+  }
+  .sectionLabel {
+    margin-bottom: 12px;
   }
 
-  .sectionLabel {
-    margin-bottom: 24px;
+  .mapFrame {
+    aspect-ratio: 4 / 3;
+  }
+  .mapLayout {
+    gap: 32px;
   }
 
   .cta {
@@ -540,7 +736,6 @@
     align-items: flex-start;
     gap: 20px;
     padding: 24px 20px;
-    margin-top: 52px;
     border-radius: var(--radius-xl);
   }
 
@@ -550,7 +745,6 @@
   }
 }
 
-/* ── 600px — большой телефон ── */
 @media (max-width: 600px) {
   .hero {
     height: 60vh;
@@ -558,34 +752,26 @@
     min-height: 400px;
     justify-content: center;
   }
-
   .heroInner {
-    padding: 90px 16px 28px;
+    padding: 90px 20px 28px;
   }
-
-  .heroSubtitle {
-    max-width: 100%;
-  }
-
   .panelInner {
-    padding: 32px 10px 48px;
+    padding: 32px 20px 48px;
   }
-
+  .transportGrid {
+    grid-template-columns: 1fr;
+  }
   .cta {
-    margin-top: 44px;
     padding: 20px 18px;
   }
-
   .ctaTitle {
     font-size: var(--text-lg);
   }
-
   .ctaText {
     font-size: var(--text-sm);
   }
 }
 
-/* ── 480px — телефон ── */
 @media (max-width: 480px) {
   .hero {
     height: 58vh;
@@ -593,43 +779,37 @@
     min-height: 380px;
     justify-content: center;
   }
-
   .heroInner {
-    padding: 86px 14px 24px;
+    padding: 86px 20px 24px;
   }
-
-  /* Подзаголовок скрываем — слишком много текста на узком экране */
   .heroSubtitle {
     display: none;
   }
-
   .heroBadges {
     gap: 6px;
   }
-
   .panelInner {
-    padding: 28px 10px 44px;
+    padding: 28px 20px 44px;
   }
-
   .sectionLabel {
     font-size: 10px;
     padding: 5px 11px;
-    margin-bottom: 20px;
   }
-
-  .cta {
-    margin-top: 36px;
-    padding: 18px 14px;
-    gap: 16px;
-    border-radius: var(--radius-lg);
+  .sectionTitle {
+    font-size: var(--text-2xl);
+    margin-bottom: 24px;
   }
-
-  .ctaTitle {
-    font-size: var(--text-base);
+  .mapFrame {
+    aspect-ratio: 1 / 1;
+  }
+  .transportCard {
+    padding: 18px 16px;
+  }
+  .section {
+    margin-bottom: 44px;
   }
 }
 
-/* ── 360px — маленький телефон ── */
 @media (max-width: 360px) {
   .hero {
     height: 55vh;
@@ -637,33 +817,29 @@
     min-height: 340px;
     justify-content: center;
   }
-
   .heroInner {
-    padding: 80px 12px 20px;
+    padding: 80px 16px 20px;
   }
-
   .heroLabel {
     display: none;
   }
-
   .heroBadgeDot {
     display: none;
   }
-
   .heroBadges {
     flex-wrap: wrap;
   }
-
   .panelInner {
-    padding: 24px 8px 36px;
+    padding: 24px 16px 36px;
   }
-
   .cta {
-    padding: 16px 12px;
+    padding: 16px 14px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .scrollBtn,
+  .mapOpenBtn,
   .ctaBtn {
     transition: none;
   }

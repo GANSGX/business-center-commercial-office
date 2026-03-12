@@ -12,7 +12,7 @@ import styles from './Header.module.css'
 const NAV_LINKS = [
   { href: '/offices', label: 'Аренда офисов' },
   { href: '/gallery', label: 'Фотогалерея' },
-  { href: '/contacts#map', label: 'Расположение' },
+  { href: '/location', label: 'Расположение' },
   { href: '/about', label: 'О нас' },
   { href: '/contacts', label: 'Контакты' },
 ]
@@ -57,18 +57,25 @@ export function Header({ services }: HeaderProps) {
     return () => document.removeEventListener('keydown', handler)
   }, [])
 
-  // Lock body scroll when drawer is open
+  // Lock body scroll when drawer is open (включая iOS Safari)
   useEffect(() => {
-    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
     return () => {
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
   }, [drawerOpen])
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   const handleCta = useCallback(() => {
-    if (pathname === '/') {
+    if (pathname === '/' || pathname === '/contacts') {
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     } else {
       openModal()

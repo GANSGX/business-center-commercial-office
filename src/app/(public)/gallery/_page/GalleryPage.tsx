@@ -51,13 +51,15 @@ export function GalleryPage({ images }: Props) {
       {/* ── Основной контент ── */}
       <div id="gallery-panel" className={styles.panel}>
         <div className={styles.panelInner}>
-          <div id="gallery-section-label" className={styles.sectionLabel} aria-hidden="true">
-            Фото и видео
-          </div>
-
-          <div id="gallery-grid">
+          <section id="gallery-section-label" aria-labelledby="gallery-h2">
+            <span className={styles.sectionLabel} aria-hidden="true">
+              Фото и видео
+            </span>
+            <h2 id="gallery-h2" className={styles.srOnly}>
+              Фотогалерея бизнес-центра
+            </h2>
             <GalleryGrid images={images} />
-          </div>
+          </section>
 
           <div className={styles.cta}>
             <div className={styles.ctaContent}>

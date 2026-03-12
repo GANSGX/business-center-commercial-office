@@ -29,7 +29,7 @@ function buildOrganizationSchema() {
 export function AboutPage() {
   const breadcrumbJsonLd = buildBreadcrumbList([
     { name: 'Главная', url: `${BASE_URL}/` },
-    { name: 'О компании', url: `${BASE_URL}/about` },
+    { name: 'О нас', url: `${BASE_URL}/about` },
   ])
   const organizationJsonLd = buildOrganizationSchema()
 

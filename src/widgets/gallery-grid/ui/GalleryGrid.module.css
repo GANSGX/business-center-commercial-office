@@ -172,6 +172,8 @@
   gap: 16px;
   padding: 20px;
   animation: fadeIn 180ms ease;
+  touch-action: none;
+  overscroll-behavior: none;
 }
 
 @keyframes fadeIn {
@@ -414,7 +416,7 @@
 
   .lightboxImg {
     width: 96vw;
-    height: 52vh;
+    height: 52svh;
   }
 
   .thumb {
@@ -432,7 +434,7 @@
 
   .lightboxImg {
     width: 100vw;
-    height: 50vh;
+    height: 50svh;
     border-radius: var(--radius-md);
   }
 
@@ -474,7 +476,7 @@
   }
 
   .lightboxImg {
-    height: 46vh;
+    height: 46svh;
   }
 
   .thumb {
@@ -501,7 +503,7 @@
   }
 
   .lightboxImg {
-    height: 42vh;
+    height: 42svh;
   }
 
   .thumb {

@@ -35,7 +35,7 @@ const NAV_COLUMNS = [
       { href: '/gallery', label: 'Фотогалерея' },
       { href: '/about', label: 'О нас' },
       { href: '/contacts', label: 'Контакты' },
-      { href: '/contacts#map', label: 'Как добраться' },
+      { href: '/location', label: 'Расположение' },
     ],
   },
 ]
