@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Preloader } from '@/shared/ui'
 import '@/styles/globals.css'
 
 const inter = Inter({
@@ -28,7 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={inter.variable}>{children}</body>
+      <body className={inter.variable}>
+        <Preloader />
+        {children}
+      </body>
     </html>
   )
 }

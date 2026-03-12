@@ -11,7 +11,7 @@ const MAP_URL =
 
 const ADDRESS = '630007, г. Новосибирск, ул. Коммунистическая, 35'
 const TRANSPORT =
-  'Метро «Площадь Ленина» — 5–10 минут пешком\nОстановки автобусов — в 2 минутах от входа'
+  'Метро «Площадь Ленина» — 5–10 минут пешком\nПлатформа пригородного сообщения «Центр» — в шаговой доступности'
 
 export function MapSection() {
   const { ref, isVisible } = useIntersection({ rootMargin: '200px', freezeOnceVisible: true })

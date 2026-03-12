@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { LocationHero } from './LocationHero'
+import { LocationCtaButton } from './LocationCtaButton'
 import { LocationMap } from './LocationMap'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
@@ -180,9 +180,7 @@ export function LocationPage() {
                 в&nbsp;течение рабочего дня.
               </p>
             </div>
-            <Link href="/contacts" className={styles.ctaBtn}>
-              Оставить заявку
-            </Link>
+            <LocationCtaButton />
           </div>
         </div>
 

@@ -1,13 +1,6 @@
 import Link from 'next/link'
 import { LogoLink } from '@/shared/ui'
-import {
-  IconVk,
-  IconWhatsapp,
-  IconTelegram,
-  IconPhone,
-  IconEmail,
-  IconMapPin,
-} from '@/shared/ui/icons'
+import { IconPhone, IconEmail, IconMapPin } from '@/shared/ui/icons'
 import styles from './Footer.module.css'
 
 const NAV_COLUMNS = [
@@ -16,8 +9,7 @@ const NAV_COLUMNS = [
     links: [
       { href: '/offices', label: 'Все помещения' },
       { href: '/offices?type=office', label: 'Офисы' },
-      { href: '/offices?type=open', label: 'Open space' },
-      { href: '/offices?type=meeting', label: 'Переговорные' },
+      { href: '/offices?type=storage', label: 'Складские помещения' },
     ],
   },
   {
@@ -40,7 +32,8 @@ const NAV_COLUMNS = [
   },
 ]
 
-const PHONE = '+7 (383) 223-43-50'
+const PHONE_RECEPTION = '+7 (383) 223-43-50'
+const PHONE_RENT = '+7 (383) 217-80-07'
 const EMAIL = 'kommunist35@mail.ru'
 const ADDRESS = '630007, г. Новосибирск, ул. Коммунистическая, 35'
 
@@ -67,9 +60,25 @@ export function Footer() {
             </p>
 
             <div className={styles.contacts}>
-              <a href={`tel:${PHONE.replace(/\s|\(|\)|-/g, '')}`} className={styles.contactItem}>
+              <a
+                href={`tel:${PHONE_RECEPTION.replace(/\s|\(|\)|-/g, '')}`}
+                className={styles.contactItem}
+              >
                 <IconPhone size={14} className={styles.contactIcon} />
-                {PHONE}
+                <span>
+                  <span className={styles.contactSubLabel}>Приёмная&nbsp;</span>
+                  {PHONE_RECEPTION}
+                </span>
+              </a>
+              <a
+                href={`tel:${PHONE_RENT.replace(/\s|\(|\)|-/g, '')}`}
+                className={styles.contactItem}
+              >
+                <IconPhone size={14} className={styles.contactIcon} />
+                <span>
+                  <span className={styles.contactSubLabel}>Отдел аренды&nbsp;</span>
+                  {PHONE_RENT}
+                </span>
               </a>
               <a href={`mailto:${EMAIL}`} className={styles.contactItem}>
                 <IconEmail size={14} className={styles.contactIcon} />
@@ -126,40 +135,6 @@ export function Footer() {
             <Link href="/privacy" className={styles.privacyLink}>
               Политика конфиденциальности
             </Link>
-          </div>
-
-          {/* Правая группа: соцсети с подписью */}
-          <div className={styles.socialsGroup}>
-            <span className={styles.socialsLabel}>Мы в соцсетях</span>
-            <div className={styles.socials}>
-              <a
-                href="https://vk.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.socialBtn} ${styles.socialVk}`}
-                aria-label="ВКонтакте"
-              >
-                <IconVk size={18} />
-              </a>
-              <a
-                href="https://wa.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.socialBtn} ${styles.socialWa}`}
-                aria-label="WhatsApp"
-              >
-                <IconWhatsapp size={18} />
-              </a>
-              <a
-                href="https://t.me/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${styles.socialBtn} ${styles.socialTg}`}
-                aria-label="Telegram"
-              >
-                <IconTelegram size={18} />
-              </a>
-            </div>
           </div>
         </div>
       </div>

@@ -729,13 +729,36 @@
     text-align: right;
   }
 
+  /* Карточка — грид: цена (слева) + бейдж (справа) в одну строку,
+     кнопка и всё остальное — на всю ширину */
+  .sidebarCard {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    padding: 18px;
+    gap: 14px 16px;
+  }
+
+  .priceBlock {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+
   .priceValue {
     font-size: var(--text-2xl);
   }
 
-  .sidebarCard {
-    padding: 18px;
-    gap: 14px;
+  .sidebarBadge {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+  }
+
+  /* ctaBtn, sidebarSpecs, sidebarNote — на всю ширину */
+  .sidebarCard > *:nth-child(n + 3) {
+    grid-column: 1 / -1;
   }
 
   .tag {
@@ -767,7 +790,7 @@
 
   .sidebarCard {
     padding: 16px;
-    gap: 12px;
+    gap: 12px 14px;
     border-radius: var(--radius-lg);
   }
 
@@ -828,7 +851,7 @@
 
   .sidebarCard {
     padding: 14px;
-    gap: 10px;
+    gap: 10px 12px;
   }
 
   .priceValue {

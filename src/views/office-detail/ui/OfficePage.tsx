@@ -59,6 +59,8 @@ export function OfficePage({ room }: Props) {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    // Вызываем сразу — чтобы блюр применился при перезагрузке в середине страницы
+    handleScroll()
     return () => {
       window.removeEventListener('scroll', handleScroll)
       if (rafId !== null) cancelAnimationFrame(rafId)

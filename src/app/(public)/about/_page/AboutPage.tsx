@@ -60,14 +60,18 @@ export function AboutPage() {
             <p className={styles.aboutLead}>
               Акционерное общество «Коммунистическая-35» — управляющая компания одноимённого
               бизнес-центра в&nbsp;историческом центре Новосибирска. Предоставляем в&nbsp;аренду
-              офисные помещения площадью от&nbsp;15 до&nbsp;72&nbsp;м² для малого и&nbsp;среднего
-              бизнеса.
+              офисные и&nbsp;складские помещения для малого и&nbsp;среднего бизнеса.
             </p>
             <p className={`${styles.aboutText} ${styles.aboutTextSecondary}`}>
-              В&nbsp;здании созданы все условия для комфортной работы: профессиональная охрана,
-              ежедневная уборка, скоростной интернет и&nbsp;круглосуточный доступ. Удобное
-              расположение обеспечивает отличную транспортную доступность для сотрудников
-              и&nbsp;клиентов.
+              В&nbsp;здании созданы все условия для комфортной работы: профессиональная охрана 24/7,
+              скоростной интернет и&nbsp;круглосуточный доступ. На&nbsp;территории бизнес-центра
+              работают кафе бурятской кухни «Бузовар», бары «Пинобар» и&nbsp;«Hait».
+            </p>
+            <p className={`${styles.aboutText} ${styles.aboutTextSecondary}`}>
+              В&nbsp;непосредственной близости расположены Мэрия Новосибирска, Театр оперы
+              и&nbsp;балета, Государственная филармония, Музей Рериха, Картинная галерея
+              и&nbsp;Первомайский сквер. Рядом&nbsp;— станция метро «Площадь Ленина»
+              и&nbsp;остановочная платформа пригородного сообщения «Центр».
             </p>
 
             <div className={styles.statsRow} role="list" aria-label="Ключевые показатели">
@@ -211,7 +215,7 @@ export function AboutPage() {
             <h2 className={styles.sectionTitle}>Контактная информация</h2>
 
             <div className={styles.contactGrid}>
-              <a href="tel:+73833223450" className={styles.contactCard}>
+              <a href="tel:+73832234350" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -227,12 +231,12 @@ export function AboutPage() {
                   </svg>
                 </span>
                 <div>
-                  <p className={styles.contactLabel}>Телефон</p>
+                  <p className={styles.contactLabel}>Приёмная</p>
                   <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;223-43-50</span>
                 </div>
               </a>
 
-              <div className={styles.contactCard}>
+              <a href="tel:+73832178007" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -244,15 +248,14 @@ export function AboutPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <polyline points="22 2 11 13" />
-                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.09 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .9h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
                   </svg>
                 </span>
                 <div>
-                  <p className={styles.contactLabel}>Факс</p>
-                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;217-72-24</span>
+                  <p className={styles.contactLabel}>Отдел аренды</p>
+                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;217-80-07</span>
                 </div>
-              </div>
+              </a>
 
               <a href="mailto:kommunist35@mail.ru" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">

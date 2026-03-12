@@ -64,7 +64,7 @@ export function ContactsPage() {
 
             {/* Четыре карточки */}
             <div className={styles.contactsGrid}>
-              <a href="tel:+73833223450" className={styles.contactCard}>
+              <a href="tel:+73832234350" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -80,12 +80,12 @@ export function ContactsPage() {
                   </svg>
                 </span>
                 <div>
-                  <p className={styles.contactLabel}>Телефон</p>
+                  <p className={styles.contactLabel}>Приёмная</p>
                   <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;223-43-50</span>
                 </div>
               </a>
 
-              <div className={styles.contactCard}>
+              <a href="tel:+73832178007" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -97,15 +97,14 @@ export function ContactsPage() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <polyline points="22 2 11 13" />
-                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.09 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .9h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
                   </svg>
                 </span>
                 <div>
-                  <p className={styles.contactLabel}>Факс</p>
-                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;217-72-24</span>
+                  <p className={styles.contactLabel}>Отдел аренды</p>
+                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;217-80-07</span>
                 </div>
-              </div>
+              </a>
 
               <a href="mailto:kommunist35@mail.ru" className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">

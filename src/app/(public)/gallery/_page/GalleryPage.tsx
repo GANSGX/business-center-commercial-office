@@ -1,9 +1,9 @@
 import { GalleryHero } from './GalleryHero'
+import { GalleryCtaButton } from './GalleryCtaButton'
 import { GalleryGrid } from '@/widgets/gallery-grid'
 import { Footer } from '@/widgets/footer'
 import type { GalleryImage } from '@/entities/gallery'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
-import Link from 'next/link'
 import styles from './GalleryPage.module.css'
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
@@ -68,9 +68,7 @@ export function GalleryPage({ images }: Props) {
                 Организуем бесплатный осмотр любого офиса в удобное для вас время
               </p>
             </div>
-            <Link href="/contacts" className={styles.ctaBtn}>
-              Записаться на просмотр
-            </Link>
+            <GalleryCtaButton />
           </div>
         </div>
 
