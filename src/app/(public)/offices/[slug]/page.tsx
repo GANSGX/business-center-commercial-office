@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getRoomBySlug } from '@/entities/room'
-import { OfficePage } from '@/pages/office-detail'
+import { OfficePage } from '@/views/office-detail'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import { sanitizeRichText } from '@/shared/lib/sanitize'
 

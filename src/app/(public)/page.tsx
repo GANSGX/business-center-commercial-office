@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { HomePage } from '@/pages/home'
+import { HomePage } from '@/views/home'
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
