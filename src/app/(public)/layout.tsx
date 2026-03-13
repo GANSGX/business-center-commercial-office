@@ -1,6 +1,6 @@
 import { Header } from '@/widgets/header'
 import { CookieBannerLazy } from '@/widgets/cookie-banner'
-import { LeadModal } from '@/widgets/lead-form'
+import { LeadModalLazy } from '@/widgets/lead-form'
 import { ScrollToTop } from '@/shared/ui'
 import styles from './layout.module.css'
 
@@ -19,7 +19,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <ScrollToTop />
       <Header services={mockServices} />
       <main>{children}</main>
-      <LeadModal />
+      <LeadModalLazy />
       <CookieBannerLazy />
     </div>
   )

@@ -26,11 +26,18 @@ export function Header({ services }: HeaderProps) {
   const [drawerServicesOpen, setDrawerServicesOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Scroll detection
+  // Scroll detection — RAF throttle чтобы не тригерить ре-рендер на каждый пиксель
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 10)
+    let rafId: number
+    const handler = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 10))
+    }
     window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
+    return () => {
+      window.removeEventListener('scroll', handler)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   // Close desktop dropdown on outside click
