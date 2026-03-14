@@ -45,4 +45,4 @@ docker/certs/
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
+# src/generated/prisma is tracked (needed for TypeScript types)

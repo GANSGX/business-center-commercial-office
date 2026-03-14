@@ -1,0 +1,443 @@
+/* ===== Offers Preview — dark glass panel over hero ===== */
+
+/* ─── Section ───────────────────────────────────────── */
+
+.section {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  /* background, border-radius и box-shadow — на darkPanel в HomePage */
+  background: transparent;
+  padding: 120px 0 64px;
+  min-height: 80vh;
+}
+
+.inner {
+  max-width: 1248px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* ─── Шапка секции ──────────────────────────────────── */
+
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.sectionHeadText {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Пилюля-лейбл — идентична hero .label */
+.sectionLabel {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 7px 16px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid transparent;
+  width: fit-content;
+}
+
+/* Градиентный amber-бордер — идентичен hero .label::before */
+.sectionLabel::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 50, 12, 0.5) 0%,
+    rgba(195, 125, 50, 1) 30%,
+    rgba(230, 168, 88, 1) 50%,
+    rgba(195, 125, 50, 1) 70%,
+    rgba(100, 50, 12, 0.5) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.sectionTitle {
+  font-size: clamp(var(--text-2xl), 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.sectionSubtitle {
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.48);
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+/* Кнопка "Все офисы" — glass, идентична hero .btnGlass */
+.allLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+  padding: 12px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    background var(--transition-base),
+    border-color var(--transition-base),
+    transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.allLink:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.26);
+  transform: translateX(3px);
+}
+
+/* ─── Grid ──────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  /* Нужно для z-index при hover */
+  isolation: isolate;
+}
+
+/* ─── Card ──────────────────────────────────────────── */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+
+  /* Dark glass — идентичен hero .content */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(0, 0, 0, 0.05) 100%
+    ),
+    rgba(6, 5, 16, 0.7);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.9);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.9);
+
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-top-color: rgba(255, 255, 255, 0.2);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 4px 24px rgba(0, 0, 0, 0.28);
+
+  /* Пружинящий hover: cubic-bezier с «отскоком» */
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* Hover — карточка выезжает вперёд и увеличивается */
+.card:hover {
+  will-change: transform;
+  transform: scale(1.04) translateY(-10px);
+  z-index: 2;
+  border-color: rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(230, 168, 88, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 28px 72px rgba(0, 0, 0, 0.55),
+    0 8px 28px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(230, 168, 88, 0.12),
+    0 0 48px rgba(245, 158, 11, 0.07);
+}
+
+/* ─── Photo ─────────────────────────────────────────── */
+
+.cardPhoto {
+  position: relative;
+  height: 148px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #201628 0%, #18112e 30%, #2a1e1a 65%, #150e0e 100%);
+  transition: transform 0.5s ease;
+}
+
+/* Архитектурный световой блик */
+.photoPlaceholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 50% at 28% 38%,
+    rgba(245, 201, 106, 0.1) 0%,
+    rgba(245, 201, 106, 0.03) 40%,
+    transparent 70%
+  );
+}
+
+.card:hover .photoPlaceholder {
+  transform: scale(1.05);
+}
+
+/* "Свободен" — glass green pill */
+.statusBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(110, 231, 183, 0.95);
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.34);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* Этаж — тёмная glass пилюля */
+.floorBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.68);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Card body ─────────────────────────────────────── */
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 18px 18px;
+  gap: 12px;
+}
+
+/* ─── Title ─────────────────────────────────────────── */
+
+.cardTitle {
+  display: inline-block;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  transition: color var(--transition-fast);
+}
+
+.cardTitle:hover {
+  color: rgba(245, 201, 106, 0.95);
+}
+
+/* ─── Details ───────────────────────────────────────── */
+
+.details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.detailRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap;
+}
+
+.detailValue {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: right;
+}
+
+/* ─── Footer ────────────────────────────────────────── */
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: auto;
+}
+
+.priceWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.priceLabel {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.32);
+  letter-spacing: 0.04em;
+}
+
+/* Цена — amber gradient как scrollPhrase в hero */
+.price {
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #f5c96a 0%, #f0a830 50%, #e8c470 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* CTA — идентична hero .btnPrimary */
+.ctaBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(139, 85, 35, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition:
+    background var(--transition-base),
+    box-shadow var(--transition-base);
+  white-space: nowrap;
+}
+
+.ctaBtn:hover {
+  background: linear-gradient(135deg, #ad7242 0%, #8b5523 100%);
+  box-shadow:
+    0 4px 16px rgba(139, 85, 35, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ─── Responsive ────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: 96px 0 80px;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 108px 0 72px;
+  }
+
+  .inner {
+    padding: 0 10px;
+  }
+
+  .sectionHead {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .cardFooter {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .ctaBtn {
+    flex-shrink: 0;
+    font-size: var(--text-xs);
+    padding: 9px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 104px 0 64px;
+  }
+}
+
+@media (max-width: 375px) {
+  .section {
+    padding: 88px 0 48px;
+  }
+
+  .inner {
+    padding: 0 8px;
+  }
+}

@@ -1,0 +1,880 @@
+/* ===== OfficePage — страница карточки офиса =====
+   Структура идентична главной:
+   - heroSection: position sticky, 100vh, фото за хедером
+   - container (darkPanel): z-index 2, едет поверх залипшего фото при скроле
+   Хедер: padding 14px 24px 0 + inner height 72px = 86px
+================================================================ */
+
+.page {
+  position: relative;
+  background: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════════
+   Hero — sticky, полный экран, фото за хедером
+   Идентично .hero в HeroSlider
+══════════════════════════════════════════ */
+
+.heroSection {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  margin-top: -86px;
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+/* ── Галерея заполняет весь heroSection ── */
+
+.galleryFill {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── Хлебные крошки — поверх фото, выровнены по хедеру ── */
+
+/* padding: 0 24px совпадает с outer-padding хедера.
+   position: fixed — всегда видны при скроле, поверх всего. */
+.breadcrumb {
+  position: fixed;
+  top: calc(86px + 18px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none;
+  padding: 0 24px;
+}
+
+/* Внутри .breadcrumb { padding: 0 24px } — поэтому 1200px, не 1248px */
+.breadcrumbList {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.crumbLink {
+  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 100px;
+  /* Идентично .inner хедера */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    rgba(6, 5, 14, 0.82);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.crumbLink:hover {
+  color: #fff;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.04) 50%,
+      rgba(0, 0, 0, 0.04) 100%
+    ),
+    rgba(6, 5, 14, 0.88);
+}
+
+.crumbSep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  user-select: none;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(0, 0, 0, 0.08) 100%),
+    rgba(6, 5, 14, 0.72);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.crumbCurrent {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.08) 100%),
+    rgba(6, 5, 14, 0.7);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* ── Нижний градиент (overlaySlot — передаётся в PhotoGallery) ── */
+
+.photoGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.5) 35%,
+    rgba(0, 0, 0, 0.15) 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Бейджи статус + этаж ── */
+
+.photoBadges {
+  position: absolute;
+  bottom: 28px;
+  left: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.floorTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.03em;
+}
+
+/* ── Плейсхолдер (нет фото) ── */
+
+.photoPlaceholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--color-hero-bg);
+  color: rgba(255, 255, 255, 0.2);
+  font-size: var(--text-sm);
+}
+
+/* ══════════════════════════════════════════
+   Основной контент — dark glass panel
+   Идентично darkPanel в HomePage.
+   z-index: 2 → едет поверх sticky heroSection при скроле
+══════════════════════════════════════════ */
+
+.container {
+  position: relative;
+  z-index: 3;
+  background: rgba(8, 6, 22, 0.92);
+  border-radius: 32px 32px 0 0;
+  box-shadow:
+    0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 -24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* Декоративный amber glow */
+.container::after {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 500px;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(139, 85, 35, 0.05) 0%,
+    rgba(245, 158, 11, 0.018) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.containerInner {
+  position: relative;
+  z-index: 1;
+  max-width: 1248px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.title {
+  font-size: clamp(var(--text-2xl), 3vw, var(--text-4xl));
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  padding-top: 56px;
+  margin-bottom: 32px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  padding-bottom: 96px;
+  align-items: start;
+}
+
+/* ── Левая колонка ── */
+
+.main {
+  min-width: 0;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+/* Section title — amber-bordered pill label (идентично Advantages/OffersPreview) */
+.sectionTitle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid transparent;
+  margin-bottom: 20px;
+}
+
+.sectionTitle::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 50, 12, 0.5) 0%,
+    rgba(195, 125, 50, 1) 30%,
+    rgba(230, 168, 88, 1) 50%,
+    rgba(195, 125, 50, 1) 70%,
+    rgba(100, 50, 12, 0.5) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Таблица характеристик — dark glass (как карточки OffersPreview) ── */
+
+.specs {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) 1fr;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 40%,
+      rgba(0, 0, 0, 0.12) 100%
+    ),
+    rgba(8, 6, 20, 0.75);
+  backdrop-filter: blur(32px) saturate(2);
+  -webkit-backdrop-filter: blur(32px) saturate(2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.specTerm {
+  padding: 12px 18px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-weight: 400;
+}
+
+.specValue {
+  padding: 12px 18px;
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.specTerm:last-of-type,
+.specValue:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Описание — glass card с amber-акцентом слева ── */
+
+.description {
+  position: relative;
+  padding: 24px 24px 24px 28px;
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.015) 50%,
+      rgba(0, 0, 0, 0.08) 100%
+    ),
+    rgba(8, 6, 20, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top-color: rgba(255, 255, 255, 0.12);
+  border-left: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 4px 20px rgba(0, 0, 0, 0.25);
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.78;
+  overflow: hidden;
+}
+
+/* Amber left accent bar */
+.description::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  background: linear-gradient(
+    180deg,
+    rgba(245, 158, 11, 0.7) 0%,
+    rgba(195, 110, 30, 0.4) 60%,
+    transparent 100%
+  );
+}
+
+.description p {
+  margin-bottom: 16px;
+}
+.description p:last-child {
+  margin-bottom: 0;
+}
+
+.description h2,
+.description h3 {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 24px 0 12px;
+}
+
+.description ul,
+.description ol {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+
+.description li {
+  margin-bottom: 6px;
+}
+
+/* ── Теги "Подходит для" ── */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag {
+  position: relative;
+  padding: 7px 16px;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: rgba(245, 185, 80, 0.75);
+  border-radius: 100px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.tag:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: rgba(252, 200, 100, 1);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.12);
+}
+
+/* ══════════════════════════════════════════
+   Боковая панель — dark glass card
+   Идентична .card в OffersPreview
+══════════════════════════════════════════ */
+
+.sidebar {
+  position: sticky;
+  top: calc(86px + 24px);
+  padding-top: 52px;
+  padding-right: 14px;
+}
+
+.sidebarCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(0, 0, 0, 0.05) 100%
+    ),
+    rgba(6, 5, 16, 0.7);
+  backdrop-filter: blur(40px) saturate(2.2) brightness(0.9);
+  -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.9);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-top-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 4px 24px rgba(0, 0, 0, 0.28);
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Цена — amber gradient как в OffersPreview */
+.priceValue {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #f5c96a 0%, #f0a830 50%, #e8c470 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.priceM2 {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.sidebarBadge {
+  display: flex;
+}
+
+/* CTA — идентична OffersPreview .ctaBtn */
+.ctaBtn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
+  color: #ffffff;
+  font-size: var(--text-base);
+  font-weight: 600;
+  font-family: var(--font-sans);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+  box-shadow:
+    0 4px 20px rgba(139, 85, 35, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.ctaBtn:hover {
+  background: linear-gradient(135deg, #ad7242 0%, #8b5523 100%);
+  box-shadow:
+    0 8px 28px rgba(139, 85, 35, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.ctaBtn:active {
+  transform: translateY(0);
+}
+
+/* Мини-характеристики — как detailRow в OffersPreview */
+.sidebarSpecs {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarSpecRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: var(--text-sm);
+}
+
+.sidebarSpecRow:last-child {
+  border-bottom: none;
+}
+
+.sidebarSpecRow dt {
+  color: rgba(255, 255, 255, 0.38);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.sidebarSpecRow dd {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+  text-align: right;
+}
+
+.sidebarNote {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.28);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════════════════
+   Адаптив
+══════════════════════════════════════════ */
+
+/* ── 1024px — планшет ── */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 48px 0 64px;
+  }
+
+  .sidebar {
+    position: static;
+    order: -1;
+    padding-top: 0;
+    padding-right: 0;
+  }
+
+  .sidebarCard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+    align-items: start;
+  }
+
+  .priceBlock {
+    grid-column: 1 / -1;
+  }
+
+  .sidebarNote {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── 768px — планшет узкий ── */
+@media (max-width: 768px) {
+  .breadcrumb {
+    display: none;
+  }
+
+  .heroSection {
+    min-height: 440px;
+  }
+
+  /* Плашки — на мобиле переезжают под хедер (top вместо bottom) */
+  .photoBadges {
+    bottom: auto;
+    top: 90px;
+    left: 16px;
+  }
+
+  .containerInner {
+    padding: 0 10px;
+  }
+
+  .title {
+    font-size: clamp(var(--text-xl), 5vw, var(--text-2xl));
+    padding-top: 40px;
+    margin-bottom: 24px;
+  }
+
+  .layout {
+    gap: 24px;
+    padding: 36px 0 52px;
+  }
+
+  .sidebarCard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .specs {
+    grid-template-columns: minmax(110px, 150px) 1fr;
+  }
+
+  .specTerm,
+  .specValue {
+    padding: 10px 12px;
+  }
+
+  .section {
+    margin-bottom: 36px;
+  }
+
+  .container {
+    border-radius: 20px 20px 0 0;
+  }
+}
+
+/* ── 600px — большой телефон ── */
+@media (max-width: 600px) {
+  .heroSection {
+    min-height: 380px;
+  }
+
+  .title {
+    font-size: var(--text-xl);
+    padding-top: 32px;
+  }
+
+  /* Таблица — 2 колонки в линию: лейбл слева, значение справа */
+  .specs {
+    grid-template-columns: auto 1fr;
+    border-radius: var(--radius-lg);
+  }
+
+  .specTerm {
+    padding: 9px 12px;
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.35);
+    white-space: nowrap;
+  }
+
+  .specValue {
+    padding: 9px 12px;
+    font-size: var(--text-xs);
+    text-align: right;
+  }
+
+  /* Карточка — грид: цена (слева) + бейдж (справа) в одну строку,
+     кнопка и всё остальное — на всю ширину */
+  .sidebarCard {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    padding: 18px;
+    gap: 14px 16px;
+  }
+
+  .priceBlock {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .priceValue {
+    font-size: var(--text-2xl);
+  }
+
+  .sidebarBadge {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: end;
+  }
+
+  /* ctaBtn, sidebarSpecs, sidebarNote — на всю ширину */
+  .sidebarCard > *:nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .tag {
+    font-size: var(--text-xs);
+    padding: 5px 11px;
+  }
+}
+
+/* ── 480px — телефон ── */
+@media (max-width: 480px) {
+  .heroSection {
+    min-height: 320px;
+  }
+
+  .containerInner {
+    padding: 0 10px;
+  }
+
+  .title {
+    font-size: clamp(var(--text-lg), 5vw, var(--text-xl));
+    padding-top: 28px;
+    margin-bottom: 20px;
+  }
+
+  .layout {
+    gap: 20px;
+    padding: 28px 0 44px;
+  }
+
+  .sidebarCard {
+    padding: 16px;
+    gap: 12px 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .priceValue {
+    font-size: var(--text-xl);
+  }
+
+  .priceM2 {
+    font-size: var(--text-xs);
+  }
+
+  .description {
+    padding: 16px 16px 16px 20px;
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .sectionTitle {
+    font-size: 10px;
+    padding: 5px 11px;
+    margin-bottom: 14px;
+  }
+
+  .sidebarSpecRow {
+    padding: 7px 0;
+    font-size: var(--text-xs);
+  }
+
+  .sidebarNote {
+    font-size: 11px;
+  }
+}
+
+/* ── 360px — маленький телефон ── */
+@media (max-width: 360px) {
+  .heroSection {
+    min-height: 280px;
+  }
+
+  .containerInner {
+    padding: 0 8px;
+  }
+
+  .title {
+    font-size: var(--text-base);
+    padding-top: 24px;
+    margin-bottom: 16px;
+  }
+
+  .layout {
+    padding: 24px 0 36px;
+    gap: 16px;
+  }
+
+  .sidebarCard {
+    padding: 14px;
+    gap: 10px 12px;
+  }
+
+  .priceValue {
+    font-size: var(--text-lg);
+  }
+
+  .specTerm,
+  .specValue {
+    padding: 6px 8px;
+    font-size: var(--text-xs);
+  }
+
+  .tags {
+    gap: 6px;
+  }
+
+  .tag {
+    padding: 4px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaBtn {
+    transition: none;
+  }
+}

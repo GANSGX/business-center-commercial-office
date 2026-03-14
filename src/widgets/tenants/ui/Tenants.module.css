@@ -1,0 +1,351 @@
+/* ===== Tenants — infinite marquee ticker ===== */
+
+.section {
+  position: relative;
+  width: 100%;
+  background: transparent;
+  /* padding-top: 0 — секция вплотную к Advantages как продолжение */
+  padding: 0 0 96px;
+}
+
+/* ─── Header ─────────────────────────────────── */
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-bottom: 48px;
+  padding: 0 24px;
+}
+
+.label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  padding: 7px 16px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid transparent;
+}
+
+.label::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    90deg,
+    rgba(100, 50, 12, 0.5) 0%,
+    rgba(195, 125, 50, 1) 30%,
+    rgba(230, 168, 88, 1) 50%,
+    rgba(195, 125, 50, 1) 70%,
+    rgba(100, 50, 12, 0.5) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.title {
+  font-size: clamp(var(--text-2xl), 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.65;
+  max-width: 440px;
+}
+
+/* ─── Marquee area (overflow clipping zone) ──── */
+
+.marqueeArea {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Marquee rows ───────────────────────────── */
+
+.marqueeWrap {
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.marqueeWrap:last-of-type {
+  margin-bottom: 0;
+}
+
+/* gap заменён на margin-right на .logo,
+   чтобы translateX(-50%) делил трек ровно пополам */
+.marqueeTrack {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Row 1 — scrolls left */
+.trackLeft {
+  animation: marqueeLeft 40s linear infinite;
+}
+
+/* Row 2 — scrolls right */
+.trackRight {
+  animation: marqueeRight 38s linear infinite;
+}
+
+@keyframes marqueeLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* -33.333% = одна копия из трёх, бесшовный цикл на любом экране */
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes marqueeRight {
+  from {
+    transform: translateX(-33.333%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ─── Logo card (glass pill) ─────────────────── */
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 20px 12px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: default;
+  /* Spacing between cards — margin-right гарантирует ровный -50% */
+  margin-right: 14px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: scale(1.04);
+}
+
+/* Logo badge — содержит SVG-иконку компании */
+.logoMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.logoMark svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* Favicon от Google API — сброс фона, масштаб */
+.faviconImg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Company name */
+.logoName {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: -0.01em;
+}
+
+/* ─── Color variants ─────────────────────────── */
+
+.color_blue .logoMark {
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.32);
+  color: rgba(147, 197, 253, 0.95);
+}
+.color_blue {
+  border-color: rgba(59, 130, 246, 0.14);
+}
+
+.color_green .logoMark {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: rgba(110, 231, 183, 0.95);
+}
+.color_green {
+  border-color: rgba(16, 185, 129, 0.12);
+}
+
+.color_amber .logoMark {
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  color: rgba(252, 196, 99, 0.95);
+}
+.color_amber {
+  border-color: rgba(245, 158, 11, 0.12);
+}
+
+.color_teal .logoMark {
+  background: rgba(20, 184, 166, 0.16);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  color: rgba(94, 234, 212, 0.95);
+}
+.color_teal {
+  border-color: rgba(20, 184, 166, 0.12);
+}
+
+.color_purple .logoMark {
+  background: rgba(139, 92, 246, 0.16);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: rgba(196, 181, 253, 0.95);
+}
+.color_purple {
+  border-color: rgba(139, 92, 246, 0.12);
+}
+
+.color_red .logoMark {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  color: rgba(252, 165, 165, 0.95);
+}
+.color_red {
+  border-color: rgba(239, 68, 68, 0.1);
+}
+
+.color_indigo .logoMark {
+  background: rgba(99, 102, 241, 0.16);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: rgba(165, 180, 252, 0.95);
+}
+.color_indigo {
+  border-color: rgba(99, 102, 241, 0.12);
+}
+
+.color_orange .logoMark {
+  background: rgba(251, 146, 60, 0.15);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+  color: rgba(253, 186, 116, 0.95);
+}
+.color_orange {
+  border-color: rgba(251, 146, 60, 0.12);
+}
+
+/* ─── Edge fade masks (только над marqueeArea) ── */
+
+.fadeLeft,
+.fadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(to right, rgba(8, 6, 22, 0.85) 0%, transparent 100%);
+}
+
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, rgba(8, 6, 22, 0.85) 0%, transparent 100%);
+}
+
+/* ─── Responsive ─────────────────────────────── */
+
+@media (max-width: 768px) {
+  .section {
+    padding: 8px 0 72px;
+  }
+
+  .head {
+    padding: 0 10px;
+    margin-bottom: 36px;
+  }
+
+  .logo {
+    padding: 10px 16px 10px 10px;
+  }
+
+  .logoMark {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logoMark svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .fadeLeft,
+  .fadeRight {
+    width: 72px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 8px 0 56px;
+  }
+
+  .head {
+    margin-bottom: 28px;
+  }
+}
+
+@media (max-width: 375px) {
+  .section {
+    padding: 8px 0 44px;
+  }
+
+  .head {
+    padding: 0 8px;
+  }
+
+  .logo {
+    padding: 8px 12px 8px 8px;
+    gap: 7px;
+  }
+
+  .logoName {
+    font-size: 11px;
+  }
+}

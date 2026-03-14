@@ -1,64 +1,118 @@
+/* ===== Modal — тёмный glass-стиль в тематике сайта ===== */
+
+/* Оверлей: тёмный blur — контент за модалкой не виден */
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(5, 10, 20, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md);
-  animation: fadeIn var(--transition-fast);
+  animation: fadeIn var(--transition-fast) both;
 }
 
+/* Само модальное окно: тёмная стеклянная панель */
 .modal {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  background: rgba(13, 22, 42, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 32px 80px rgba(0, 0, 0, 0.6),
+    0 0 100px rgba(27, 79, 216, 0.07);
+  /* backdrop-filter убран — оверлей уже блюрит фон, двойной blur дорог */
   width: 100%;
   max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
-  animation: slideUp var(--transition-base);
+  outline: none;
+  animation: slideUp var(--transition-base) both;
+
+  /* Тонкий скроллбар в тёмном стиле */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
 }
 
+.modal::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+/* Шапка модалки: sticky при скролле */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-lg) var(--spacing-xl);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  position: sticky;
+  top: 0;
+  background: rgba(13, 22, 42, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .title {
   font-size: var(--text-xl);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
+/* Кнопка закрытия */
 .close {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  transition: background-color var(--transition-fast);
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  background: none;
-  border: none;
-  font-size: 1.25rem;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
 .close:hover {
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-primary);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
 }
 
+.close:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.8);
+  outline-offset: 2px;
+}
+
+/* Тело модалки */
 .body {
   padding: var(--spacing-xl);
 }
+
+/* ═══════════════════════════════════════
+   Анимации
+═══════════════════════════════════════ */
 
 @keyframes fadeIn {
   from {
@@ -71,11 +125,84 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(16px);
+    transform: translateY(20px);
     opacity: 0;
   }
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════
+   Адаптив — mobile-first
+═══════════════════════════════════════ */
+
+/* Планшет: немного меньше отступы */
+@media (max-width: 768px) {
+  .body {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Мобильный: bottom sheet — выезжает снизу */
+@media (max-width: 640px) {
+  .overlay {
+    align-items: flex-end;
+    padding: 0;
+    background: rgba(5, 10, 20, 0.85);
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    animation: slideUpSheet var(--transition-base) both;
+  }
+
+  .header {
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .title {
+    font-size: var(--text-lg);
+  }
+
+  .body {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+/* Маленький мобильный */
+@media (max-width: 480px) {
+  .modal {
+    max-height: 95vh;
+    max-height: 95dvh;
+  }
+
+  .body {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Отключаем анимации для пользователей с настройкой "уменьшить движение" */
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    animation: none;
+  }
+
+  .modal {
+    animation: none;
   }
 }

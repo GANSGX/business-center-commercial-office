@@ -1,0 +1,64 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #0a1628;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 380ms ease,
+    visibility 380ms ease;
+}
+
+/* JS добавляет этот атрибут после window.load */
+.overlay[data-ready='true'] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ── Спиннер ── */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(245, 201, 106, 0.12);
+  border-top-color: rgba(245, 201, 106, 0.85);
+  animation: spin 800ms linear infinite;
+}
+
+/* ── Текст ── */
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.title {
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  font-family: var(--font-inter, system-ui, sans-serif);
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+.sub {
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 400;
+  font-family: var(--font-inter, system-ui, sans-serif);
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
