@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Preloader } from '@/shared/ui'
 import '@/styles/globals.css'
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={inter.variable}>
         <Preloader />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   )
