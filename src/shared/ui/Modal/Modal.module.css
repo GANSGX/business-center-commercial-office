@@ -154,11 +154,6 @@
   }
 }
 
-/* Drag handle — скрыт на десктопе */
-.dragHandle {
-  display: none;
-}
-
 /* Мобильный: bottom sheet — выезжает снизу */
 @media (max-width: 640px) {
   .overlay {
@@ -173,35 +168,6 @@
     max-height: 92dvh;
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
     animation: slideUpSheet var(--transition-base) both;
-  }
-
-  /* Drag handle — видим только на мобильном */
-  .dragHandle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px 0 4px;
-    cursor: grab;
-    touch-action: none; /* не мешаем нашим touch-обработчикам */
-    flex-shrink: 0;
-  }
-
-  .dragHandle::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 2px;
-    transition:
-      background var(--transition-fast),
-      width var(--transition-fast);
-  }
-
-  .dragHandle:active::before {
-    width: 52px;
-    background: rgba(255, 255, 255, 0.35);
   }
 
   .header {
