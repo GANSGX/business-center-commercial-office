@@ -1,14 +1,11 @@
 .page {
-  min-height: 100vh;
-  padding-top: 86px;
+  min-height: calc(100vh - 86px);
   background: #0a0a0a;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-bottom: 48px;
+  padding: 48px 24px;
   position: relative;
   overflow: hidden;
 }
