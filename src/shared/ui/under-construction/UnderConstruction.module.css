@@ -1,8 +1,6 @@
-/* ===== UnderConstruction ===== */
-
 .page {
   min-height: 100vh;
-  padding-top: 86px; /* высота хедера */
+  padding-top: 86px;
   background: #0a0a0a;
   display: flex;
   flex-direction: column;
@@ -35,267 +33,18 @@
   pointer-events: none;
 }
 
-/* ════════════════════════════════
-   Сцена
-   240 × 210px
-   Молоток вверху, кирпичи внизу
-════════════════════════════════ */
-
-.scene {
-  position: relative;
-  width: 240px;
-  height: 210px;
-  margin-bottom: 48px;
-  flex-shrink: 0;
-}
-
-/* ── Молоток ── */
-
-/*
-  Ось вращения — верх рукоятки (grip).
-  SVG 80×110: рукоятка идёт сверху вниз, голова — горизонтальный блок ВНИЗУ.
-  При угле 0° молоток вертикален, голова бьёт в точку ~(48, 100) в сцене.
-  При -42° — поднят назад/вверх.
-*/
-.hammerWrap {
-  position: absolute;
-  top: 0;
-  /* центр pivot (40px от левого края) смещаем так, чтобы голова при ударе
-     попала в центр кирпичей (x≈120px сцены) */
-  left: 72px;
-  width: 80px;
-  height: 110px;
-  transform-origin: 40px 6px; /* grip — верх рукоятки */
-  transform: rotate(-42deg);
-  animation: hammerSwing 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-@keyframes hammerSwing {
-  /* поднят */
-  0% {
-    transform: rotate(-42deg);
-  }
-  /* удар */
-  36% {
-    transform: rotate(4deg);
-  }
-  /* лёгкий отскок */
-  44% {
-    transform: rotate(2deg);
-  }
-  50% {
-    transform: rotate(4deg);
-  }
-  /* возврат */
-  78% {
-    transform: rotate(-42deg);
-  }
-  100% {
-    transform: rotate(-42deg);
-  }
-}
-
-/* ── Вспышка удара ── */
-
-/* При угле +4° голова (центр y≈100 от pivot) оказывается на y≈100px сцены.
-   Pivot сцены: left=72+40=112px, top=6px.
-   Head offset при +4°: dx=100*sin4°≈7, dy=100*cos4°≈100.
-   Точка удара в сцене: (119, 106). */
-.impactDot {
-  position: absolute;
-  top: 100px;
-  left: 111px;
-  width: 22px;
-  height: 22px;
-  margin-left: -11px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(252, 211, 77, 0.9) 0%,
-    rgba(245, 158, 11, 0.5) 40%,
-    transparent 70%
-  );
-  pointer-events: none;
-  animation: impactFlash 1.5s ease infinite;
-}
-
-@keyframes impactFlash {
-  0%,
-  32% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  38% {
-    opacity: 1;
-    transform: scale(1.4);
-  }
-  50% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ── Пыль ── */
-
-.dust {
-  position: absolute;
-  top: 108px;
-  left: 119px;
-  pointer-events: none;
-}
-
-.dustParticle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(200, 150, 80, 0.8);
-  opacity: 0;
-  animation: dustFly 1.5s ease infinite;
-}
-
-.dustParticle:nth-child(1) {
-  --dx: -18px;
-  --dy: -18px;
-  animation-delay: 0.01s;
-}
-.dustParticle:nth-child(2) {
-  --dx: 2px;
-  --dy: -22px;
-  animation-delay: 0.03s;
-}
-.dustParticle:nth-child(3) {
-  --dx: 20px;
-  --dy: -14px;
-  animation-delay: 0.05s;
-}
-.dustParticle:nth-child(4) {
-  --dx: -10px;
-  --dy: -10px;
-  animation-delay: 0.07s;
-}
-
-@keyframes dustFly {
-  0%,
-  33% {
-    opacity: 0;
-    transform: translate(0, 0) scale(1);
-  }
-  38% {
-    opacity: 1;
-  }
-  62% {
-    opacity: 0;
-    transform: translate(var(--dx), var(--dy)) scale(0.2);
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ── Кирпичи ── */
-
-/*
-  Три ряда + строящийся верхний.
-  Центр x=120px сцены. Кирпичи начинаются с y≈112px.
-  Появляются после ударов молотка: 1й удар ≈0.54s, 2й≈2.04s, 3й≈3.54s.
-*/
-.wall {
-  position: absolute;
-  top: 112px;
-  left: 50%;
-  transform: translateX(-50%);
+.icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   display: flex;
-  flex-direction: column-reverse; /* row1 внизу, строящийся — вверху */
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  color: rgba(245, 185, 80, 0.7);
+  margin-bottom: 32px;
 }
-
-.brickRow {
-  display: flex;
-  gap: 3px;
-}
-
-/* Смещение чётных рядов — реалистичная кладка */
-.brickRow:nth-child(even) {
-  margin-left: 23px;
-}
-
-.brick {
-  width: 42px;
-  height: 20px;
-  border-radius: 3px;
-  background: linear-gradient(175deg, #b05c2e 0%, #8b4520 55%, #6b3318 100%);
-  border: 1px solid rgba(0, 0, 0, 0.45);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-    1px 2px 4px rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  transform: translateY(-6px) scale(0.92);
-  animation: brickLand 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes brickLand {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Ряд 1 (нижний) — появляется при 1-м ударе */
-.row1 .brick:nth-child(1) {
-  animation-delay: 0.52s;
-}
-.row1 .brick:nth-child(2) {
-  animation-delay: 0.6s;
-}
-.row1 .brick:nth-child(3) {
-  animation-delay: 0.68s;
-}
-
-/* Ряд 2 — 2-й удар */
-.row2 .brick:nth-child(1) {
-  animation-delay: 2.02s;
-}
-.row2 .brick:nth-child(2) {
-  animation-delay: 2.1s;
-}
-.row2 .brick:nth-child(3) {
-  animation-delay: 2.18s;
-}
-
-/* Ряд 3 — 3-й удар */
-.row3 .brick:nth-child(1) {
-  animation-delay: 3.52s;
-}
-.row3 .brick:nth-child(2) {
-  animation-delay: 3.6s;
-}
-
-/* Раствор между рядами */
-.mortar {
-  width: 136px;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(190, 160, 110, 0.3);
-  opacity: 0;
-  animation: brickLand 0.2s ease forwards;
-}
-
-.mortar1 {
-  animation-delay: 1.9s;
-}
-.mortar2 {
-  animation-delay: 3.4s;
-}
-
-/* ════════════════════════════════
-   Текст
-════════════════════════════════ */
 
 .content {
   text-align: center;
@@ -309,7 +58,7 @@
   padding: 5px 14px;
   border-radius: 100px;
   background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.28);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   color: rgba(245, 185, 80, 0.85);
   font-size: 11px;
   font-weight: 600;
@@ -323,21 +72,7 @@
   height: 6px;
   border-radius: 50%;
   background: #f59e0b;
-  box-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
   flex-shrink: 0;
-  animation: pulse 1.8s ease infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.4;
-    transform: scale(0.65);
-  }
 }
 
 .title {
@@ -381,40 +116,4 @@
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.85);
   border-color: rgba(255, 255, 255, 0.2);
-}
-
-/* ════════════════════════════════
-   Адаптив
-════════════════════════════════ */
-
-@media (max-width: 480px) {
-  .scene {
-    transform: scale(0.85);
-    margin-bottom: 28px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hammerWrap {
-    animation: none;
-    transform: rotate(4deg);
-  }
-
-  .brick {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .mortar {
-    animation: none;
-    opacity: 1;
-  }
-
-  .impactDot,
-  .dustParticle,
-  .badgeDot {
-    animation: none;
-    opacity: 0;
-  }
 }
