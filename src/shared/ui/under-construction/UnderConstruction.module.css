@@ -1,11 +1,15 @@
 .page {
-  min-height: calc(100vh - 86px);
+  margin-top: -86px; /* закрываем фиолетовый фон лейаута за хедером */
+  padding-top: 86px; /* контент начинается ниже хедера */
+  min-height: 100vh;
   background: #0a0a0a;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 48px;
   position: relative;
   overflow: hidden;
 }
