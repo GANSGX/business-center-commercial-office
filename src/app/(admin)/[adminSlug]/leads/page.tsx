@@ -1,4 +1,9 @@
-// TODO Sprint 3 [S3-D2-05]: Таблица заявок — фильтр, поиск, смена статуса, пагинация
-export default function AdminLeadsPage() {
-  return null
+import dynamic from 'next/dynamic'
+
+const LeadsPage = dynamic(() => import('./_page/LeadsPage').then((m) => m.LeadsPage), {
+  ssr: false,
+})
+
+export default function Page() {
+  return <LeadsPage />
 }

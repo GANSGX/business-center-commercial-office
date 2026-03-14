@@ -1,0 +1,205 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-muted);
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.addBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+}
+
+.searchInput {
+  flex: 1;
+  max-width: 360px;
+  padding: 9px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--admin-text-muted);
+}
+
+.searchInput:focus {
+  border-color: var(--admin-accent);
+}
+
+/* ── Table ── */
+
+.tableWrap {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 560px;
+}
+
+.table th {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 13px 14px;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border-subtle);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.row {
+  transition: background var(--transition-fast);
+}
+
+.row:hover td {
+  background: var(--admin-surface-hover);
+}
+
+.dragCell {
+  width: 36px;
+  padding-left: 14px !important;
+}
+
+.dragHandle {
+  color: var(--admin-text-muted);
+  cursor: grab;
+}
+
+.titleCell {
+  font-weight: 600;
+  color: var(--admin-text) !important;
+}
+
+.slugCell {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted) !important;
+}
+
+.priceCell {
+  white-space: nowrap;
+}
+
+.optionsCell {
+  white-space: nowrap;
+}
+
+.optionsBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--admin-accent-light);
+  color: var(--admin-accent);
+}
+
+.mutedCell {
+  color: var(--admin-text-muted) !important;
+}
+
+/* ── Actions ── */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.actionBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--admin-surface-hover);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--admin-text);
+}
+
+.actionBtnDanger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.emptyRow {
+  text-align: center;
+  color: var(--admin-text-muted) !important;
+  padding: 40px !important;
+}

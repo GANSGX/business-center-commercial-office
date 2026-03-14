@@ -1,4 +1,10 @@
-// TODO Sprint 3 [S3-D1-06, S3-D1-07]: Hero-слайды, Advantages, Tenants — таблица + dnd sort
-export default function AdminHeroSlidesPage() {
-  return null
+import dynamic from 'next/dynamic'
+
+const HeroSlidesPage = dynamic(
+  () => import('./_page/HeroSlidesPage').then((m) => m.HeroSlidesPage),
+  { ssr: false }
+)
+
+export default function Page() {
+  return <HeroSlidesPage />
 }

@@ -1,4 +1,9 @@
-// TODO Sprint 3 [S3-D2-07]: Настройки — контакты, соцсети, реквизиты, карта
-export default function AdminSettingsPage() {
-  return null
+import dynamic from 'next/dynamic'
+
+const SettingsPage = dynamic(() => import('./_page/SettingsPage').then((m) => m.SettingsPage), {
+  ssr: false,
+})
+
+export default function Page() {
+  return <SettingsPage />
 }
