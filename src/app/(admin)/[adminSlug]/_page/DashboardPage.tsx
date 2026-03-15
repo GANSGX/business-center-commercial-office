@@ -471,7 +471,7 @@ export function DashboardPage() {
       </div>
 
       {/* ── Analytics ── */}
-      {analytics && (
+      {analytics ? (
         <>
           <div className={styles.kpiGrid}>
             {/* Просмотров сегодня */}
@@ -613,6 +613,16 @@ export function DashboardPage() {
             </div>
           </div>
         </>
+      ) : (
+        <div
+          className={styles.card}
+          style={{ textAlign: 'center', padding: '2rem', color: 'var(--admin-text-muted)' }}
+        >
+          <p style={{ margin: 0, fontSize: '0.9rem' }}>
+            Данных о посещениях пока нет. Откройте публичный сайт, примите куки — и посещения начнут
+            отображаться здесь.
+          </p>
+        </div>
       )}
 
       {/* ── Recent Leads ── */}
