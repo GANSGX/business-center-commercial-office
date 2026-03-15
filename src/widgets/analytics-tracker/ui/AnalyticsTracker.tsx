@@ -27,6 +27,10 @@ export function AnalyticsTracker() {
     if (prevPath.current === pathname) return
     prevPath.current = pathname
 
+    // Трекаем только после явного согласия пользователя с cookie banner
+    const consent = localStorage.getItem('cookie_consent')
+    if (consent !== 'accepted') return
+
     const visitorId = getOrCreateVisitorId()
     if (!visitorId) return
 

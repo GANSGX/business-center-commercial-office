@@ -59,6 +59,7 @@ export const ModelName = {
   Lead: 'Lead',
   SiteSettings: 'SiteSettings',
   User: 'User',
+  PageView: 'PageView',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -221,6 +222,18 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+export const PageViewScalarFieldEnum = {
+  id: 'id',
+  path: 'path',
+  referrer: 'referrer',
+  device: 'device',
+  visitorId: 'visitorId',
+  createdAt: 'createdAt',
+} as const
+
+export type PageViewScalarFieldEnum =
+  (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
 
 export const SortOrder = {
   asc: 'asc',

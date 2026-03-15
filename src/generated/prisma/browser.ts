@@ -71,3 +71,8 @@ export type SiteSettings = Prisma.SiteSettingsModel
  *
  */
 export type User = Prisma.UserModel
+/**
+ * Model PageView
+ *
+ */
+export type PageView = Prisma.PageViewModel
