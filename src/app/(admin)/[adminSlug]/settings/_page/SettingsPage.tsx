@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './SettingsPage.module.css'
 
 const SECTIONS = ['Контакты', 'Реквизиты', 'Карта', 'Социальные сети'] as const
@@ -25,11 +25,33 @@ const SECTION_META: Record<Section, { desc: string; pages: string }> = {
   },
 }
 
+// Flat settings state - each key maps directly to SiteSettings.key
+type SettingsMap = Record<string, string>
+
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState<Section>('Контакты')
+  const [settings, setSettings] = useState<SettingsMap>({})
+  const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
-  function handleSave() {
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data: SettingsMap) => setSettings(data))
+  }, [])
+
+  function set(key: string, value: string) {
+    setSettings((prev) => ({ ...prev, [key]: value }))
+  }
+
+  async function handleSave() {
+    setSaving(true)
+    await fetch('/api/settings', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settings),
+    })
+    setSaving(false)
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
   }
@@ -41,7 +63,7 @@ export function SettingsPage() {
           <h1 className={styles.title}>Настройки</h1>
           <p className={styles.subtitle}>Контактная информация и параметры сайта</p>
         </div>
-        <button className={styles.saveBtn} onClick={handleSave}>
+        <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
           {saved ? (
             <>
               <svg
@@ -58,6 +80,8 @@ export function SettingsPage() {
               </svg>
               Сохранено
             </>
+          ) : saving ? (
+            'Сохранение...'
           ) : (
             'Сохранить'
           )}
@@ -107,24 +131,33 @@ export function SettingsPage() {
               <Field
                 label="Телефон приёмной"
                 placeholder="+7 (383) 223-43-50"
-                defaultValue="+7 (383) 223-43-50"
+                value={settings['phone1'] ?? ''}
+                onChange={(v) => set('phone1', v)}
               />
-              <Field label="Телефон аренды" placeholder="+7 (383) 217-72-24" />
+              <Field
+                label="Телефон аренды"
+                placeholder="+7 (383) 217-72-24"
+                value={settings['phone2'] ?? ''}
+                onChange={(v) => set('phone2', v)}
+              />
               <Field
                 label="Email"
                 type="email"
                 placeholder="kommunist35@mail.ru"
-                defaultValue="kommunist35@mail.ru"
+                value={settings['email'] ?? ''}
+                onChange={(v) => set('email', v)}
               />
               <Field
                 label="Адрес"
                 placeholder="630007, г. Новосибирск, ул. Коммунистическая, 35"
-                defaultValue="630007, г. Новосибирск, ул. Коммунистическая, 35"
+                value={settings['address'] ?? ''}
+                onChange={(v) => set('address', v)}
               />
               <Field
                 label="Часы работы"
                 placeholder="Пн–Пт: 9:00–18:00"
-                defaultValue="Пн–Пт: 9:00–18:00, Сб: 10:00–16:00"
+                value={settings['workHours'] ?? ''}
+                onChange={(v) => set('workHours', v)}
               />
             </div>
           )}
@@ -132,18 +165,42 @@ export function SettingsPage() {
           {activeSection === 'Реквизиты' && (
             <div className={styles.form}>
               <FieldRow>
-                <Field label="ИНН" defaultValue="5406247047" />
-                <Field label="КПП" defaultValue="540601001" />
+                <Field label="ИНН" value={settings['inn'] ?? ''} onChange={(v) => set('inn', v)} />
+                <Field label="КПП" value={settings['kpp'] ?? ''} onChange={(v) => set('kpp', v)} />
               </FieldRow>
-              <Field label="ОГРН" defaultValue="1035402474293" />
-              <Field label="Наименование организации" defaultValue='АО "Коммунистическая-35"' />
-              <Field label="Расчётный счёт" defaultValue="40702810123220000356" />
-              <Field label="Банк" defaultValue='Филиал "НОВОСИБИРСКИЙ" АО "АЛЬФА-БАНК"' />
+              <Field label="ОГРН" value={settings['ogrn'] ?? ''} onChange={(v) => set('ogrn', v)} />
+              <Field
+                label="Наименование организации"
+                value={settings['orgName'] ?? ''}
+                onChange={(v) => set('orgName', v)}
+              />
+              <Field
+                label="Расчётный счёт"
+                value={settings['bankAccount'] ?? ''}
+                onChange={(v) => set('bankAccount', v)}
+              />
+              <Field
+                label="Банк"
+                value={settings['bankName'] ?? ''}
+                onChange={(v) => set('bankName', v)}
+              />
               <FieldRow>
-                <Field label="БИК" defaultValue="045004774" />
-                <Field label="К/с" defaultValue="30101810600000000774" />
+                <Field
+                  label="БИК"
+                  value={settings['bankBik'] ?? ''}
+                  onChange={(v) => set('bankBik', v)}
+                />
+                <Field
+                  label="К/с"
+                  value={settings['bankKs'] ?? ''}
+                  onChange={(v) => set('bankKs', v)}
+                />
               </FieldRow>
-              <Field label="Директор" defaultValue="Усенко Виталий Владимирович" />
+              <Field
+                label="Директор"
+                value={settings['director'] ?? ''}
+                onChange={(v) => set('director', v)}
+              />
             </div>
           )}
 
@@ -151,16 +208,33 @@ export function SettingsPage() {
             <div className={styles.form}>
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldLabel}>Провайдер карты</label>
-                <select className={styles.fieldSelect} defaultValue="yandex">
+                <select
+                  className={styles.fieldSelect}
+                  value={settings['mapProvider'] ?? 'yandex'}
+                  onChange={(e) => set('mapProvider', e.target.value)}
+                >
                   <option value="yandex">Яндекс.Карты</option>
                   <option value="2gis">2ГИС</option>
                 </select>
               </div>
               <FieldRow>
-                <Field label="Широта" defaultValue="54.987871" />
-                <Field label="Долгота" defaultValue="82.891380" />
+                <Field
+                  label="Широта"
+                  value={settings['mapLat'] ?? ''}
+                  onChange={(v) => set('mapLat', v)}
+                />
+                <Field
+                  label="Долгота"
+                  value={settings['mapLng'] ?? ''}
+                  onChange={(v) => set('mapLng', v)}
+                />
               </FieldRow>
-              <Field label="Зум" type="number" defaultValue="16" />
+              <Field
+                label="Зум"
+                type="number"
+                value={settings['mapZoom'] ?? ''}
+                onChange={(v) => set('mapZoom', v)}
+              />
               <div className={styles.mapPreview}>
                 <div className={styles.mapPlaceholder}>
                   <svg
@@ -184,10 +258,30 @@ export function SettingsPage() {
 
           {activeSection === 'Социальные сети' && (
             <div className={styles.form}>
-              <Field label="ВКонтакте" placeholder="https://vk.com/..." />
-              <Field label="Telegram" placeholder="https://t.me/..." />
-              <Field label="WhatsApp" placeholder="+7..." />
-              <Field label="Avito" placeholder="https://avito.ru/..." />
+              <Field
+                label="ВКонтакте"
+                placeholder="https://vk.com/..."
+                value={settings['socialVk'] ?? ''}
+                onChange={(v) => set('socialVk', v)}
+              />
+              <Field
+                label="Telegram"
+                placeholder="https://t.me/..."
+                value={settings['socialTg'] ?? ''}
+                onChange={(v) => set('socialTg', v)}
+              />
+              <Field
+                label="WhatsApp"
+                placeholder="+7..."
+                value={settings['socialWa'] ?? ''}
+                onChange={(v) => set('socialWa', v)}
+              />
+              <Field
+                label="Avito"
+                placeholder="https://avito.ru/..."
+                value={settings['socialAvito'] ?? ''}
+                onChange={(v) => set('socialAvito', v)}
+              />
             </div>
           )}
         </div>
@@ -203,12 +297,14 @@ export function SettingsPage() {
 function Field({
   label,
   placeholder,
-  defaultValue,
+  value,
+  onChange,
   type = 'text',
 }: {
   label: string
   placeholder?: string
-  defaultValue?: string
+  value: string
+  onChange: (v: string) => void
   type?: string
 }) {
   return (
@@ -218,7 +314,8 @@ function Field({
         className={styles.fieldInput}
         type={type}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   )

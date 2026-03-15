@@ -138,39 +138,61 @@
 .fieldGroup {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
+}
+
+.fieldHint {
+  font-size: 0.72rem;
+  color: var(--admin-text-muted);
+  margin-top: -2px;
+}
+
+.fieldInput,
+.fieldSelect {
+  padding: 10px 14px;
+  background: var(--admin-bg);
+  border: 1.5px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  width: 100%;
+  line-height: 1.4;
+}
+
+.fieldInput::placeholder {
+  color: var(--admin-text-muted);
+  opacity: 0.7;
+}
+
+.fieldInput:focus,
+.fieldSelect:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px rgba(139, 85, 35, 0.15);
+}
+
+.fieldInput:hover:not(:focus),
+.fieldSelect:hover:not(:focus) {
+  border-color: color-mix(in srgb, var(--admin-border) 60%, var(--admin-accent));
+}
+
+.fieldSelect {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
 }
 
 .fieldLabel {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--admin-text-secondary);
-}
-
-.fieldInput,
-.fieldSelect {
-  padding: 9px 12px;
-  background: var(--admin-bg);
-  border: 1px solid var(--admin-border);
-  border-radius: 8px;
-  color: var(--admin-text);
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color var(--transition-fast);
-  width: 100%;
-}
-
-.fieldInput::placeholder {
-  color: var(--admin-text-muted);
-}
-
-.fieldInput:focus,
-.fieldSelect:focus {
-  border-color: var(--admin-accent);
-}
-
-.fieldSelect {
-  cursor: pointer;
+  letter-spacing: 0.01em;
 }
 
 /* ── Checkboxes ── */
@@ -314,6 +336,44 @@
 
 .photoItem:hover .photoDeleteBtn {
   opacity: 1;
+}
+
+/* ── State banners ── */
+
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+.errorBanner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+}
+
+.infoBanner {
+  background: rgba(139, 85, 35, 0.1);
+  border: 1px solid rgba(139, 85, 35, 0.25);
+  color: var(--admin-accent);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+}
+
+.photoHint {
+  color: var(--admin-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ── Toast ── */

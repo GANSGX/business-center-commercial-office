@@ -105,8 +105,8 @@
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: 14px;
-  overflow: hidden;
   overflow-x: auto;
+  overflow-y: visible;
 }
 
 .table {

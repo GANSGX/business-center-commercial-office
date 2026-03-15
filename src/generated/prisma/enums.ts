@@ -18,6 +18,7 @@ export type RoomStatus = (typeof RoomStatus)[keyof typeof RoomStatus]
 
 export const LeadStatus = {
   NEW: 'NEW',
+  IN_PROGRESS: 'IN_PROGRESS',
   PROCESSED: 'PROCESSED',
 } as const
 

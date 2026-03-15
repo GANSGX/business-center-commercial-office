@@ -1,9 +1,20 @@
 'use client'
 
-import React, { useState } from 'react'
-import { MOCK_LEADS } from '@/entities/lead'
-import type { Lead, LeadStatus } from '@/entities/lead'
+import React, { useState, useEffect, useCallback } from 'react'
+import type { LeadStatus } from '@/entities/lead'
 import styles from './LeadsPage.module.css'
+
+interface Lead {
+  id: string
+  createdAt: string
+  name: string
+  phone: string
+  email?: string | null
+  message?: string | null
+  roomId?: string | null
+  serviceName?: string | null
+  status: LeadStatus
+}
 
 const STATUS_LABELS: Record<LeadStatus, string> = {
   NEW: 'Новая',
@@ -21,26 +32,43 @@ function formatDateTime(iso: string) {
 }
 
 export function LeadsPage() {
-  const [leads, setLeads] = useState<Lead[]>(MOCK_LEADS)
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [total, setTotal] = useState(0)
+  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'ALL' | LeadStatus>('ALL')
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
   const [expanded, setExpanded] = useState<string | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
 
-  const filtered = leads.filter((l) => {
-    if (filter !== 'ALL' && l.status !== filter) return false
-    if (search) {
-      const q = search.toLowerCase()
-      if (!l.name.toLowerCase().includes(q) && !l.phone.includes(q)) return false
+  const fetchLeads = useCallback(async () => {
+    setLoading(true)
+    const params = new URLSearchParams({ page: String(page), limit: '20' })
+    if (filter !== 'ALL') params.set('status', filter)
+    if (search) params.set('search', search)
+    const res = await fetch(`/api/leads?${params}`)
+    if (res.ok) {
+      const data = await res.json()
+      setLeads(data.leads)
+      setTotal(data.total)
     }
-    return true
-  })
+    setLoading(false)
+  }, [filter, search, page])
+
+  useEffect(() => {
+    fetchLeads()
+  }, [fetchLeads])
 
   const newCount = leads.filter((l) => l.status === 'NEW').length
 
-  function changeStatus(id: string, status: LeadStatus) {
-    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)))
+  async function changeStatus(id: string, status: LeadStatus) {
     setOpenDropdownId(null)
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)))
+    await fetch(`/api/leads/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    })
   }
 
   function statusBadgeClass(status: LeadStatus) {
@@ -58,29 +86,30 @@ export function LeadsPage() {
         />
       )}
 
-      {/* Заголовок */}
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>
             Заявки
             {newCount > 0 && <span className={styles.newBadge}>{newCount} новых</span>}
           </h1>
-          <p className={styles.subtitle}>Входящие обращения от посетителей</p>
+          <p className={styles.subtitle}>Всего: {total}</p>
         </div>
       </div>
 
-      {/* Фильтры */}
       <div className={styles.toolbar}>
         <div className={styles.tabs}>
           {(['ALL', 'NEW', 'IN_PROGRESS', 'PROCESSED'] as const).map((f) => (
             <button
               key={f}
               className={`${styles.tab} ${filter === f ? styles.tabActive : ''}`}
-              onClick={() => setFilter(f)}
+              onClick={() => {
+                setFilter(f)
+                setPage(1)
+              }}
             >
               {f === 'ALL' ? 'Все' : STATUS_LABELS[f]}
               <span className={styles.tabCount}>
-                {f === 'ALL' ? leads.length : leads.filter((l) => l.status === f).length}
+                {f === 'ALL' ? total : leads.filter((l) => l.status === f).length}
               </span>
             </button>
           ))}
@@ -89,90 +118,98 @@ export function LeadsPage() {
           className={styles.searchInput}
           placeholder="Поиск по имени или телефону..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            setPage(1)
+          }}
         />
       </div>
 
-      {/* Таблица */}
-      <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Имя</th>
-              <th>Телефон</th>
-              <th>Email</th>
-              <th>Помещение</th>
-              <th>Статус</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((lead) => (
-              <React.Fragment key={lead.id}>
-                <tr
-                  className={`${styles.row} ${expanded === lead.id ? styles.rowExpanded : ''} ${lead.status === 'NEW' ? styles.rowNew : lead.status === 'IN_PROGRESS' ? styles.rowInProgress : ''}`}
-                  onClick={() => setExpanded(expanded === lead.id ? null : lead.id)}
-                >
-                  <td className={styles.dateCell}>{formatDateTime(lead.createdAt)}</td>
-                  <td className={styles.nameCell}>{lead.name}</td>
-                  <td className={styles.phoneCell}>{lead.phone}</td>
-                  <td className={styles.mutedCell}>{lead.email ?? '—'}</td>
-                  <td className={styles.mutedCell}>{lead.roomTitle ?? lead.serviceName ?? '—'}</td>
-                  <td>
-                    <div
-                      className={styles.statusSelect}
-                      style={{ position: 'relative', display: 'inline-block' }}
-                    >
-                      <span
-                        className={`${styles.statusBadge} ${statusBadgeClass(lead.status)}`}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setOpenDropdownId(openDropdownId === lead.id ? null : lead.id)
-                        }}
+      {loading ? (
+        <div className={styles.emptyRow} style={{ padding: '3rem', textAlign: 'center' }}>
+          Загрузка...
+        </div>
+      ) : (
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Имя</th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th>Помещение / Услуга</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map((lead) => (
+                <React.Fragment key={lead.id}>
+                  <tr
+                    className={`${styles.row} ${expanded === lead.id ? styles.rowExpanded : ''} ${lead.status === 'NEW' ? styles.rowNew : lead.status === 'IN_PROGRESS' ? styles.rowInProgress : ''}`}
+                    onClick={() => setExpanded(expanded === lead.id ? null : lead.id)}
+                  >
+                    <td className={styles.dateCell}>{formatDateTime(lead.createdAt)}</td>
+                    <td className={styles.nameCell}>{lead.name}</td>
+                    <td className={styles.phoneCell}>{lead.phone}</td>
+                    <td className={styles.mutedCell}>{lead.email ?? '—'}</td>
+                    <td className={styles.mutedCell}>{lead.serviceName ?? '—'}</td>
+                    <td>
+                      <div
+                        className={styles.statusSelect}
+                        style={{ position: 'relative', display: 'inline-block' }}
                       >
-                        {STATUS_LABELS[lead.status]}
-                      </span>
-                      {openDropdownId === lead.id && (
-                        <div className={styles.statusDropdown} style={{ zIndex: 10 }}>
-                          {(['NEW', 'IN_PROGRESS', 'PROCESSED'] as LeadStatus[]).map((s) => (
-                            <button
-                              key={s}
-                              className={`${styles.statusOption} ${s === lead.status ? styles.statusOptionActive : ''}`}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                changeStatus(lead.id, s)
-                              }}
-                            >
-                              {STATUS_LABELS[s]}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-                {expanded === lead.id && lead.message && (
-                  <tr key={`${lead.id}-msg`} className={styles.expandRow}>
-                    <td colSpan={6}>
-                      <div className={styles.messageBox}>
-                        <span className={styles.messageLabel}>Сообщение:</span>
-                        <p className={styles.messageText}>{lead.message}</p>
+                        <span
+                          className={`${styles.statusBadge} ${statusBadgeClass(lead.status)}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenDropdownId(openDropdownId === lead.id ? null : lead.id)
+                          }}
+                        >
+                          {STATUS_LABELS[lead.status]}
+                        </span>
+                        {openDropdownId === lead.id && (
+                          <div className={styles.statusDropdown} style={{ zIndex: 10 }}>
+                            {(['NEW', 'IN_PROGRESS', 'PROCESSED'] as LeadStatus[]).map((s) => (
+                              <button
+                                key={s}
+                                className={`${styles.statusOption} ${s === lead.status ? styles.statusOptionActive : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  changeStatus(lead.id, s)
+                                }}
+                              >
+                                {STATUS_LABELS[s]}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-            {filtered.length === 0 && (
-              <tr>
-                <td colSpan={6} className={styles.emptyRow}>
-                  Заявок не найдено
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                  {expanded === lead.id && lead.message && (
+                    <tr key={`${lead.id}-msg`} className={styles.expandRow}>
+                      <td colSpan={6}>
+                        <div className={styles.messageBox}>
+                          <span className={styles.messageLabel}>Сообщение:</span>
+                          <p className={styles.messageText}>{lead.message}</p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+              {leads.length === 0 && (
+                <tr>
+                  <td colSpan={6} className={styles.emptyRow}>
+                    Заявок не найдено
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

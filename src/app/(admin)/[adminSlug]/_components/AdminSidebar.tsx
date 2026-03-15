@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useParams } from 'next/navigation'
+import { usePathname, useParams, useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { useSidebarStore } from '@/features/admin-sidebar'
 import styles from './AdminSidebar.module.css'
 
@@ -183,10 +184,16 @@ const NAV_ITEMS = [
 export function AdminSidebar() {
   const pathname = usePathname()
   const params = useParams()
+  const router = useRouter()
   const slug = params.adminSlug as string
   const base = `/${slug}`
 
   const { isOpen, close } = useSidebarStore()
+
+  async function handleLogout() {
+    await signOut({ redirect: false })
+    router.push(`/${slug}/login`)
+  }
 
   function isActive(segment: string) {
     const href = segment === '' ? base : `${base}/${segment}`
@@ -235,7 +242,7 @@ export function AdminSidebar() {
             <IconExternalLink />
             Перейти на сайт
           </a>
-          <button className={styles.logoutBtn} onClick={() => {}}>
+          <button className={styles.logoutBtn} onClick={handleLogout}>
             <IconLogout />
             Выйти
           </button>

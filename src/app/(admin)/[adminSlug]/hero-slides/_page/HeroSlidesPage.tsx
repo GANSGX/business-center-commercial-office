@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import styles from './HeroSlidesPage.module.css'
 
 interface Slide {
@@ -8,30 +8,96 @@ interface Slide {
   image: string
   order: number
   active: boolean
+  title: string
 }
 
-const MOCK_SLIDES: Slide[] = [
-  { id: '1', image: 'https://picsum.photos/seed/hero-1/800/400', order: 0, active: true },
-  { id: '2', image: 'https://picsum.photos/seed/hero-2/800/400', order: 1, active: true },
-  { id: '3', image: 'https://picsum.photos/seed/hero-3/800/400', order: 2, active: false },
-]
-
 export function HeroSlidesPage() {
-  const [slides, setSlides] = useState(MOCK_SLIDES)
+  const [slides, setSlides] = useState<Slide[]>([])
+  const [uploading, setUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const replaceIdRef = useRef<string | null>(null)
 
-  function toggleActive(id: string) {
-    setSlides((prev) => prev.map((s) => (s.id === id ? { ...s, active: !s.active } : s)))
+  useEffect(() => {
+    fetch('/api/hero-slides?admin=true')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => setSlides(Array.isArray(data) ? data : []))
+  }, [])
+
+  async function toggleActive(id: string) {
+    const slide = slides.find((s) => s.id === id)
+    if (!slide) return
+    const newActive = !slide.active
+    setSlides((prev) => prev.map((s) => (s.id === id ? { ...s, active: newActive } : s)))
+    await fetch('/api/hero-slides', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, active: newActive }),
+    })
   }
 
-  function removeSlide(id: string) {
+  async function removeSlide(id: string) {
     if (!confirm('Удалить слайд?')) return
     setSlides((prev) => prev.filter((s) => s.id !== id))
+    await fetch('/api/hero-slides', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+  }
+
+  async function handleFileUpload(files: FileList | null, replaceId?: string) {
+    if (!files || files.length === 0) return
+    setUploading(true)
+    for (const file of Array.from(files)) {
+      const form = new FormData()
+      form.append('file', file)
+      const uploadRes = await fetch('/api/upload', { method: 'POST', body: form })
+      if (!uploadRes.ok) continue
+      const { url } = await uploadRes.json()
+      if (replaceId) {
+        await fetch('/api/hero-slides', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: replaceId, image: url }),
+        })
+        setSlides((prev) => prev.map((s) => (s.id === replaceId ? { ...s, image: url } : s)))
+      } else {
+        const order = slides.length
+        const addRes = await fetch('/api/hero-slides', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: `Слайд ${order + 1}`, image: url, order, active: true }),
+        })
+        if (addRes.ok) {
+          const slide = await addRes.json()
+          setSlides((prev) => [...prev, slide])
+        }
+      }
+    }
+    setUploading(false)
   }
 
   const activeCount = slides.filter((s) => s.active).length
 
   return (
     <div className={styles.page}>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          if (replaceIdRef.current) {
+            handleFileUpload(e.target.files, replaceIdRef.current)
+            replaceIdRef.current = null
+          } else {
+            handleFileUpload(e.target.files)
+          }
+          e.target.value = ''
+        }}
+      />
+
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Hero-слайдер</h1>
@@ -39,7 +105,14 @@ export function HeroSlidesPage() {
             {slides.length} фото · {activeCount} активных
           </p>
         </div>
-        <label className={styles.uploadBtn}>
+        <button
+          className={styles.uploadBtn}
+          onClick={() => {
+            replaceIdRef.current = null
+            fileInputRef.current?.click()
+          }}
+          disabled={uploading}
+        >
           <svg
             width="16"
             height="16"
@@ -53,9 +126,8 @@ export function HeroSlidesPage() {
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
-          Добавить фото
-          <input type="file" accept="image/*" multiple style={{ display: 'none' }} />
-        </label>
+          {uploading ? 'Загрузка...' : 'Добавить фото'}
+        </button>
       </div>
 
       <div className={styles.hint}>
@@ -104,7 +176,14 @@ export function HeroSlidesPage() {
               </label>
 
               <div className={styles.actions}>
-                <label className={styles.actionBtn} title="Заменить фото">
+                <button
+                  className={styles.actionBtn}
+                  title="Заменить фото"
+                  onClick={() => {
+                    replaceIdRef.current = slide.id
+                    fileInputRef.current?.click()
+                  }}
+                >
                   <svg
                     width="14"
                     height="14"
@@ -119,8 +198,7 @@ export function HeroSlidesPage() {
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <input type="file" accept="image/*" style={{ display: 'none' }} />
-                </label>
+                </button>
                 <button
                   className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
                   onClick={() => removeSlide(slide.id)}
@@ -149,8 +227,13 @@ export function HeroSlidesPage() {
         ))}
 
         {/* Заглушка добавления */}
-        <label className={styles.addCard}>
-          <input type="file" accept="image/*" multiple style={{ display: 'none' }} />
+        <button
+          className={styles.addCard}
+          onClick={() => {
+            replaceIdRef.current = null
+            fileInputRef.current?.click()
+          }}
+        >
           <svg
             width="28"
             height="28"
@@ -165,7 +248,7 @@ export function HeroSlidesPage() {
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
           <span>Добавить фото</span>
-        </label>
+        </button>
       </div>
     </div>
   )

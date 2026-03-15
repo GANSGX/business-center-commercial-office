@@ -10,12 +10,16 @@ export default auth(function middleware(req) {
   const isAdminPath = pathname.startsWith(`/${adminSlug}`)
 
   if (isAdminPath) {
-    // TODO Sprint 3: раскомментировать после подключения NextAuth + БД
-    // if (!req.auth) {
-    //   return NextResponse.rewrite(new URL('/not-found', req.url))
-    // }
+    const isLoginPage = pathname === `/${adminSlug}/login`
     const response = NextResponse.next()
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+
+    if (!req.auth && !isLoginPage) {
+      return NextResponse.redirect(new URL(`/${adminSlug}/login`, req.url))
+    }
+    if (req.auth && isLoginPage) {
+      return NextResponse.redirect(new URL(`/${adminSlug}`, req.url))
+    }
     return response
   }
 

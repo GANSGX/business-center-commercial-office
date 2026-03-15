@@ -1,7 +1,10 @@
 import type { Room } from '../types'
-import { MOCK_ROOMS } from '../mock'
+import { prisma } from '@/shared/lib/prisma'
 
-// TODO Sprint 1: заменить на prisma.room.findUnique({ where: { slug }, include: { photos: { orderBy: { order: 'asc' } } } })
 export async function getRoomBySlug(slug: string): Promise<Room | null> {
-  return MOCK_ROOMS.find((r) => r.slug === slug) ?? null
+  const room = await prisma.room.findUnique({
+    where: { slug },
+    include: { photos: { orderBy: { order: 'asc' } } },
+  })
+  return room as Room | null
 }

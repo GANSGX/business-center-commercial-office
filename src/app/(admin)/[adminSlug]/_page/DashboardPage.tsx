@@ -1,27 +1,12 @@
 'use client'
 
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { MOCK_ROOMS } from '@/entities/room'
-import { MOCK_LEADS } from '@/entities/lead'
 import type { LeadStatus } from '@/entities/lead'
 import styles from './DashboardPage.module.css'
 
-// ── Mock analytics data ──────────────────────────────────────────────────────
-
-const VISITS_30D = [
-  42, 38, 51, 45, 60, 55, 30, 48, 52, 67, 71, 65, 58, 35, 53, 61, 74, 70, 68, 62, 28, 66, 78, 82,
-  75, 91, 88, 45, 95, 87,
-]
-const LEADS_7D = [2, 1, 3, 0, 2, 4, 1]
-const DAYS_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-
-const TOTAL_MONTH = VISITS_30D.reduce((a, b) => a + b, 0)
-const TODAY = VISITS_30D[VISITS_30D.length - 1]
-const YESTERDAY = VISITS_30D[VISITS_30D.length - 2]
-const DELTA_PCT = Math.round(((TODAY - YESTERDAY) / YESTERDAY) * 100)
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function fmt(iso: string) {
   const d = new Date(iso)
@@ -29,6 +14,16 @@ function fmt(iso: string) {
     date: d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' }),
     time: d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
   }
+}
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10)
+}
+
+function daysAgo(n: number) {
+  const d = new Date()
+  d.setDate(d.getDate() - n)
+  return d.toISOString().slice(0, 10)
 }
 
 const STATUS_LABELS: Record<LeadStatus, string> = {
@@ -41,16 +36,17 @@ const STATUS_CLS: Record<LeadStatus, string> = {
   IN_PROGRESS: styles.badgeProgress,
   PROCESSED: styles.badgeDone,
 }
+const DAYS_SHORT = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 
-// ── SVG Area Chart ────────────────────────────────────────────────────────────
+// ── SVG Area Chart ─────────────────────────────────────────────────────────────
 
 function AreaChart({ data, color, gradId }: { data: number[]; color: string; gradId: string }) {
-  const W = 500
-  const H = 80
-  const P = 3
+  const W = 500,
+    H = 80,
+    P = 3
   const max = Math.max(...data, 1)
   const pts = data.map((v, i) => [
-    P + (i / (data.length - 1)) * (W - P * 2),
+    P + (i / Math.max(data.length - 1, 1)) * (W - P * 2),
     P + (1 - v / max) * (H - P * 2 - 8),
   ])
   const line = pts
@@ -59,7 +55,6 @@ function AreaChart({ data, color, gradId }: { data: number[]; color: string; gra
   const last = pts[pts.length - 1]
   const first = pts[0]
   const area = `${line} L${last[0].toFixed(1)},${H} L${first[0].toFixed(1)},${H} Z`
-
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
@@ -95,7 +90,7 @@ function AreaChart({ data, color, gradId }: { data: number[]; color: string; gra
   )
 }
 
-// ── CSS Bar Chart ─────────────────────────────────────────────────────────────
+// ── CSS Bar Chart ──────────────────────────────────────────────────────────────
 
 function BarChart({ data, labels }: { data: number[]; labels: string[] }) {
   const max = Math.max(...data, 1)
@@ -115,7 +110,7 @@ function BarChart({ data, labels }: { data: number[]; labels: string[] }) {
   )
 }
 
-// ── Donut Chart (CSS conic-gradient) ─────────────────────────────────────────
+// ── Donut Chart ────────────────────────────────────────────────────────────────
 
 function DonutChart({
   free,
@@ -127,15 +122,11 @@ function DonutChart({
   rented: number
 }) {
   const total = free + reserved + rented
-  if (total === 0) return null
+  if (total === 0) return <p className={styles.emptyHint}>Помещений пока нет</p>
   const fP = (free / total) * 100
   const rP = (reserved / total) * 100
   const donutStyle = {
-    background: `conic-gradient(
-      #22c55e 0% ${fP.toFixed(1)}%,
-      #f59e0b ${fP.toFixed(1)}% ${(fP + rP).toFixed(1)}%,
-      #ef4444 ${(fP + rP).toFixed(1)}% 100%
-    )`,
+    background: `conic-gradient(#22c55e 0% ${fP.toFixed(1)}%, #f59e0b ${fP.toFixed(1)}% ${(fP + rP).toFixed(1)}%, #ef4444 ${(fP + rP).toFixed(1)}% 100%)`,
   }
   return (
     <div className={styles.donutWrap}>
@@ -162,31 +153,123 @@ function DonutChart({
   )
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// ── Main Component ─────────────────────────────────────────────────────────────
+
+interface RoomItem {
+  status: string
+}
+
+interface LeadItem {
+  id: string
+  createdAt: string
+  name: string
+  phone: string
+  roomId?: string | null
+  roomTitle?: string | null
+  serviceName?: string | null
+  status: LeadStatus
+}
 
 export function DashboardPage() {
   const params = useParams()
   const slug = params.adminSlug as string
   const base = `/${slug}`
 
-  const totalRooms = MOCK_ROOMS.length
-  const freeRooms = MOCK_ROOMS.filter((r) => r.status === 'FREE').length
-  const reservedRooms = MOCK_ROOMS.filter((r) => r.status === 'RESERVED').length
-  const rentedRooms = MOCK_ROOMS.filter((r) => r.status === 'RENTED').length
+  const [rooms, setRooms] = useState<RoomItem[]>([])
+  const [allLeads, setAllLeads] = useState<LeadItem[]>([])
 
-  const newLeads = MOCK_LEADS.filter((l) => l.status === 'NEW').length
-  const inProgress = MOCK_LEADS.filter((l) => l.status === 'IN_PROGRESS').length
-  const processed = MOCK_LEADS.filter((l) => l.status === 'PROCESSED').length
-  const totalLeads = MOCK_LEADS.length
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/rooms?limit=100').then((r) => (r.ok ? r.json() : { rooms: [] })),
+      fetch('/api/leads?limit=500').then((r) => (r.ok ? r.json() : { leads: [] })),
+    ]).then(([roomsData, leadsData]) => {
+      setRooms(roomsData.rooms ?? [])
+      setAllLeads(leadsData.leads ?? [])
+    })
+  }, [])
 
-  const conversion = ((totalLeads / TOTAL_MONTH) * 100).toFixed(2)
+  // Room stats
+  const freeRooms = rooms.filter((r) => r.status === 'FREE').length
+  const reservedRooms = rooms.filter((r) => r.status === 'RESERVED').length
+  const rentedRooms = rooms.filter((r) => r.status === 'RENTED').length
+  const totalRooms = rooms.length
 
-  const recentLeads = [...MOCK_LEADS]
+  // Lead stats
+  const newLeads = allLeads.filter((l) => l.status === 'NEW').length
+  const inProgress = allLeads.filter((l) => l.status === 'IN_PROGRESS').length
+  const processed = allLeads.filter((l) => l.status === 'PROCESSED').length
+  const totalLeads = allLeads.length
+
+  // Today's leads
+  const today = todayStr()
+  const todayLeads = allLeads.filter((l) => l.createdAt.slice(0, 10) === today).length
+  const yesterday = daysAgo(1)
+  const yesterdayLeads = allLeads.filter((l) => l.createdAt.slice(0, 10) === yesterday).length
+  const deltaPct =
+    yesterdayLeads > 0
+      ? Math.round(((todayLeads - yesterdayLeads) / yesterdayLeads) * 100)
+      : todayLeads > 0
+        ? 100
+        : 0
+
+  // Leads per day — last 30 days
+  const leads30d = useMemo(() => {
+    const counts: number[] = Array(30).fill(0)
+    const now = new Date()
+    allLeads.forEach((l) => {
+      const d = new Date(l.createdAt)
+      const diff = Math.floor((now.getTime() - d.getTime()) / 86400000)
+      if (diff >= 0 && diff < 30) counts[29 - diff]++
+    })
+    return counts
+  }, [allLeads])
+
+  // Leads per day of week — last 7 days (Mon–Sun order)
+  const leads7d = useMemo(() => {
+    const counts: number[] = Array(7).fill(0)
+    const now = new Date()
+    allLeads.forEach((l) => {
+      const d = new Date(l.createdAt)
+      const diff = Math.floor((now.getTime() - d.getTime()) / 86400000)
+      if (diff >= 0 && diff < 7) counts[6 - diff]++
+    })
+    return counts
+  }, [allLeads])
+
+  // X-axis labels for 30d chart
+  const xLabels = useMemo(() => {
+    const labels: string[] = []
+    const months = [
+      'янв',
+      'фев',
+      'мар',
+      'апр',
+      'май',
+      'июн',
+      'июл',
+      'авг',
+      'сен',
+      'окт',
+      'ноя',
+      'дек',
+    ]
+    for (const offset of [29, 22, 15, 7, 0]) {
+      const d = new Date()
+      d.setDate(d.getDate() - offset)
+      labels.push(`${d.getDate()} ${months[d.getMonth()]}`)
+    }
+    return labels
+  }, [])
+
+  const recentLeads = [...allLeads]
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
     .slice(0, 5)
 
-  // X-axis labels for 30-day chart
-  const xLabels = ['14 фев', '21 фев', '28 фев', '7 мар', '15 мар']
+  const nowStr = new Date().toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 
   return (
     <div className={styles.page}>
@@ -194,7 +277,7 @@ export function DashboardPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Дашборд</h1>
-          <p className={styles.subtitle}>15 марта 2026 · данные обновляются каждые 5 минут</p>
+          <p className={styles.subtitle}>{nowStr} · данные обновляются в реальном времени</p>
         </div>
         <Link href={`${base}/analytics`} className={styles.metrikaBtn}>
           <svg
@@ -217,94 +300,90 @@ export function DashboardPage() {
 
       {/* ── KPI Cards ── */}
       <div className={styles.kpiGrid}>
-        {/* Посетители сегодня */}
+        {/* Заявок сегодня */}
         <div className={styles.kpiCard}>
           <div className={styles.kpiHeader}>
-            <span className={styles.kpiLabel}>Посетители сегодня</span>
-            <span
-              className={`${styles.delta} ${DELTA_PCT >= 0 ? styles.deltaUp : styles.deltaDown}`}
-            >
-              {DELTA_PCT >= 0 ? '↑' : '↓'} {Math.abs(DELTA_PCT)}%
-            </span>
+            <span className={styles.kpiLabel}>Заявок сегодня</span>
+            {yesterdayLeads > 0 && (
+              <span
+                className={`${styles.delta} ${deltaPct >= 0 ? styles.deltaUp : styles.deltaDown}`}
+              >
+                {deltaPct >= 0 ? '↑' : '↓'} {Math.abs(deltaPct)}%
+              </span>
+            )}
           </div>
           <div className={styles.kpiSpark}>
-            <AreaChart data={VISITS_30D.slice(-7)} color="#8b5523" gradId="sp1" />
+            <AreaChart data={leads30d.slice(-7)} color="#8b5523" gradId="sp1" />
           </div>
-          <div className={styles.kpiValue}>{TODAY}</div>
-          <div className={styles.kpiMeta}>вчера: {YESTERDAY}</div>
+          <div className={styles.kpiValue}>{todayLeads}</div>
+          <div className={styles.kpiMeta}>вчера: {yesterdayLeads}</div>
         </div>
 
-        {/* Посетители за месяц */}
+        {/* Заявок за 30 дней */}
         <div className={styles.kpiCard}>
           <div className={styles.kpiHeader}>
-            <span className={styles.kpiLabel}>За месяц</span>
-            <span className={`${styles.delta} ${styles.deltaUp}`}>↑ 8%</span>
+            <span className={styles.kpiLabel}>За 30 дней</span>
           </div>
           <div className={styles.kpiSpark}>
-            <AreaChart data={VISITS_30D} color="#6366f1" gradId="sp2" />
+            <AreaChart data={leads30d} color="#6366f1" gradId="sp2" />
           </div>
-          <div className={styles.kpiValue}>{TOTAL_MONTH.toLocaleString('ru-RU')}</div>
-          <div className={styles.kpiMeta}>≈{Math.round(TOTAL_MONTH / 30)} в день</div>
+          <div className={styles.kpiValue}>{leads30d.reduce((a, b) => a + b, 0)}</div>
+          <div className={styles.kpiMeta}>всего заявок: {totalLeads}</div>
         </div>
 
-        {/* Заявки */}
+        {/* Новые заявки */}
         <div className={`${styles.kpiCard} ${newLeads > 0 ? styles.kpiCardAlert : ''}`}>
           <div className={styles.kpiHeader}>
-            <span className={styles.kpiLabel}>Заявок за месяц</span>
-            <span className={`${styles.delta} ${styles.deltaUp}`}>↑ 3</span>
+            <span className={styles.kpiLabel}>Новых заявок</span>
           </div>
           <div className={styles.kpiSpark}>
-            <AreaChart data={LEADS_7D} color="#22c55e" gradId="sp3" />
+            <AreaChart data={leads7d} color="#22c55e" gradId="sp3" />
           </div>
-          <div className={styles.kpiValue}>{totalLeads}</div>
+          <div className={styles.kpiValue}>{newLeads}</div>
           <div className={styles.kpiMeta}>
-            {newLeads > 0 && <span className={styles.alertDot}>{newLeads} новых</span>}
+            {newLeads > 0 && <span className={styles.alertDot}>{newLeads} требуют ответа</span>}
             {inProgress > 0 && <span> · {inProgress} в работе</span>}
+            {newLeads === 0 && inProgress === 0 && <span>всё обработано</span>}
           </div>
         </div>
 
-        {/* Конверсия */}
+        {/* Помещения */}
         <div className={styles.kpiCard}>
           <div className={styles.kpiHeader}>
-            <span className={styles.kpiLabel}>Конверсия</span>
-            <span className={`${styles.delta} ${styles.deltaUp}`}>↑ 0.1%</span>
+            <span className={styles.kpiLabel}>Помещений</span>
           </div>
-          <div className={styles.convValue}>{conversion}%</div>
-          <div className={styles.convDesc}>заявок / посетителей</div>
-          <div className={styles.convBar}>
-            <div
-              className={styles.convFill}
-              style={{ width: `${Math.min(parseFloat(conversion) * 15, 100)}%` }}
-            />
-          </div>
+          <div className={styles.kpiValue}>{totalRooms}</div>
           <div className={styles.kpiMeta}>
-            {totalLeads} заявок из {TOTAL_MONTH} визитов
+            {freeRooms > 0 && <span style={{ color: '#22c55e' }}>{freeRooms} свободно</span>}
+            {reservedRooms > 0 && <span> · {reservedRooms} бронь</span>}
+            {rentedRooms > 0 && <span> · {rentedRooms} занято</span>}
+            {totalRooms === 0 && 'нет помещений'}
           </div>
         </div>
       </div>
 
-      {/* ── Visit Chart ── */}
+      {/* ── Leads 30d Chart ── */}
       <div className={styles.card}>
         <div className={styles.cardTop}>
           <div>
-            <h2 className={styles.cardTitle}>Посещения сайта</h2>
-            <p className={styles.cardDesc}>последние 30 дней</p>
+            <h2 className={styles.cardTitle}>Заявки за 30 дней</h2>
+            <p className={styles.cardDesc}>динамика обращений</p>
           </div>
-          <Link href={`${base}/analytics`} className={styles.cardLink}>
-            Полная статистика →
+          <Link href={`${base}/leads`} className={styles.cardLink}>
+            Все заявки →
           </Link>
         </div>
         <div className={styles.visitChart}>
           <div className={styles.yAxis}>
-            {[Math.max(...VISITS_30D), Math.round(Math.max(...VISITS_30D) / 2), 0].map((v) => (
-              <span key={v} className={styles.yTick}>
+            {[Math.max(...leads30d), Math.round(Math.max(...leads30d) / 2), 0].map((v, i) => (
+              <span key={i} className={styles.yTick}>
                 {v}
               </span>
             ))}
           </div>
           <div className={styles.chartBody}>
             <div className={styles.chartSvg}>
-              <AreaChart data={VISITS_30D} color="#8b5523" gradId="main" />
+              <AreaChart data={leads30d} color="#8b5523" gradId="main" />
             </div>
             <div className={styles.xAxis}>
               {xLabels.map((l) => (
@@ -333,7 +412,7 @@ export function DashboardPage() {
           <DonutChart free={freeRooms} reserved={reservedRooms} rented={rentedRooms} />
         </div>
 
-        {/* Leads 7d + funnel */}
+        {/* Leads 7d */}
         <div className={styles.card}>
           <div className={styles.cardTop}>
             <div>
@@ -344,7 +423,7 @@ export function DashboardPage() {
               Все заявки →
             </Link>
           </div>
-          <BarChart data={LEADS_7D} labels={DAYS_SHORT} />
+          <BarChart data={leads7d} labels={DAYS_SHORT} />
           <div className={styles.funnel}>
             {[
               { color: '#ef4444', label: 'Новые', val: newLeads },
@@ -358,7 +437,7 @@ export function DashboardPage() {
                   <div
                     className={styles.funnelFill}
                     style={{
-                      width: `${(val / totalLeads) * 100}%`,
+                      width: totalLeads > 0 ? `${(val / totalLeads) * 100}%` : '0%',
                       background: color,
                       opacity: 0.6,
                     }}
@@ -415,6 +494,20 @@ export function DashboardPage() {
                   </tr>
                 )
               })}
+              {recentLeads.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={5}
+                    style={{
+                      textAlign: 'center',
+                      color: 'var(--color-text-muted)',
+                      padding: '1.5rem',
+                    }}
+                  >
+                    Заявок пока нет
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
