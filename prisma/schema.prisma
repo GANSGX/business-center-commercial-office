@@ -137,3 +137,16 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
 }
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  device    String?
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([visitorId])
+  @@index([path])
+}

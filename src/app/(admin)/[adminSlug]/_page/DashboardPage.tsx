@@ -170,6 +170,18 @@ interface LeadItem {
   status: LeadStatus
 }
 
+interface AnalyticsData {
+  viewsByDay: number[]
+  visitorsByDay: number[]
+  totalViews: number
+  uniqueVisitors: number
+  todayViews: number
+  yesterdayViews: number
+  todayVisitors: number
+  topPages: { path: string; count: number }[]
+  deviceBreakdown: { mobile?: number; desktop?: number }
+}
+
 export function DashboardPage() {
   const params = useParams()
   const slug = params.adminSlug as string
@@ -177,14 +189,17 @@ export function DashboardPage() {
 
   const [rooms, setRooms] = useState<RoomItem[]>([])
   const [allLeads, setAllLeads] = useState<LeadItem[]>([])
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
 
   useEffect(() => {
     Promise.all([
       fetch('/api/rooms?limit=100').then((r) => (r.ok ? r.json() : { rooms: [] })),
       fetch('/api/leads?limit=500').then((r) => (r.ok ? r.json() : { leads: [] })),
-    ]).then(([roomsData, leadsData]) => {
+      fetch('/api/analytics').then((r) => (r.ok ? r.json() : null)),
+    ]).then(([roomsData, leadsData, analyticsData]) => {
       setRooms(roomsData.rooms ?? [])
       setAllLeads(leadsData.leads ?? [])
+      setAnalytics(analyticsData)
     })
   }, [])
 
@@ -449,6 +464,151 @@ export function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Analytics ── */}
+      {analytics && (
+        <>
+          <div className={styles.kpiGrid}>
+            {/* Просмотров сегодня */}
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiHeader}>
+                <span className={styles.kpiLabel}>Просмотров сегодня</span>
+                {analytics.yesterdayViews > 0 && (
+                  <span
+                    className={`${styles.delta} ${analytics.todayViews >= analytics.yesterdayViews ? styles.deltaUp : styles.deltaDown}`}
+                  >
+                    {analytics.todayViews >= analytics.yesterdayViews ? '↑' : '↓'}{' '}
+                    {analytics.yesterdayViews > 0
+                      ? Math.abs(
+                          Math.round(
+                            ((analytics.todayViews - analytics.yesterdayViews) /
+                              analytics.yesterdayViews) *
+                              100
+                          )
+                        )
+                      : 100}
+                    %
+                  </span>
+                )}
+              </div>
+              <div className={styles.kpiSpark}>
+                <AreaChart data={analytics.viewsByDay.slice(-7)} color="#8b5523" gradId="av1" />
+              </div>
+              <div className={styles.kpiValue}>{analytics.todayViews}</div>
+              <div className={styles.kpiMeta}>вчера: {analytics.yesterdayViews}</div>
+            </div>
+
+            {/* Уникальных посетителей */}
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiHeader}>
+                <span className={styles.kpiLabel}>Посетителей за 30 дней</span>
+              </div>
+              <div className={styles.kpiSpark}>
+                <AreaChart data={analytics.visitorsByDay} color="#6366f1" gradId="av2" />
+              </div>
+              <div className={styles.kpiValue}>{analytics.uniqueVisitors}</div>
+              <div className={styles.kpiMeta}>просмотров всего: {analytics.totalViews}</div>
+            </div>
+
+            {/* Сегодня посетителей */}
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiHeader}>
+                <span className={styles.kpiLabel}>Посетителей сегодня</span>
+              </div>
+              <div className={styles.kpiSpark}>
+                <AreaChart data={analytics.visitorsByDay.slice(-7)} color="#22c55e" gradId="av3" />
+              </div>
+              <div className={styles.kpiValue}>{analytics.todayVisitors}</div>
+              <div className={styles.kpiMeta}>
+                mobile: {analytics.deviceBreakdown.mobile ?? 0} · desktop:{' '}
+                {analytics.deviceBreakdown.desktop ?? 0}
+              </div>
+            </div>
+
+            {/* Конверсия */}
+            <div className={styles.kpiCard}>
+              <div className={styles.kpiHeader}>
+                <span className={styles.kpiLabel}>Конверсия (30 дней)</span>
+              </div>
+              <div className={styles.kpiValue}>
+                {analytics.uniqueVisitors > 0
+                  ? ((allLeads.length / analytics.uniqueVisitors) * 100).toFixed(2)
+                  : '0.00'}
+                %
+              </div>
+              <div className={styles.kpiMeta}>
+                {allLeads.length} заявок / {analytics.uniqueVisitors} посетителей
+              </div>
+            </div>
+          </div>
+
+          {/* Посещаемость + топ страниц */}
+          <div className={styles.midRow}>
+            <div className={styles.card}>
+              <div className={styles.cardTop}>
+                <div>
+                  <h2 className={styles.cardTitle}>Просмотры за 30 дней</h2>
+                  <p className={styles.cardDesc}>страниц сайта</p>
+                </div>
+              </div>
+              <div className={styles.visitChart}>
+                <div className={styles.yAxis}>
+                  {[
+                    Math.max(...analytics.viewsByDay),
+                    Math.round(Math.max(...analytics.viewsByDay) / 2),
+                    0,
+                  ].map((v, i) => (
+                    <span key={i} className={styles.yTick}>
+                      {v}
+                    </span>
+                  ))}
+                </div>
+                <div className={styles.chartBody}>
+                  <div className={styles.chartSvg}>
+                    <AreaChart data={analytics.viewsByDay} color="#6366f1" gradId="views30" />
+                  </div>
+                  <div className={styles.xAxis}>
+                    {xLabels.map((l) => (
+                      <span key={l} className={styles.xTick}>
+                        {l}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.card}>
+              <div className={styles.cardTop}>
+                <div>
+                  <h2 className={styles.cardTitle}>Топ страниц</h2>
+                  <p className={styles.cardDesc}>за 30 дней</p>
+                </div>
+              </div>
+              <div className={styles.topPages}>
+                {analytics.topPages.length === 0 && (
+                  <p className={styles.emptyHint}>Данных пока нет</p>
+                )}
+                {analytics.topPages.map(({ path, count }) => {
+                  const maxCount = analytics.topPages[0]?.count ?? 1
+                  return (
+                    <div key={path} className={styles.topPageRow}>
+                      <span className={styles.topPagePath}>{path || '/'}</span>
+                      <div className={styles.topPageTrack}>
+                        <div
+                          className={styles.topPageFill}
+                          style={{ width: `${(count / maxCount) * 100}%` }}
+                        />
+                      </div>
+                      <span className={styles.topPageCount}>{count}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* ── Recent Leads ── */}
       <div className={styles.card}>

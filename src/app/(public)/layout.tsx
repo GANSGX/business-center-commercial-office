@@ -1,6 +1,7 @@
 import { Header } from '@/widgets/header'
 import { CookieBannerLazy } from '@/widgets/cookie-banner'
 import { LeadModalLazy } from '@/widgets/lead-form'
+import { AnalyticsTracker } from '@/widgets/analytics-tracker'
 import { ScrollToTop, Preloader } from '@/shared/ui'
 import styles from './layout.module.css'
 
@@ -18,6 +19,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <div className={styles.page}>
       <Preloader />
       <ScrollToTop />
+      <AnalyticsTracker />
       <Header services={mockServices} />
       <main>{children}</main>
       <LeadModalLazy />

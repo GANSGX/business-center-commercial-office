@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { PrismaClient } from '../src/generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
+import bcrypt from 'bcryptjs'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
@@ -194,6 +195,21 @@ async function main() {
       { key: 'mapZoom', value: '16' },
     ],
   })
+
+  // Admin user — создаётся из ADMIN_EMAIL + ADMIN_PASSWORD в .env
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+  if (adminEmail && adminPassword) {
+    const passwordHash = await bcrypt.hash(adminPassword, 12)
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: { passwordHash },
+      create: { email: adminEmail, passwordHash },
+    })
+    console.log(`Admin created: ${adminEmail}`)
+  } else {
+    console.warn('ADMIN_EMAIL / ADMIN_PASSWORD not set — admin user skipped')
+  }
 
   console.log('Seeding complete!')
 }

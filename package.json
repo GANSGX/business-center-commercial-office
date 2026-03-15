@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:up": "docker compose --profile dev up postgres-exposed -d",
+    "db:down": "docker compose --profile dev down",
+    "setup": "prisma migrate deploy && prisma db seed"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

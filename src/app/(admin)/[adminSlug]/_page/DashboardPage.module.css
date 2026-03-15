@@ -566,6 +566,55 @@
   color: var(--admin-success);
 }
 
+/* ── Top Pages ── */
+
+.topPages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.topPageRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.topPagePath {
+  font-size: 0.8rem;
+  color: var(--admin-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.topPageTrack {
+  width: 90px;
+  height: 5px;
+  background: var(--admin-border-subtle);
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.topPageFill {
+  height: 100%;
+  background: #6366f1;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.topPageCount {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-text);
+  min-width: 28px;
+  text-align: right;
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 1280px) {
