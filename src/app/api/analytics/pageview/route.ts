@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/shared/lib/prisma'
+import { dashboardEmitter } from '@/shared/lib/dashboard-emitter'
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,6 +21,8 @@ export async function POST(req: NextRequest) {
         visitorId: visitorId.slice(0, 64),
       },
     })
+
+    dashboardEmitter.emit('update')
 
     return NextResponse.json({ ok: true })
   } catch {

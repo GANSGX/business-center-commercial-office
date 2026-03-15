@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/shared/lib/prisma'
 import { requireAdmin } from '@/shared/lib/require-admin'
 import { leadsEmitter } from '@/shared/lib/leads-emitter'
+import { dashboardEmitter } from '@/shared/lib/dashboard-emitter'
 
 // ── Rate limit (in-memory, 5 req / 15 min per IP) ────────────────────────────
 
@@ -67,8 +68,9 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // Уведомляем SSE-подписчиков (админки) мгновенно
+    // Уведомляем SSE-подписчиков (админки и дашборда) мгновенно
     leadsEmitter.emit('new-lead')
+    dashboardEmitter.emit('update')
 
     return NextResponse.json({ ok: true, id: lead.id }, { status: 201 })
   } catch (e) {

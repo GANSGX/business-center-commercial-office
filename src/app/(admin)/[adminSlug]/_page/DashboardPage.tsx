@@ -192,15 +192,20 @@ export function DashboardPage() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/rooms?limit=100').then((r) => (r.ok ? r.json() : { rooms: [] })),
-      fetch('/api/leads?limit=500').then((r) => (r.ok ? r.json() : { leads: [] })),
-      fetch('/api/analytics').then((r) => (r.ok ? r.json() : null)),
-    ]).then(([roomsData, leadsData, analyticsData]) => {
-      setRooms(roomsData.rooms ?? [])
-      setAllLeads(leadsData.leads ?? [])
-      setAnalytics(analyticsData)
-    })
+    const es = new EventSource('/api/dashboard/stream')
+
+    es.onmessage = (e) => {
+      try {
+        const snap = JSON.parse(e.data)
+        if (snap.rooms) setRooms(snap.rooms)
+        if (snap.leads) setAllLeads(snap.leads)
+        if (snap.analytics) setAnalytics(snap.analytics)
+      } catch {
+        /* ignore malformed messages */
+      }
+    }
+
+    return () => es.close()
   }, [])
 
   // Room stats
