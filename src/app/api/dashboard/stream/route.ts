@@ -44,7 +44,7 @@ async function getSnapshot() {
   const viewsByDay: number[] = Array(30).fill(0)
   const visitorsByDay: Set<string>[] = Array.from({ length: 30 }, () => new Set())
   const pageCounts: Record<string, number> = {}
-  const deviceCounts: Record<string, number> = { mobile: 0, desktop: 0 }
+  const deviceVisitors: Record<string, Set<string>> = { mobile: new Set(), desktop: new Set() }
   const allVisitors = new Set<string>()
   const todayVisitors = new Set<string>()
 
@@ -55,9 +55,14 @@ async function getSnapshot() {
       visitorsByDay[29 - diff].add(v.visitorId)
     }
     pageCounts[v.path] = (pageCounts[v.path] ?? 0) + 1
-    if (v.device) deviceCounts[v.device] = (deviceCounts[v.device] ?? 0) + 1
+    if (v.device) deviceVisitors[v.device]?.add(v.visitorId)
     allVisitors.add(v.visitorId)
     if (new Date(v.createdAt) >= startOfToday) todayVisitors.add(v.visitorId)
+  }
+
+  const deviceCounts = {
+    mobile: deviceVisitors.mobile.size,
+    desktop: deviceVisitors.desktop.size,
   }
 
   const topPages = Object.entries(pageCounts)

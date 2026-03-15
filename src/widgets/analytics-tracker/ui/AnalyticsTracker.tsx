@@ -34,7 +34,6 @@ function trackPageview(pathname: string) {
       referrer: document.referrer || null,
       visitorId,
     }),
-    keepalive: true,
   }).catch(() => {})
 }
 
