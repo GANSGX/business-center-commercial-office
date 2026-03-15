@@ -95,9 +95,12 @@ export async function GET(req: NextRequest) {
         if (closed) return
         try {
           const snap = await getSnapshot()
+          if (closed) return
           controller.enqueue(enc(`data: ${JSON.stringify(snap)}\n\n`))
         } catch (e) {
-          console.error('[dashboard/stream]', e)
+          if ((e as NodeJS.ErrnoException)?.code !== 'ERR_INVALID_STATE') {
+            console.error('[dashboard/stream]', e)
+          }
         }
       }
 
