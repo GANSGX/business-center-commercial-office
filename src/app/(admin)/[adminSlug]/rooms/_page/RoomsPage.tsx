@@ -34,6 +34,7 @@ export function RoomsPage() {
   const [filterType, setFilterType] = useState('')
   const [search, setSearch] = useState('')
   const [rooms, setRooms] = useState<Room[]>(MOCK_ROOMS)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
 
   const filtered = rooms.filter((r) => {
     if (filterStatus && r.status !== filterStatus) return false
@@ -54,10 +55,17 @@ export function RoomsPage() {
 
   function changeStatus(id: string, status: RoomStatus) {
     setRooms((prev) => prev.map((r) => (r.id === id ? { ...r, status } : r)))
+    setOpenDropdownId(null)
   }
 
   return (
     <div className={styles.page}>
+      {openDropdownId && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 9 }}
+          onClick={() => setOpenDropdownId(null)}
+        />
+      )}
       {/* Заголовок */}
       <div className={styles.header}>
         <div>
@@ -171,20 +179,31 @@ export function RoomsPage() {
                 <td className={styles.mutedCell}>{room.floor}</td>
                 <td>
                   <div className={styles.statusSelect}>
-                    <span className={`${styles.statusBadge} ${STATUS_STYLES[room.status]}`}>
+                    <span
+                      className={`${styles.statusBadge} ${STATUS_STYLES[room.status]}`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setOpenDropdownId(openDropdownId === room.id ? null : room.id)
+                      }}
+                    >
                       {STATUS_LABELS[room.status]}
                     </span>
-                    <div className={styles.statusDropdown}>
-                      {ALL_STATUSES.map((s) => (
-                        <button
-                          key={s}
-                          className={`${styles.statusOption} ${s === room.status ? styles.statusOptionActive : ''}`}
-                          onClick={() => changeStatus(room.id, s)}
-                        >
-                          {STATUS_LABELS[s]}
-                        </button>
-                      ))}
-                    </div>
+                    {openDropdownId === room.id && (
+                      <div className={styles.statusDropdown} style={{ zIndex: 10 }}>
+                        {ALL_STATUSES.map((s) => (
+                          <button
+                            key={s}
+                            className={`${styles.statusOption} ${s === room.status ? styles.statusOptionActive : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              changeStatus(room.id, s)
+                            }}
+                          >
+                            {STATUS_LABELS[s]}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </td>
                 <td className={styles.priceCell}>{formatPrice(room.priceMonth)}</td>

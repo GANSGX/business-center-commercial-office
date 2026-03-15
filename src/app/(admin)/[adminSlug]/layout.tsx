@@ -1,13 +1,6 @@
-import dynamic from 'next/dynamic'
 import styles from './admin-layout.module.css'
-
-const AdminSidebar = dynamic(
-  () => import('./_components/AdminSidebar').then((m) => m.AdminSidebar),
-  { ssr: false }
-)
-const AdminTopbar = dynamic(() => import('./_components/AdminTopbar').then((m) => m.AdminTopbar), {
-  ssr: false,
-})
+import { AdminSidebar } from './_components/AdminSidebar'
+import { AdminTopbar } from './_components/AdminTopbar'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (

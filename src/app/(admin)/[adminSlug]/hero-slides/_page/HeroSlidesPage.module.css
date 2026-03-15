@@ -25,7 +25,7 @@
   color: var(--admin-text-muted);
 }
 
-.addBtn {
+.uploadBtn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -35,63 +35,78 @@
   color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
-  border: none;
   cursor: pointer;
   transition: background var(--transition-fast);
+  flex-shrink: 0;
 }
 
-.addBtn:hover {
+.uploadBtn:hover {
   background: var(--admin-accent-hover);
 }
 
-/* ── List ── */
+/* ── Hint ── */
 
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.card {
+.hint {
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+/* ── Grid ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
+}
+
+/* ── Card ── */
+
+.card {
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: 12px;
-  padding: 14px 16px;
+  overflow: hidden;
   transition: border-color var(--transition-fast);
+  position: relative;
 }
 
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .cardInactive {
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
-.dragHandle {
-  color: var(--admin-text-muted);
-  cursor: grab;
-  flex-shrink: 0;
-  padding: 4px;
+.orderBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
-
-.dragHandle:hover {
-  color: var(--admin-text-secondary);
-}
-
-/* ── Thumb ── */
 
 .thumb {
-  width: 120px;
-  height: 68px;
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 16 / 7;
   background: var(--admin-bg);
+  overflow: hidden;
 }
 
 .thumb img {
@@ -99,77 +114,29 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform var(--transition-slow);
 }
 
-.orderBadge {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  color: #fff;
-  font-size: 0.7rem;
-  font-weight: 700;
+.card:hover .thumb img {
+  transform: scale(1.03);
+}
+
+/* ── Card footer ── */
+
+.cardFooter {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 8px;
 }
 
-/* ── Info ── */
+/* ── Toggle ── */
 
-.info {
-  flex: 1;
-  min-width: 0;
-}
-
-.slideTitle {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--admin-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.slideSubtitle {
-  font-size: 0.8rem;
-  color: var(--admin-text-secondary);
-  margin-top: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.slideMeta {
-  display: flex;
-  gap: 16px;
-  margin-top: 6px;
-  flex-wrap: wrap;
-}
-
-.metaItem {
+.toggle {
   display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  color: var(--admin-text-muted);
-}
-
-/* ── Actions ── */
-
-.actions {
-  display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
-}
-
-/* Toggle */
-.toggle {
-  position: relative;
-  display: inline-flex;
   cursor: pointer;
 }
 
@@ -182,12 +149,13 @@
 
 .toggleTrack {
   display: block;
-  width: 36px;
-  height: 20px;
+  width: 34px;
+  height: 19px;
   border-radius: 10px;
-  background: var(--admin-border);
+  background: rgba(255, 255, 255, 0.1);
   transition: background var(--transition-fast);
   position: relative;
+  flex-shrink: 0;
 }
 
 .toggleTrack::after {
@@ -195,10 +163,10 @@
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.5);
   transition: transform var(--transition-fast);
 }
 
@@ -207,13 +175,26 @@
 }
 
 .toggle input:checked + .toggleTrack::after {
-  transform: translateX(16px);
+  transform: translateX(15px);
+  background: #fff;
+}
+
+.toggleLabel {
+  font-size: 0.78rem;
+  color: var(--admin-text-muted);
+}
+
+/* ── Actions ── */
+
+.actions {
+  display: flex;
+  gap: 6px;
 }
 
 .actionBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: 7px;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
   background: var(--admin-surface-hover);
   border: 1px solid var(--admin-border);
   color: var(--admin-text-secondary);
@@ -232,19 +213,34 @@
 }
 
 .actionBtnDanger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-@media (max-width: 768px) {
-  .thumb {
-    width: 80px;
-    height: 46px;
-  }
+/* ── Add card ── */
 
-  .slideSubtitle,
-  .slideMeta {
-    display: none;
-  }
+.addCard {
+  border: 1.5px dashed var(--admin-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 16 / 7;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
+  font-size: 0.8rem;
+  min-height: 120px;
+}
+
+.addCard:hover {
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+  background: var(--admin-accent-light);
 }

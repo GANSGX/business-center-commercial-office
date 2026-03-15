@@ -1,8 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const RoomEditPage = dynamic(() => import('./_page/RoomEditPage').then((m) => m.RoomEditPage), {
-  ssr: false,
-})
+import { RoomEditPage } from './_page/RoomEditPage'
 
 interface Props {
   params: Promise<{ adminSlug: string; id: string }>

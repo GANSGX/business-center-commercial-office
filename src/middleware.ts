@@ -10,9 +10,10 @@ export default auth(function middleware(req) {
   const isAdminPath = pathname.startsWith(`/${adminSlug}`)
 
   if (isAdminPath) {
-    if (!req.auth) {
-      return NextResponse.rewrite(new URL('/not-found', req.url))
-    }
+    // TODO Sprint 3: раскомментировать после подключения NextAuth + БД
+    // if (!req.auth) {
+    //   return NextResponse.rewrite(new URL('/not-found', req.url))
+    // }
     const response = NextResponse.next()
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
     return response

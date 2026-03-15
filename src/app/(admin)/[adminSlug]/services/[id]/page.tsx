@@ -1,9 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const ServiceEditPage = dynamic(
-  () => import('./_page/ServiceEditPage').then((m) => m.ServiceEditPage),
-  { ssr: false }
-)
+import { ServiceEditPage } from './_page/ServiceEditPage'
 
 interface Props {
   params: Promise<{ adminSlug: string; id: string }>

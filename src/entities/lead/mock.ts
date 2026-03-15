@@ -48,7 +48,7 @@ export const MOCK_LEADS: Lead[] = [
     roomId: null,
     roomTitle: null,
     serviceName: 'Парковка',
-    status: 'PROCESSED',
+    status: 'IN_PROGRESS',
   },
   {
     id: '5',
@@ -56,11 +56,11 @@ export const MOCK_LEADS: Lead[] = [
     name: 'ИП Кузнецова Е.В.',
     phone: '+7 (913) 321-65-87',
     email: 'kuznetsova@yandex.ru',
-    message: null,
+    message: 'Планируем открытие в апреле. Нужен офис с отдельным входом.',
     roomId: 'office-302',
     roomTitle: 'Офис 302',
     serviceName: null,
-    status: 'PROCESSED',
+    status: 'IN_PROGRESS',
   },
   {
     id: '6',

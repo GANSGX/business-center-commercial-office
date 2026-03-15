@@ -1,9 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const HeroSlidesPage = dynamic(
-  () => import('./_page/HeroSlidesPage').then((m) => m.HeroSlidesPage),
-  { ssr: false }
-)
+import { HeroSlidesPage } from './_page/HeroSlidesPage'
 
 export default function Page() {
   return <HeroSlidesPage />

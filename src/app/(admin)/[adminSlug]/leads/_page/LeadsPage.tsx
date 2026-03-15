@@ -1,9 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { MOCK_LEADS } from '@/entities/lead'
 import type { Lead, LeadStatus } from '@/entities/lead'
 import styles from './LeadsPage.module.css'
+
+const STATUS_LABELS: Record<LeadStatus, string> = {
+  NEW: 'Новая',
+  IN_PROGRESS: 'В работе',
+  PROCESSED: 'Обработана',
+}
 
 function formatDateTime(iso: string) {
   const d = new Date(iso)
@@ -19,6 +25,7 @@ export function LeadsPage() {
   const [filter, setFilter] = useState<'ALL' | LeadStatus>('ALL')
   const [search, setSearch] = useState('')
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
 
   const filtered = leads.filter((l) => {
     if (filter !== 'ALL' && l.status !== filter) return false
@@ -31,16 +38,26 @@ export function LeadsPage() {
 
   const newCount = leads.filter((l) => l.status === 'NEW').length
 
-  function toggleStatus(id: string) {
-    setLeads((prev) =>
-      prev.map((l) =>
-        l.id === id ? { ...l, status: l.status === 'NEW' ? 'PROCESSED' : 'NEW' } : l
-      )
-    )
+  function changeStatus(id: string, status: LeadStatus) {
+    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)))
+    setOpenDropdownId(null)
+  }
+
+  function statusBadgeClass(status: LeadStatus) {
+    if (status === 'NEW') return styles.statusNew
+    if (status === 'IN_PROGRESS') return styles.statusInProgress
+    return styles.statusDone
   }
 
   return (
     <div className={styles.page}>
+      {openDropdownId && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 9 }}
+          onClick={() => setOpenDropdownId(null)}
+        />
+      )}
+
       {/* Заголовок */}
       <div className={styles.header}>
         <div>
@@ -55,13 +72,13 @@ export function LeadsPage() {
       {/* Фильтры */}
       <div className={styles.toolbar}>
         <div className={styles.tabs}>
-          {(['ALL', 'NEW', 'PROCESSED'] as const).map((f) => (
+          {(['ALL', 'NEW', 'IN_PROGRESS', 'PROCESSED'] as const).map((f) => (
             <button
               key={f}
               className={`${styles.tab} ${filter === f ? styles.tabActive : ''}`}
               onClick={() => setFilter(f)}
             >
-              {f === 'ALL' ? 'Все' : f === 'NEW' ? 'Новые' : 'Обработанные'}
+              {f === 'ALL' ? 'Все' : STATUS_LABELS[f]}
               <span className={styles.tabCount}>
                 {f === 'ALL' ? leads.length : leads.filter((l) => l.status === f).length}
               </span>
@@ -87,15 +104,13 @@ export function LeadsPage() {
               <th>Email</th>
               <th>Помещение</th>
               <th>Статус</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((lead) => (
-              <>
+              <React.Fragment key={lead.id}>
                 <tr
-                  key={lead.id}
-                  className={`${styles.row} ${expanded === lead.id ? styles.rowExpanded : ''} ${lead.status === 'NEW' ? styles.rowNew : ''}`}
+                  className={`${styles.row} ${expanded === lead.id ? styles.rowExpanded : ''} ${lead.status === 'NEW' ? styles.rowNew : lead.status === 'IN_PROGRESS' ? styles.rowInProgress : ''}`}
                   onClick={() => setExpanded(expanded === lead.id ? null : lead.id)}
                 >
                   <td className={styles.dateCell}>{formatDateTime(lead.createdAt)}</td>
@@ -104,55 +119,41 @@ export function LeadsPage() {
                   <td className={styles.mutedCell}>{lead.email ?? '—'}</td>
                   <td className={styles.mutedCell}>{lead.roomTitle ?? lead.serviceName ?? '—'}</td>
                   <td>
-                    <span
-                      className={`${styles.statusBadge} ${lead.status === 'NEW' ? styles.statusNew : styles.statusDone}`}
+                    <div
+                      className={styles.statusSelect}
+                      style={{ position: 'relative', display: 'inline-block' }}
                     >
-                      {lead.status === 'NEW' ? 'Новая' : 'Обработана'}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      className={`${styles.actionBtn} ${lead.status === 'NEW' ? styles.actionBtnPrimary : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleStatus(lead.id)
-                      }}
-                      title={lead.status === 'NEW' ? 'Отметить обработанной' : 'Вернуть в новые'}
-                    >
-                      {lead.status === 'NEW' ? (
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      ) : (
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                          <path d="M3 3v5h5" />
-                        </svg>
+                      <span
+                        className={`${styles.statusBadge} ${statusBadgeClass(lead.status)}`}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setOpenDropdownId(openDropdownId === lead.id ? null : lead.id)
+                        }}
+                      >
+                        {STATUS_LABELS[lead.status]}
+                      </span>
+                      {openDropdownId === lead.id && (
+                        <div className={styles.statusDropdown} style={{ zIndex: 10 }}>
+                          {(['NEW', 'IN_PROGRESS', 'PROCESSED'] as LeadStatus[]).map((s) => (
+                            <button
+                              key={s}
+                              className={`${styles.statusOption} ${s === lead.status ? styles.statusOptionActive : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                changeStatus(lead.id, s)
+                              }}
+                            >
+                              {STATUS_LABELS[s]}
+                            </button>
+                          ))}
+                        </div>
                       )}
-                    </button>
+                    </div>
                   </td>
                 </tr>
                 {expanded === lead.id && lead.message && (
                   <tr key={`${lead.id}-msg`} className={styles.expandRow}>
-                    <td colSpan={7}>
+                    <td colSpan={6}>
                       <div className={styles.messageBox}>
                         <span className={styles.messageLabel}>Сообщение:</span>
                         <p className={styles.messageText}>{lead.message}</p>
@@ -160,11 +161,11 @@ export function LeadsPage() {
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className={styles.emptyRow}>
+                <td colSpan={6} className={styles.emptyRow}>
                   Заявок не найдено
                 </td>
               </tr>

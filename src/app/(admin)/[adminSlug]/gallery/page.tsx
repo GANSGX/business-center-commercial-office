@@ -1,9 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const GalleryAdminPage = dynamic(
-  () => import('./_page/GalleryAdminPage').then((m) => m.GalleryAdminPage),
-  { ssr: false }
-)
+import { GalleryAdminPage } from './_page/GalleryAdminPage'
 
 export default function Page() {
   return <GalleryAdminPage />

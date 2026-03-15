@@ -1,4 +1,4 @@
-export type LeadStatus = 'NEW' | 'PROCESSED'
+export type LeadStatus = 'NEW' | 'IN_PROGRESS' | 'PROCESSED'
 
 export interface Lead {
   id: string

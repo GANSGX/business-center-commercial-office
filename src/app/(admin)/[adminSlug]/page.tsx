@@ -1,8 +1,4 @@
-import dynamic from 'next/dynamic'
-
-const DashboardPage = dynamic(() => import('./_page/DashboardPage').then((m) => m.DashboardPage), {
-  ssr: false,
-})
+import { DashboardPage } from './_page/DashboardPage'
 
 export default function Page() {
   return <DashboardPage />

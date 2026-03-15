@@ -6,6 +6,25 @@ import styles from './SettingsPage.module.css'
 const SECTIONS = ['Контакты', 'Реквизиты', 'Карта', 'Социальные сети'] as const
 type Section = (typeof SECTIONS)[number]
 
+const SECTION_META: Record<Section, { desc: string; pages: string }> = {
+  Контакты: {
+    desc: 'Телефоны, email, адрес и часы работы',
+    pages: 'Главная (/), Контакты (/contacts), Подвал сайта',
+  },
+  Реквизиты: {
+    desc: 'ИНН, ОГРН, банковские реквизиты',
+    pages: 'Контакты (/contacts)',
+  },
+  Карта: {
+    desc: 'Местоположение объекта на карте',
+    pages: 'Контакты (/contacts)',
+  },
+  'Социальные сети': {
+    desc: 'Ссылки на соцсети и мессенджеры',
+    pages: 'Главная (/), Подвал сайта',
+  },
+}
+
 export function SettingsPage() {
   const [activeSection, setActiveSection] = useState<Section>('Контакты')
   const [saved, setSaved] = useState(false)
@@ -54,13 +73,35 @@ export function SettingsPage() {
               className={`${styles.sectionTab} ${activeSection === s ? styles.sectionTabActive : ''}`}
               onClick={() => setActiveSection(s)}
             >
-              {s}
+              <span className={styles.sectionTabName}>{s}</span>
+              <span className={styles.sectionTabPages}>{SECTION_META[s].pages}</span>
             </button>
           ))}
         </nav>
 
         {/* Форма */}
         <div className={styles.formWrap}>
+          <div className={styles.sectionInfo}>
+            <p className={styles.sectionDesc}>{SECTION_META[activeSection].desc}</p>
+            <p className={styles.sectionPages}>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Отображается на: {SECTION_META[activeSection].pages}
+            </p>
+          </div>
+
           {activeSection === 'Контакты' && (
             <div className={styles.form}>
               <Field
