@@ -19,6 +19,25 @@ function getOrCreateVisitorId(): string | null {
   }
 }
 
+function trackPageview(pathname: string) {
+  const consent = localStorage.getItem('cookie_consent')
+  if (consent !== 'accepted') return
+
+  const visitorId = getOrCreateVisitorId()
+  if (!visitorId) return
+
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      path: pathname,
+      referrer: document.referrer || null,
+      visitorId,
+    }),
+    keepalive: true,
+  }).catch(() => {})
+}
+
 export function AnalyticsTracker() {
   const pathname = usePathname()
   const prevPath = useRef<string | null>(null)
@@ -26,24 +45,13 @@ export function AnalyticsTracker() {
   useEffect(() => {
     if (prevPath.current === pathname) return
     prevPath.current = pathname
+    trackPageview(pathname)
+  }, [pathname])
 
-    // Трекаем только после явного согласия пользователя с cookie banner
-    const consent = localStorage.getItem('cookie_consent')
-    if (consent !== 'accepted') return
-
-    const visitorId = getOrCreateVisitorId()
-    if (!visitorId) return
-
-    fetch('/api/analytics/pageview', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        path: pathname,
-        referrer: document.referrer || null,
-        visitorId,
-      }),
-      keepalive: true,
-    }).catch(() => {})
+  useEffect(() => {
+    const onConsent = () => trackPageview(pathname)
+    window.addEventListener('cookie-consent-accepted', onConsent)
+    return () => window.removeEventListener('cookie-consent-accepted', onConsent)
   }, [pathname])
 
   return null

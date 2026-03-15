@@ -19,16 +19,26 @@ async function getSnapshot() {
   const startOfYesterday = new Date(startOfToday)
   startOfYesterday.setDate(startOfYesterday.getDate() - 1)
 
-  const [rooms, leads, views30d, todayViews, yesterdayViews] = await Promise.all([
+  const [rooms, leads] = await Promise.all([
     prisma.room.findMany({ select: { status: true } }),
     prisma.lead.findMany({ orderBy: { createdAt: 'desc' }, take: 1000 }),
-    prisma.pageView.findMany({
-      where: { createdAt: { gte: startOf30d } },
-      select: { createdAt: true, visitorId: true, path: true, device: true },
-    }),
-    prisma.pageView.count({ where: { createdAt: { gte: startOfToday } } }),
-    prisma.pageView.count({ where: { createdAt: { gte: startOfYesterday, lt: startOfToday } } }),
   ])
+
+  let views30d: { createdAt: Date; visitorId: string; path: string; device: string | null }[] = []
+  let todayViews = 0
+  let yesterdayViews = 0
+  try {
+    ;[views30d, todayViews, yesterdayViews] = await Promise.all([
+      prisma.pageView.findMany({
+        where: { createdAt: { gte: startOf30d } },
+        select: { createdAt: true, visitorId: true, path: true, device: true },
+      }),
+      prisma.pageView.count({ where: { createdAt: { gte: startOfToday } } }),
+      prisma.pageView.count({ where: { createdAt: { gte: startOfYesterday, lt: startOfToday } } }),
+    ])
+  } catch (e) {
+    console.error('[dashboard/stream] pageView query failed:', e)
+  }
 
   // Aggregate analytics
   const viewsByDay: number[] = Array(30).fill(0)
