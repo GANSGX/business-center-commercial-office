@@ -5,6 +5,7 @@ import { usePathname, useParams, useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { useSidebarStore } from '@/features/admin-sidebar'
 import styles from './AdminSidebar.module.css'
+import { useEffect, useState } from 'react'
 
 // ── Inline SVG icons ────────────────────────────────────────────────────────
 
@@ -173,7 +174,7 @@ function IconLogout() {
 const NAV_ITEMS = [
   { segment: '', label: 'Дашборд', icon: <IconDashboard /> },
   { segment: 'rooms', label: 'Помещения', icon: <IconRooms /> },
-  { segment: 'leads', label: 'Заявки', icon: <IconLeads />, badge: 3 },
+  { segment: 'leads', label: 'Заявки', icon: <IconLeads /> },
   { segment: 'gallery', label: 'Галерея', icon: <IconGallery /> },
   { segment: 'analytics', label: 'Аналитика', icon: <IconAnalytics /> },
   { segment: 'settings', label: 'Настройки', icon: <IconSettings /> },
@@ -189,6 +190,41 @@ export function AdminSidebar() {
   const base = `/${slug}`
 
   const { isOpen, close } = useSidebarStore()
+
+  const [newLeadsCount, setNewLeadsCount] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function fetchNewLeads() {
+      try {
+        const res = await fetch('/api/leads?status=NEW&limit=1', { cache: 'no-store' })
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled) setNewLeadsCount(data.total ?? 0)
+      } catch {
+        /* ignore */
+      }
+    }
+
+    fetchNewLeads()
+
+    // SSE для мгновенного обновления бейджа
+    const es = new EventSource('/api/leads/stream')
+    es.onmessage = (e) => {
+      if (e.data === 'new-lead') fetchNewLeads()
+    }
+    es.onerror = () => es.close()
+
+    // Резервный поллинг раз в 60 сек
+    const fallback = setInterval(fetchNewLeads, 60_000)
+
+    return () => {
+      cancelled = true
+      es.close()
+      clearInterval(fallback)
+    }
+  }, [])
 
   async function handleLogout() {
     await signOut({ redirect: false })
@@ -218,9 +254,10 @@ export function AdminSidebar() {
 
         {/* Навигация */}
         <nav className={styles.nav} aria-label="Навигация">
-          {NAV_ITEMS.map(({ segment, label, icon, badge }) => {
+          {NAV_ITEMS.map(({ segment, label, icon }) => {
             const href = segment === '' ? base : `${base}/${segment}`
             const active = isActive(segment)
+            const badge = segment === 'leads' ? newLeadsCount : 0
             return (
               <Link
                 key={segment}
@@ -230,7 +267,7 @@ export function AdminSidebar() {
               >
                 <span className={styles.navIcon}>{icon}</span>
                 <span className={styles.navLabel}>{label}</span>
-                {badge && <span className={styles.navBadge}>{badge}</span>}
+                {badge > 0 && <span className={styles.navBadge}>{badge}</span>}
               </Link>
             )
           })}

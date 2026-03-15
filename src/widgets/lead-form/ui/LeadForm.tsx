@@ -39,9 +39,10 @@ function validate(f: FormFields) {
 
 interface LeadFormProps {
   compact?: boolean
+  serviceName?: string
 }
 
-export function LeadForm({ compact = false }: LeadFormProps) {
+export function LeadForm({ compact = false, serviceName }: LeadFormProps) {
   const [form, setForm] = useState<FormFields>(EMPTY)
   const [errors, setErrors] = useState<Partial<Record<keyof FormFields, string>>>({})
   const [status, setStatus] = useState<Status>('idle')
@@ -74,6 +75,7 @@ export function LeadForm({ compact = false }: LeadFormProps) {
           phone: form.phone.trim(),
           email: form.email.trim() || undefined,
           message: form.message.trim() || undefined,
+          serviceName: serviceName || undefined,
           pageUrl: typeof window !== 'undefined' ? window.location.href : undefined,
         }),
       })
@@ -82,6 +84,7 @@ export function LeadForm({ compact = false }: LeadFormProps) {
       if (res.ok) {
         setStatus('success')
         setForm(EMPTY)
+        window.dispatchEvent(new Event('lead-submitted'))
       } else if (res.status === 429) {
         setErrors({ phone: 'Слишком много заявок. Повторите через 15 минут.' })
         setStatus('idle')

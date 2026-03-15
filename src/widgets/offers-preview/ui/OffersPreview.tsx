@@ -32,9 +32,19 @@ export function OffersPreview() {
   const [offices, setOffices] = useState<Office[] | null>(null)
 
   useEffect(() => {
-    fetch('/api/rooms?showOnHome=true&status=FREE&limit=6', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : { rooms: [] }))
-      .then((data) => setOffices(data.rooms ?? []))
+    function load() {
+      fetch(`/api/rooms?showOnHome=true&status=FREE&limit=6&_t=${Date.now()}`, {
+        cache: 'no-store',
+      })
+        .then((r) => (r.ok ? r.json() : { rooms: [] }))
+        .then((data) => setOffices(data.rooms ?? []))
+    }
+    load()
+    function onVisible() {
+      if (!document.hidden) load()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
   }, [])
 
   return (

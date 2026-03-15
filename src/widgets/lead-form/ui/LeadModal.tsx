@@ -23,7 +23,7 @@ export function LeadModal() {
 
   return (
     <Modal open={isOpen} onClose={close} title={title}>
-      <LeadForm compact />
+      <LeadForm compact serviceName={officeLabel ?? undefined} />
     </Modal>
   )
 }

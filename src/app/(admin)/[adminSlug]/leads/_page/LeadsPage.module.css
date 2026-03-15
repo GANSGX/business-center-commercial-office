@@ -115,7 +115,6 @@
   background: var(--admin-surface);
   border: 1px solid var(--admin-border);
   border-radius: 14px;
-  overflow: hidden;
   overflow-x: auto;
 }
 
@@ -223,6 +222,9 @@
 }
 
 .statusOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 7px 10px;
   border-radius: 5px;
   font-size: 0.8rem;
@@ -231,6 +233,7 @@
   border: none;
   cursor: pointer;
   text-align: left;
+  width: 100%;
   transition: background var(--transition-fast);
 }
 
@@ -240,7 +243,19 @@
 }
 
 .statusOptionActive {
-  color: var(--admin-accent) !important;
+  color: var(--admin-text) !important;
+  font-weight: 600;
+}
+
+.optionBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .statusNew {
@@ -322,6 +337,66 @@
   color: var(--admin-text-secondary);
   line-height: 1.6;
   margin: 0;
+}
+
+/* ── Delete button ── */
+
+.actionCell {
+  width: 36px;
+  padding: 0 8px !important;
+}
+
+.deleteBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--admin-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* ── Source link ── */
+
+.expandContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sourceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--admin-accent);
+  text-decoration: none;
+  word-break: break-all;
+  transition: opacity var(--transition-fast);
+}
+
+.sourceLink:hover {
+  opacity: 0.75;
 }
 
 /* ── Empty ── */

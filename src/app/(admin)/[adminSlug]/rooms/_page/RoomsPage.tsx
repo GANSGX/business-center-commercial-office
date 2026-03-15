@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import type { RoomStatus } from '@/entities/room'
@@ -33,6 +34,12 @@ const STATUS_STYLES: Record<RoomStatus, string> = {
   RENTED: styles.badgeRented,
 }
 
+const STATUS_COLORS: Record<RoomStatus, { bg: string; color: string }> = {
+  FREE: { bg: 'rgba(34, 197, 94, 0.12)', color: '#22c55e' },
+  RESERVED: { bg: 'rgba(245, 158, 11, 0.12)', color: '#f59e0b' },
+  RENTED: { bg: 'rgba(239, 68, 68, 0.12)', color: '#ef4444' },
+}
+
 function formatPrice(p: number) {
   return p.toLocaleString('ru-RU') + ' ₽'
 }
@@ -49,6 +56,7 @@ export function RoomsPage() {
   const [filterType, setFilterType] = useState('')
   const [search, setSearch] = useState('')
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
 
   const fetchRooms = useCallback(async () => {
     setLoading(true)
@@ -239,27 +247,17 @@ export function RoomsPage() {
                         className={`${styles.statusBadge} ${STATUS_STYLES[room.status]}`}
                         onClick={(e) => {
                           e.stopPropagation()
-                          setOpenDropdownId(openDropdownId === room.id ? null : room.id)
+                          if (openDropdownId === room.id) {
+                            setOpenDropdownId(null)
+                          } else {
+                            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                            setDropdownPos({ top: rect.bottom + 6, left: rect.left })
+                            setOpenDropdownId(room.id)
+                          }
                         }}
                       >
                         {STATUS_LABELS[room.status]}
                       </span>
-                      {openDropdownId === room.id && (
-                        <div className={styles.statusDropdown} style={{ zIndex: 10 }}>
-                          {ALL_STATUSES.map((s) => (
-                            <button
-                              key={s}
-                              className={`${styles.statusOption} ${s === room.status ? styles.statusOptionActive : ''}`}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                changeStatus(room.id, s)
-                              }}
-                            >
-                              {STATUS_LABELS[s]}
-                            </button>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </td>
                   <td className={styles.priceCell}>{formatPrice(room.priceMonth)}</td>
@@ -330,6 +328,52 @@ export function RoomsPage() {
           </table>
         </div>
       )}
+
+      {openDropdownId &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className={styles.statusDropdown}
+            style={{
+              position: 'fixed',
+              top: dropdownPos.top,
+              left: dropdownPos.left,
+              zIndex: 1000,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {ALL_STATUSES.map((s) => {
+              const current = rooms.find((r) => r.id === openDropdownId)?.status
+              return (
+                <button
+                  key={s}
+                  className={`${styles.statusOption} ${s === current ? styles.statusOptionActive : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    changeStatus(openDropdownId, s)
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '3px 10px',
+                      borderRadius: '20px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      background: STATUS_COLORS[s].bg,
+                      color: STATUS_COLORS[s].color,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {STATUS_LABELS[s]}
+                  </span>
+                </button>
+              )
+            })}
+          </div>,
+          document.body
+        )}
     </div>
   )
 }
