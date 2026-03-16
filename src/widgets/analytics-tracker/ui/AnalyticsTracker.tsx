@@ -3,20 +3,23 @@
 import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
-function getOrCreateVisitorId(): string | null {
-  try {
-    const key = 'bc_visitor'
-    const match = document.cookie.match(new RegExp(`(?:^|; )${key}=([^;]*)`))
-    if (match) return decodeURIComponent(match[1])
-
-    const id = crypto.randomUUID()
-    const expires = new Date()
-    expires.setFullYear(expires.getFullYear() + 1)
-    document.cookie = `${key}=${id}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`
-    return id
-  } catch {
-    return null
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
   }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+  })
+}
+
+function getOrCreateVisitorId(): string {
+  const key = 'bc_visitor'
+  const existing = localStorage.getItem(key)
+  if (existing) return existing
+  const id = generateId()
+  localStorage.setItem(key, id)
+  return id
 }
 
 function trackPageview(pathname: string) {
@@ -24,7 +27,6 @@ function trackPageview(pathname: string) {
   if (consent !== 'accepted') return
 
   const visitorId = getOrCreateVisitorId()
-  if (!visitorId) return
 
   fetch('/api/analytics/pageview', {
     method: 'POST',
