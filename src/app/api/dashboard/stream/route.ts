@@ -9,15 +9,12 @@ export const dynamic = 'force-dynamic'
 async function getSnapshot() {
   const now = new Date()
 
-  const startOf30d = new Date(now)
-  startOf30d.setDate(startOf30d.getDate() - 29)
-  startOf30d.setHours(0, 0, 0, 0)
-
-  const startOfToday = new Date(now)
-  startOfToday.setHours(0, 0, 0, 0)
-
+  // Все даты в UTC — чтобы не зависеть от часового пояса сервера
+  const startOfToday = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
   const startOfYesterday = new Date(startOfToday)
-  startOfYesterday.setDate(startOfYesterday.getDate() - 1)
+  startOfYesterday.setUTCDate(startOfYesterday.getUTCDate() - 1)
+  const startOf30d = new Date(startOfToday)
+  startOf30d.setUTCDate(startOf30d.getUTCDate() - 29)
 
   const [rooms, leads] = await Promise.all([
     prisma.room.findMany({ select: { status: true } }),
@@ -49,7 +46,9 @@ async function getSnapshot() {
   const todayVisitors = new Set<string>()
 
   for (const v of views30d) {
-    const diff = Math.floor((now.getTime() - new Date(v.createdAt).getTime()) / 86400000)
+    const vDate = new Date(v.createdAt)
+    const vDay = Date.UTC(vDate.getUTCFullYear(), vDate.getUTCMonth(), vDate.getUTCDate())
+    const diff = Math.round((startOfToday.getTime() - vDay) / 86400000)
     if (diff >= 0 && diff < 30) {
       viewsByDay[29 - diff]++
       visitorsByDay[29 - diff].add(v.visitorId)
@@ -57,7 +56,7 @@ async function getSnapshot() {
     pageCounts[v.path] = (pageCounts[v.path] ?? 0) + 1
     if (v.device) deviceVisitors[v.device]?.add(v.visitorId)
     allVisitors.add(v.visitorId)
-    if (new Date(v.createdAt) >= startOfToday) todayVisitors.add(v.visitorId)
+    if (vDay >= startOfToday.getTime()) todayVisitors.add(v.visitorId)
   }
 
   const deviceCounts = {
