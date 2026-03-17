@@ -63,6 +63,7 @@ interface Photo {
 
 interface FormData {
   title: string
+  slug: string
   roomNumber: string
   type: string
   status: string
@@ -85,6 +86,7 @@ interface FormData {
 
 const EMPTY_FORM: FormData = {
   title: '',
+  slug: '',
   roomNumber: '',
   type: 'Офис',
   status: 'FREE',
@@ -134,6 +136,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
         }
         setForm({
           title: data.title ?? '',
+          slug: data.slug ?? '',
           roomNumber: data.roomNumber ?? '',
           type: data.type ?? 'Офис',
           status: data.status ?? 'FREE',
@@ -176,7 +179,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
     setSaving(true)
     const payload = {
       title: form.title.trim(),
-      slug: toSlug(form.title.trim()) || `room-${Date.now()}`,
+      slug: isNew ? toSlug(form.title.trim()) || `room-${Date.now()}` : form.slug,
       roomNumber: form.roomNumber || undefined,
       type: form.type || undefined,
       status: form.status,

@@ -63,12 +63,12 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
     }
-    const room = await prisma.room.update({ where: { id: slug }, data: parsed.data })
+    // Найти по slug или id, затем обновить по id
+    const existing = await prisma.room.findFirst({ where: { OR: [{ slug }, { id: slug }] } })
+    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    const room = await prisma.room.update({ where: { id: existing.id }, data: parsed.data })
     return NextResponse.json(room)
   } catch (e: unknown) {
-    if ((e as { code?: string }).code === 'P2025') {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
     if ((e as { code?: string }).code === 'P2002') {
       return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })
     }
@@ -85,12 +85,12 @@ export async function DELETE(_req: NextRequest, ctx: Ctx) {
 
   try {
     const { slug } = await ctx.params
-    await prisma.room.delete({ where: { id: slug } })
+    // Найти по slug или id, затем удалить по id
+    const existing = await prisma.room.findFirst({ where: { OR: [{ slug }, { id: slug }] } })
+    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    await prisma.room.delete({ where: { id: existing.id } })
     return NextResponse.json({ ok: true })
   } catch (e: unknown) {
-    if ((e as { code?: string }).code === 'P2025') {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    }
     console.error('[DELETE /api/rooms/[slug]]', e)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

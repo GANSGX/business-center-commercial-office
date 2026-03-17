@@ -200,8 +200,7 @@
 
 .footer {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -210,21 +209,23 @@
 
 .priceWrap {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 6px;
 }
 
 .priceLabel {
   font-size: var(--text-xs);
   color: rgba(255, 255, 255, 0.3);
   letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
 .price {
   font-size: var(--text-base);
   font-weight: 700;
   letter-spacing: -0.01em;
-  white-space: nowrap;
   background: linear-gradient(135deg, #f5c96a 0%, #f0a830 50%, #e8c470 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -239,10 +240,10 @@
 /* ── CTA кнопка ── */
 
 .cta {
-  flex-shrink: 0;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   padding: 10px 16px;
   border-radius: 10px;
   font-size: var(--text-xs);
@@ -311,12 +312,10 @@
   }
 
   .footer {
-    flex-wrap: wrap;
     gap: 10px;
   }
 
   .cta {
-    flex: 1;
     justify-content: center;
   }
 }

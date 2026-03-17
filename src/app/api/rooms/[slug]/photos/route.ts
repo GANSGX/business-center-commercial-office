@@ -33,7 +33,11 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
     }
 
-    const ext = file.name.split('.').pop() ?? 'jpg'
+    const ALLOWED_EXT = ['jpg', 'jpeg', 'png', 'webp', 'gif'] as const
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? ''
+    if (!ALLOWED_EXT.includes(ext as (typeof ALLOWED_EXT)[number])) {
+      return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 })
+    }
     const filename = `${randomUUID()}.${ext}`
     const uploadDir = join(process.cwd(), 'public', 'uploads')
     await mkdir(uploadDir, { recursive: true })
