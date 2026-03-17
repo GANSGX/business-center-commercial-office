@@ -46,6 +46,79 @@
   background: var(--admin-accent-hover);
 }
 
+/* ── Status banner ── */
+
+.statusBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.statusActive {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+  border-color: color-mix(in srgb, var(--admin-success) 30%, transparent);
+}
+
+.statusInactive {
+  background: var(--admin-surface);
+  color: var(--admin-text-muted);
+  border-color: var(--admin-border);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* ── Clear button ── */
+
+.clearBtn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: none;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.clearBtn:hover {
+  border-color: var(--admin-error, #dc2626);
+  color: var(--admin-error, #dc2626);
+}
+
+/* ── Cap card (возможности) ── */
+
+.capCard {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  padding: 24px 28px;
+}
+
+.cap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 10px;
+}
+
 /* ── Tabs ── */
 
 .tabs {
@@ -214,8 +287,13 @@
   white-space: nowrap;
 }
 
-.connectBtn:hover {
+.connectBtn:hover:not(:disabled) {
   background: var(--admin-accent-hover);
+}
+
+.connectBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .connectHint {
