@@ -4,8 +4,9 @@
   position: fixed;
   bottom: 24px;
   left: 24px;
+  right: 24px;
+  max-width: 720px;
   z-index: 200;
-  width: clamp(320px, calc(100vw - 48px), 720px);
 
   /* Тот же glass-island что у header */
   background:
@@ -149,7 +150,6 @@
     bottom: 16px;
     left: 16px;
     right: 16px;
-    width: auto;
   }
 
   .inner {
