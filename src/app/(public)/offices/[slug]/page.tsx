@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getRoomBySlug } from '@/entities/room'
 import { OfficePage } from '@/views/office-detail'
+import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import { sanitizeRichText } from '@/shared/lib/sanitize'
 
@@ -80,6 +81,7 @@ export default async function OfficeSlugPage({ params }: PageProps) {
           description: room.description ? sanitizeRichText(room.description) : null,
         }}
       />
+      <Footer />
     </>
   )
 }

@@ -1,6 +1,14 @@
 import Link from 'next/link'
 import { LogoLink } from '@/shared/ui'
-import { IconPhone, IconEmail, IconMapPin } from '@/shared/ui/icons'
+import {
+  IconPhone,
+  IconEmail,
+  IconMapPin,
+  IconVk,
+  IconTelegram,
+  IconWhatsapp,
+} from '@/shared/ui/icons'
+import { getSiteSettings, toTelHref, toAbsoluteUrl } from '@/shared/lib/getSiteSettings'
 import styles from './Footer.module.css'
 
 const NAV_COLUMNS = [
@@ -32,12 +40,19 @@ const NAV_COLUMNS = [
   },
 ]
 
-const PHONE_RECEPTION = '+7 (383) 223-43-50'
-const PHONE_RENT = '+7 (383) 217-80-07'
-const EMAIL = 'kommunist35@mail.ru'
-const ADDRESS = '630007, г. Новосибирск, ул. Коммунистическая, 35'
+export async function Footer() {
+  const s = await getSiteSettings()
 
-export function Footer() {
+  const phone1 = s['phone1']
+  const phone2 = s['phone2']
+  const email = s['email']
+  const address = s['address']
+
+  const vk = toAbsoluteUrl(s['socialVk'] || '')
+  const tg = toAbsoluteUrl(s['socialTg'] || '')
+  const wa = s['socialWa'] || ''
+  const hasSocials = vk || tg || wa
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -60,33 +75,27 @@ export function Footer() {
             </p>
 
             <div className={styles.contacts}>
-              <a
-                href={`tel:${PHONE_RECEPTION.replace(/\s|\(|\)|-/g, '')}`}
-                className={styles.contactItem}
-              >
+              <a href={toTelHref(phone1)} className={styles.contactItem}>
                 <IconPhone size={14} className={styles.contactIcon} />
                 <span>
                   <span className={styles.contactSubLabel}>Приёмная&nbsp;</span>
-                  {PHONE_RECEPTION}
+                  {phone1}
                 </span>
               </a>
-              <a
-                href={`tel:${PHONE_RENT.replace(/\s|\(|\)|-/g, '')}`}
-                className={styles.contactItem}
-              >
+              <a href={toTelHref(phone2)} className={styles.contactItem}>
                 <IconPhone size={14} className={styles.contactIcon} />
                 <span>
                   <span className={styles.contactSubLabel}>Отдел аренды&nbsp;</span>
-                  {PHONE_RENT}
+                  {phone2}
                 </span>
               </a>
-              <a href={`mailto:${EMAIL}`} className={styles.contactItem}>
+              <a href={`mailto:${email}`} className={styles.contactItem}>
                 <IconEmail size={14} className={styles.contactIcon} />
-                {EMAIL}
+                {email}
               </a>
               <div className={styles.contactItem}>
                 <IconMapPin size={14} className={styles.contactIcon} />
-                <span>{ADDRESS}</span>
+                <span>{address}</span>
               </div>
             </div>
           </div>
@@ -113,21 +122,8 @@ export function Footer() {
         {/* ── Разделитель ── */}
         <div className={styles.divider} />
 
-        {/* ── Регистрационные данные (требование РФ) ── */}
-        <div className={styles.legal}>
-          <p>
-            АО «Коммунистическая-35» &nbsp;·&nbsp; ИНН 5406247047 &nbsp;·&nbsp; КПП 540601001
-            &nbsp;·&nbsp; ОГРН 1035402474293
-          </p>
-          <p>Юридический адрес: 630007, г. Новосибирск, ул. Коммунистическая, д. 35</p>
-        </div>
-
-        {/* ── Разделитель ── */}
-        <div className={styles.divider} />
-
         {/* ── Нижний блок ── */}
         <div className={styles.bottom}>
-          {/* Левая группа: копирайт + политика */}
           <div className={styles.bottomLeft}>
             <p className={styles.copy}>
               © {new Date().getFullYear()} АО «Коммунистическая-35». Все права защищены.
@@ -136,6 +132,47 @@ export function Footer() {
               Политика конфиденциальности
             </Link>
           </div>
+
+          {hasSocials && (
+            <div className={styles.socialsGroup}>
+              <span className={styles.socialsLabel}>Мы в сети</span>
+              <div className={styles.socials}>
+                {vk && (
+                  <a
+                    href={vk}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.socialBtn} ${styles.socialVk}`}
+                    aria-label="ВКонтакте"
+                  >
+                    <IconVk size={16} />
+                  </a>
+                )}
+                {tg && (
+                  <a
+                    href={tg}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.socialBtn} ${styles.socialTg}`}
+                    aria-label="Telegram"
+                  >
+                    <IconTelegram size={16} />
+                  </a>
+                )}
+                {wa && (
+                  <a
+                    href={toTelHref(wa)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.socialBtn} ${styles.socialWa}`}
+                    aria-label="WhatsApp"
+                  >
+                    <IconWhatsapp size={16} />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </footer>

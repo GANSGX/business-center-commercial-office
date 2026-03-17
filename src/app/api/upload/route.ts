@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/shared/lib/require-admin'
+import { convertToWebp } from '@/shared/lib/convertToWebp'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
@@ -30,10 +31,13 @@ export async function POST(req: NextRequest) {
     if (!ALLOWED_EXT.includes(ext as (typeof ALLOWED_EXT)[number])) {
       return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 })
     }
-    const filename = `${randomUUID()}.${ext}`
+
+    const rawBuffer = Buffer.from(await file.arrayBuffer())
+    const { buffer, filename } = await convertToWebp(rawBuffer, file.name, randomUUID())
+
     const uploadDir = join(process.cwd(), 'public', 'uploads')
     await mkdir(uploadDir, { recursive: true })
-    await writeFile(join(uploadDir, filename), Buffer.from(await file.arrayBuffer()))
+    await writeFile(join(uploadDir, filename), buffer)
 
     return NextResponse.json({ url: `/uploads/${filename}` }, { status: 201 })
   } catch (e) {

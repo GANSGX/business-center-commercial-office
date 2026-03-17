@@ -3,29 +3,20 @@
 import { useState, useEffect } from 'react'
 import styles from './SettingsPage.module.css'
 
-const SECTIONS = ['Контакты', 'Реквизиты', 'Карта', 'Социальные сети'] as const
+const SECTIONS = ['Контакты', 'Социальные сети'] as const
 type Section = (typeof SECTIONS)[number]
 
 const SECTION_META: Record<Section, { desc: string; pages: string }> = {
   Контакты: {
     desc: 'Телефоны, email, адрес и часы работы',
-    pages: 'Главная (/), Контакты (/contacts), Подвал сайта',
-  },
-  Реквизиты: {
-    desc: 'ИНН, ОГРН, банковские реквизиты',
-    pages: 'Контакты (/contacts)',
-  },
-  Карта: {
-    desc: 'Местоположение объекта на карте',
-    pages: 'Контакты (/contacts)',
+    pages: 'Контакты (/contacts), Подвал сайта',
   },
   'Социальные сети': {
-    desc: 'Ссылки на соцсети и мессенджеры',
-    pages: 'Главная (/), Подвал сайта',
+    desc: 'Ссылки на соцсети и мессенджеры — иконки автоматически появляются в подвале',
+    pages: 'Подвал сайта',
   },
 }
 
-// Flat settings state - each key maps directly to SiteSettings.key
 type SettingsMap = Record<string, string>
 
 export function SettingsPage() {
@@ -33,6 +24,7 @@ export function SettingsPage() {
   const [settings, setSettings] = useState<SettingsMap>({})
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetch('/api/settings')
@@ -45,23 +37,28 @@ export function SettingsPage() {
   }
 
   async function handleSave() {
+    setError('')
     setSaving(true)
-    await fetch('/api/settings', {
+    const res = await fetch('/api/settings', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings),
     })
     setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    if (res.ok) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2500)
+    } else {
+      setError('Ошибка сохранения. Попробуйте ещё раз.')
+    }
   }
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Настройки</h1>
-          <p className={styles.subtitle}>Контактная информация и параметры сайта</p>
+          <h1 className={styles.title}>Информация о компании</h1>
+          <p className={styles.subtitle}>Контакты и ссылки на страницах сайта</p>
         </div>
         <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>
           {saved ? (
@@ -87,6 +84,8 @@ export function SettingsPage() {
           )}
         </button>
       </div>
+
+      {error && <div className={styles.errorBanner}>{error}</div>}
 
       <div className={styles.layout}>
         {/* Табы секций */}
@@ -135,8 +134,8 @@ export function SettingsPage() {
                 onChange={(v) => set('phone1', v)}
               />
               <Field
-                label="Телефон аренды"
-                placeholder="+7 (383) 217-72-24"
+                label="Телефон отдела аренды"
+                placeholder="+7 (383) 217-80-07"
                 value={settings['phone2'] ?? ''}
                 onChange={(v) => set('phone2', v)}
               />
@@ -162,100 +161,6 @@ export function SettingsPage() {
             </div>
           )}
 
-          {activeSection === 'Реквизиты' && (
-            <div className={styles.form}>
-              <FieldRow>
-                <Field label="ИНН" value={settings['inn'] ?? ''} onChange={(v) => set('inn', v)} />
-                <Field label="КПП" value={settings['kpp'] ?? ''} onChange={(v) => set('kpp', v)} />
-              </FieldRow>
-              <Field label="ОГРН" value={settings['ogrn'] ?? ''} onChange={(v) => set('ogrn', v)} />
-              <Field
-                label="Наименование организации"
-                value={settings['orgName'] ?? ''}
-                onChange={(v) => set('orgName', v)}
-              />
-              <Field
-                label="Расчётный счёт"
-                value={settings['bankAccount'] ?? ''}
-                onChange={(v) => set('bankAccount', v)}
-              />
-              <Field
-                label="Банк"
-                value={settings['bankName'] ?? ''}
-                onChange={(v) => set('bankName', v)}
-              />
-              <FieldRow>
-                <Field
-                  label="БИК"
-                  value={settings['bankBik'] ?? ''}
-                  onChange={(v) => set('bankBik', v)}
-                />
-                <Field
-                  label="К/с"
-                  value={settings['bankKs'] ?? ''}
-                  onChange={(v) => set('bankKs', v)}
-                />
-              </FieldRow>
-              <Field
-                label="Директор"
-                value={settings['director'] ?? ''}
-                onChange={(v) => set('director', v)}
-              />
-            </div>
-          )}
-
-          {activeSection === 'Карта' && (
-            <div className={styles.form}>
-              <div className={styles.fieldGroup}>
-                <label className={styles.fieldLabel}>Провайдер карты</label>
-                <select
-                  className={styles.fieldSelect}
-                  value={settings['mapProvider'] ?? 'yandex'}
-                  onChange={(e) => set('mapProvider', e.target.value)}
-                >
-                  <option value="yandex">Яндекс.Карты</option>
-                  <option value="2gis">2ГИС</option>
-                </select>
-              </div>
-              <FieldRow>
-                <Field
-                  label="Широта"
-                  value={settings['mapLat'] ?? ''}
-                  onChange={(v) => set('mapLat', v)}
-                />
-                <Field
-                  label="Долгота"
-                  value={settings['mapLng'] ?? ''}
-                  onChange={(v) => set('mapLng', v)}
-                />
-              </FieldRow>
-              <Field
-                label="Зум"
-                type="number"
-                value={settings['mapZoom'] ?? ''}
-                onChange={(v) => set('mapZoom', v)}
-              />
-              <div className={styles.mapPreview}>
-                <div className={styles.mapPlaceholder}>
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  <span>Превью карты появится после сохранения</span>
-                </div>
-              </div>
-            </div>
-          )}
-
           {activeSection === 'Социальные сети' && (
             <div className={styles.form}>
               <Field
@@ -272,22 +177,16 @@ export function SettingsPage() {
               />
               <Field
                 label="WhatsApp"
-                placeholder="+7..."
+                placeholder="+7 (9XX) XXX-XX-XX"
                 value={settings['socialWa'] ?? ''}
                 onChange={(v) => set('socialWa', v)}
-              />
-              <Field
-                label="Avito"
-                placeholder="https://avito.ru/..."
-                value={settings['socialAvito'] ?? ''}
-                onChange={(v) => set('socialAvito', v)}
               />
             </div>
           )}
         </div>
       </div>
 
-      {saved && <div className={styles.toast}>✓ Настройки сохранены</div>}
+      {saved && <div className={styles.toast}>✓ Сохранено</div>}
     </div>
   )
 }
@@ -319,8 +218,4 @@ function Field({
       />
     </div>
   )
-}
-
-function FieldRow({ children }: { children: React.ReactNode }) {
-  return <div className={styles.fieldRow}>{children}</div>
 }
