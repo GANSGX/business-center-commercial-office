@@ -550,11 +550,17 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: 20px;
   list-style: none;
   padding: 0;
   margin: 0;
   isolation: isolate;
+}
+
+.grid > li {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ══════════════════════════════════════════

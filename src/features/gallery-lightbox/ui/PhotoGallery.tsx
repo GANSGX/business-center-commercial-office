@@ -207,6 +207,17 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
     <div className={styles.gallery}>
       {/* ── Главное фото ── */}
       <div className={styles.mainArea} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {/* Блюр-подложка: та же фотка, cover + сильный blur — заполняет пустые края */}
+        <Image
+          src={photos[activeIndex].url}
+          alt=""
+          aria-hidden="true"
+          fill
+          className={styles.blurBg}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+        />
+
         <button
           type="button"
           className={styles.mainBtn}
@@ -240,55 +251,6 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
             Открыть
           </span>
         </button>
-
-        {photos.length > 1 && (
-          <>
-            <button
-              type="button"
-              className={`${styles.galleryNav} ${styles.galleryNavPrev}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                prevActive()
-              }}
-              aria-label="Предыдущее фото"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className={`${styles.galleryNav} ${styles.galleryNavNext}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                nextActive()
-              }}
-              aria-label="Следующее фото"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </>
-        )}
 
         {photos.length > 1 && (
           <span className={styles.photoCount} aria-hidden="true">
