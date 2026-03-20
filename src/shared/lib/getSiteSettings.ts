@@ -1,5 +1,3 @@
-import { prisma } from './prisma'
-
 const DEFAULTS: Record<string, string> = {
   phone1: '+7 (383) 223-43-50',
   phone2: '+7 (383) 217-80-07',
@@ -9,9 +7,7 @@ const DEFAULTS: Record<string, string> = {
 }
 
 export async function getSiteSettings(): Promise<Record<string, string>> {
-  const rows = await prisma.siteSettings.findMany()
-  const stored = Object.fromEntries(rows.map((r) => [r.key, r.value]))
-  return { ...DEFAULTS, ...stored }
+  return DEFAULTS
 }
 
 /** Конвертирует "+7 (383) 223-43-50" → "+73832234350" для href="tel:..." */

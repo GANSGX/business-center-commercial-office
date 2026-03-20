@@ -1,20 +1,11 @@
 import type { MetadataRoute } from 'next'
-import { MOCK_ROOMS } from '@/entities/room'
+import { MOCK_ROOM } from '@/shared/lib/mock-data'
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  let rooms: { slug: string; updatedAt: Date }[] = []
-  let services: { slug: string }[] = []
-
-  try {
-    const { prisma } = await import('@/shared/lib/prisma')
-    rooms = await prisma.room.findMany({ select: { slug: true, updatedAt: true } })
-    services = await prisma.service.findMany({ select: { slug: true } })
-  } catch {
-    // DB not available — fall back to mock data
-    rooms = MOCK_ROOMS.map((r) => ({ slug: r.slug, updatedAt: new Date() }))
-  }
+  const rooms = [{ slug: MOCK_ROOM.slug, updatedAt: new Date() }]
+  const services: { slug: string }[] = []
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {

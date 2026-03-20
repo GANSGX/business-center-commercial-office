@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { GalleryPage } from './_page/GalleryPage'
-import { prisma } from '@/shared/lib/prisma'
 
-export const revalidate = 600
+export const revalidate = false
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
@@ -35,7 +34,6 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function Gallery() {
-  const images = await prisma.galleryImage.findMany({ orderBy: { order: 'asc' } })
-  return <GalleryPage images={images} />
+export default function Gallery() {
+  return <GalleryPage images={[]} />
 }
