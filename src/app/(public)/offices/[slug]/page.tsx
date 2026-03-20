@@ -1,27 +1,21 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getRoomBySlug } from '@/entities/room'
 import { OfficePage } from '@/views/office-detail'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import { sanitizeRichText } from '@/shared/lib/sanitize'
+import { MOCK_ROOM } from '@/shared/lib/mock-data'
 
-export const revalidate = 60
+export const revalidate = false
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  const room = await getRoomBySlug(slug)
-  if (!room) return {}
-
+export async function generateMetadata(): Promise<Metadata> {
+  const room = MOCK_ROOM
   const plainDesc = room.description?.replace(/<[^>]*>/g, '').slice(0, 155) ?? ''
-  const title = `${room.title} — аренда ${room.area}\u00a0м², этаж ${room.floor} | Коммунистическая-35`
-
   return {
-    title,
+    title: `${room.title} — аренда ${room.area}\u00a0м², этаж ${room.floor} | Коммунистическая-35`,
     description:
       plainDesc ||
       `Аренда офиса ${room.area}\u00a0м² на ${room.floor} этаже в бизнес-центре Коммунистическая-35. ${room.priceMonth.toLocaleString('ru-RU')}\u00a0₽/мес.`,
@@ -30,22 +24,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: plainDesc,
       images: room.photos[0] ? [{ url: room.photos[0].url, alt: room.title }] : [],
     },
-    alternates: {
-      canonical: `/offices/${slug}`,
-    },
+    alternates: { canonical: `/offices/${room.slug}` },
   }
 }
 
 export default async function OfficeSlugPage({ params }: PageProps) {
-  const { slug } = await params
-  const room = await getRoomBySlug(slug)
+  // Любой slug → показываем единственный офис
+  void params
 
-  if (!room) notFound()
+  const room = MOCK_ROOM
 
   const breadcrumbJsonLd = buildBreadcrumbList([
     { name: 'Главная', url: '/' },
     { name: 'Аренда офисов', url: '/offices' },
-    { name: room.title, url: `/offices/${slug}` },
+    { name: room.title, url: `/offices/${room.slug}` },
   ])
 
   const productJsonLd = {
@@ -58,10 +50,7 @@ export default async function OfficeSlugPage({ params }: PageProps) {
       '@type': 'Offer',
       price: room.priceMonth,
       priceCurrency: 'RUB',
-      availability:
-        room.status === 'FREE'
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/LimitedAvailability',
+      availability: 'https://schema.org/InStock',
     },
   }
 

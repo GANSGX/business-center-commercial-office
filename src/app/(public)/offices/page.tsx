@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { getRooms } from '@/entities/room'
 import type { RoomStatus, RoomSortOption } from '@/entities/room'
 import { OfficesPage } from './_page/OfficesPage'
+import { MOCK_ROOM } from '@/shared/lib/mock-data'
 
 export const revalidate = 60
 
@@ -55,7 +55,7 @@ export default async function OfficesPageRoute({ searchParams }: PageProps) {
     : ''
   const activeType = VALID_TYPES.includes(rawType ?? '') ? (rawType as string) : ''
 
-  const allRooms = await getRooms()
+  const allRooms = [MOCK_ROOM]
 
   return (
     <OfficesPage

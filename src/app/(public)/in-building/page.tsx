@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { InBuildingPage } from './_page/InBuildingPage'
-import { prisma } from '@/shared/lib/prisma'
+import { MOCK_BUILDING_ORGS } from '@/shared/lib/mock-data'
 
-export const revalidate = 600
+export const revalidate = false
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
@@ -35,15 +35,6 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function InBuilding() {
-  let orgs: Awaited<ReturnType<typeof prisma.buildingOrg.findMany>> = []
-  try {
-    orgs = await prisma.buildingOrg.findMany({
-      where: { active: true },
-      orderBy: { order: 'asc' },
-    })
-  } catch {
-    // Таблица ещё не создана — нужна миграция
-  }
-  return <InBuildingPage orgs={orgs} />
+export default function InBuilding() {
+  return <InBuildingPage orgs={MOCK_BUILDING_ORGS} />
 }
