@@ -386,6 +386,7 @@ export const ModelName = {
   Lead: 'Lead',
   SiteSettings: 'SiteSettings',
   User: 'User',
+  BuildingOrg: 'BuildingOrg',
   PageView: 'PageView',
 } as const
 
@@ -418,6 +419,7 @@ export type TypeMap<
       | 'lead'
       | 'siteSettings'
       | 'user'
+      | 'buildingOrg'
       | 'pageView'
     txIsolationLevel: TransactionIsolationLevel
   }
@@ -1238,6 +1240,80 @@ export type TypeMap<
         }
       }
     }
+    BuildingOrg: {
+      payload: Prisma.$BuildingOrgPayload<ExtArgs>
+      fields: Prisma.BuildingOrgFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BuildingOrgFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BuildingOrgFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        findFirst: {
+          args: Prisma.BuildingOrgFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BuildingOrgFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        findMany: {
+          args: Prisma.BuildingOrgFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>[]
+        }
+        create: {
+          args: Prisma.BuildingOrgCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        createMany: {
+          args: Prisma.BuildingOrgCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BuildingOrgCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>[]
+        }
+        delete: {
+          args: Prisma.BuildingOrgDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        update: {
+          args: Prisma.BuildingOrgUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        deleteMany: {
+          args: Prisma.BuildingOrgDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BuildingOrgUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BuildingOrgUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>[]
+        }
+        upsert: {
+          args: Prisma.BuildingOrgUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuildingOrgPayload>
+        }
+        aggregate: {
+          args: Prisma.BuildingOrgAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBuildingOrg>
+        }
+        groupBy: {
+          args: Prisma.BuildingOrgGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuildingOrgGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BuildingOrgCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuildingOrgCountAggregateOutputType> | number
+        }
+      }
+    }
     PageView: {
       payload: Prisma.$PageViewPayload<ExtArgs>
       fields: Prisma.PageViewFieldRefs
@@ -1496,6 +1572,23 @@ export const UserScalarFieldEnum = {
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
+export const BuildingOrgScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  website: 'website',
+  floor: 'floor',
+  color: 'color',
+  order: 'order',
+  active: 'active',
+} as const
+
+export type BuildingOrgScalarFieldEnum =
+  (typeof BuildingOrgScalarFieldEnum)[keyof typeof BuildingOrgScalarFieldEnum]
+
 export const PageViewScalarFieldEnum = {
   id: 'id',
   path: 'path',
@@ -1750,6 +1843,7 @@ export type GlobalOmitConfig = {
   lead?: Prisma.LeadOmit
   siteSettings?: Prisma.SiteSettingsOmit
   user?: Prisma.UserOmit
+  buildingOrg?: Prisma.BuildingOrgOmit
   pageView?: Prisma.PageViewOmit
 }
 

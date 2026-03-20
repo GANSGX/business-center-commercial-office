@@ -2,29 +2,26 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { IconMenu, IconClose, IconChevronDown } from '@/shared/ui/icons'
+import { useState, useEffect, useCallback } from 'react'
+import { IconMenu, IconClose } from '@/shared/ui/icons'
 import { LogoLink } from '@/shared/ui'
 import { useLeadModal } from '@/features/lead-submit'
-import type { HeaderProps } from '../types'
 import styles from './Header.module.css'
 
 const NAV_LINKS = [
   { href: '/offices', label: 'Аренда офисов' },
+  { href: '/in-building', label: 'В здании' },
   { href: '/gallery', label: 'Фотогалерея' },
   { href: '/location', label: 'Расположение' },
   { href: '/about', label: 'О нас' },
   { href: '/contacts', label: 'Контакты' },
 ]
 
-export function Header({ services }: HeaderProps) {
+export function Header() {
   const pathname = usePathname()
   const openModal = useLeadModal((s) => s.open)
   const [scrolled, setScrolled] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
-  const [drawerServicesOpen, setDrawerServicesOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Scroll detection — RAF throttle чтобы не тригерить ре-рендер на каждый пиксель
   useEffect(() => {
@@ -40,25 +37,10 @@ export function Header({ services }: HeaderProps) {
     }
   }, [])
 
-  // Close desktop dropdown on outside click
-  useEffect(() => {
-    if (!servicesOpen) return
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setServicesOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [servicesOpen])
-
   // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setServicesOpen(false)
-        setDrawerOpen(false)
-      }
+      if (e.key === 'Escape') setDrawerOpen(false)
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
@@ -92,8 +74,6 @@ export function Header({ services }: HeaderProps) {
   const isActive = (href: string) =>
     pathname === href || (href !== '/' && (pathname ?? '').startsWith(href + '/'))
 
-  const isServicesActive = services.some((s) => (pathname ?? '').startsWith(`/services/${s.slug}`))
-
   return (
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
@@ -111,49 +91,7 @@ export function Header({ services }: HeaderProps) {
 
           {/* Desktop navigation */}
           <nav className={styles.nav} aria-label="Основная навигация">
-            <Link
-              href="/offices"
-              className={`${styles.navLink} ${isActive('/offices') ? styles.active : ''}`}
-            >
-              Аренда офисов
-            </Link>
-
-            {/* Services dropdown */}
-            {services.length > 0 && (
-              <div className={styles.navItemWithDropdown} ref={dropdownRef}>
-                <button
-                  className={`${styles.navDropdownTrigger} ${servicesOpen || isServicesActive ? styles.active : ''}`}
-                  onClick={() => setServicesOpen((v) => !v)}
-                  aria-expanded={servicesOpen}
-                  aria-haspopup="menu"
-                >
-                  Доп. услуги
-                  <IconChevronDown
-                    size={14}
-                    className={`${styles.chevron} ${servicesOpen ? styles.chevronOpen : ''}`}
-                  />
-                </button>
-
-                <div
-                  className={`${styles.dropdown} ${servicesOpen ? styles.dropdownOpen : ''}`}
-                  role="menu"
-                >
-                  {services.map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/services/${s.slug}`}
-                      className={styles.dropdownLink}
-                      role="menuitem"
-                      onClick={() => setServicesOpen(false)}
-                    >
-                      {s.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {NAV_LINKS.slice(1).map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -214,45 +152,7 @@ export function Header({ services }: HeaderProps) {
         </div>
 
         <nav className={styles.drawerNav} aria-label="Мобильная навигация">
-          <Link
-            href="/offices"
-            className={`${styles.drawerLink} ${isActive('/offices') ? styles.active : ''}`}
-            onClick={closeDrawer}
-          >
-            Аренда офисов
-          </Link>
-
-          {services.length > 0 && (
-            <div>
-              <button
-                className={`${styles.accordionTrigger} ${drawerServicesOpen ? styles.accordionOpen : ''}`}
-                onClick={() => setDrawerServicesOpen((v) => !v)}
-                aria-expanded={drawerServicesOpen}
-              >
-                Доп. услуги
-                <IconChevronDown
-                  size={16}
-                  className={`${styles.chevron} ${drawerServicesOpen ? styles.chevronOpen : ''}`}
-                />
-              </button>
-              <div
-                className={`${styles.accordionContent} ${drawerServicesOpen ? styles.accordionContentOpen : ''}`}
-              >
-                {services.map((s) => (
-                  <Link
-                    key={s.slug}
-                    href={`/services/${s.slug}`}
-                    className={styles.accordionLink}
-                    onClick={closeDrawer}
-                  >
-                    {s.title}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {NAV_LINKS.slice(1).map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}

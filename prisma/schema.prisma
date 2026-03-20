@@ -138,6 +138,20 @@ model User {
   createdAt    DateTime @default(now())
 }
 
+model BuildingOrg {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  category    String   // food | service | retail | bank | other
+  description String?
+  website     String?
+  floor       Int      @default(1)
+  color       String   @default("blue")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+}
+
 model PageView {
   id        String   @id @default(cuid())
   path      String

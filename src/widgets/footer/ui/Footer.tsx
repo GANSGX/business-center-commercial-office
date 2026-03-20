@@ -21,17 +21,9 @@ const NAV_COLUMNS = [
     ],
   },
   {
-    title: 'Услуги',
-    links: [
-      { href: '/services/parking', label: 'Парковка' },
-      { href: '/services/advertising', label: 'Реклама' },
-      { href: '/services/cleaning', label: 'Клининг' },
-      { href: '/services/security', label: 'Охрана' },
-    ],
-  },
-  {
     title: 'О центре',
     links: [
+      { href: '/in-building', label: 'В здании' },
       { href: '/gallery', label: 'Фотогалерея' },
       { href: '/about', label: 'О нас' },
       { href: '/contacts', label: 'Контакты' },

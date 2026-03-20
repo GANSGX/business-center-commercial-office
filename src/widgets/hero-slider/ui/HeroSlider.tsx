@@ -34,7 +34,7 @@ const MOCK_SLIDES: HeroSlide[] = [
       'Современные офисы, переговорные комнаты и открытые пространства — всё для комфортной работы вашей команды.',
     primaryCta: { text: 'Свободные офисы', href: '/offices' },
     secondaryCta: { text: 'Подобрать офис', href: '/offices#filter' },
-    image: '/images/hero-1.png',
+    image: '/images/new-bgc-slider.jpg',
   },
   {
     id: '2',
@@ -169,6 +169,7 @@ export function HeroSlider() {
                 priority={index === 0}
                 fetchPriority={index === 0 ? 'high' : 'low'}
                 sizes="100vw"
+                className={slide.type === 'welcome' ? styles.bgImg : undefined}
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
               <div className={styles.overlay} />

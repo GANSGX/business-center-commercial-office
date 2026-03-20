@@ -59,6 +59,7 @@ export const ModelName = {
   Lead: 'Lead',
   SiteSettings: 'SiteSettings',
   User: 'User',
+  BuildingOrg: 'BuildingOrg',
   PageView: 'PageView',
 } as const
 
@@ -222,6 +223,23 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+export const BuildingOrgScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  website: 'website',
+  floor: 'floor',
+  color: 'color',
+  order: 'order',
+  active: 'active',
+} as const
+
+export type BuildingOrgScalarFieldEnum =
+  (typeof BuildingOrgScalarFieldEnum)[keyof typeof BuildingOrgScalarFieldEnum]
 
 export const PageViewScalarFieldEnum = {
   id: 'id',

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from './Tenants.module.css'
 
 // TODO Sprint 1 S1-D2-03: заменить на данные из /api/tenants
@@ -50,9 +51,13 @@ export function Tenants() {
   return (
     <section className={styles.section} aria-labelledby="tenants-title">
       <div className={styles.head}>
-        <span className={styles.label}>Нам доверяют</span>
+        <Link href="/in-building" className={styles.labelLink}>
+          <span className={styles.label}>Нам доверяют</span>
+        </Link>
         <h2 className={styles.title} id="tenants-title">
-          Наши арендаторы
+          <Link href="/in-building" className={styles.titleLink}>
+            Наши арендаторы
+          </Link>
         </h2>
         <p className={styles.subtitle}>
           Ведущие компании Новосибирска выбирают «Коммунистическая-35»

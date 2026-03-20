@@ -271,6 +271,55 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
         )}
 
         {photos.length > 1 && (
+          <>
+            <button
+              type="button"
+              className={`${styles.sideBtn} ${styles.sidePrev}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                prevActive()
+              }}
+              aria-label="Предыдущее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className={`${styles.sideBtn} ${styles.sideNext}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                nextActive()
+              }}
+              aria-label="Следующее фото"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {photos.length > 1 && (
           <div className={styles.thumbsRow} role="list" aria-label="Все фото офиса">
             {photos.map((photo, i) => (
               <button

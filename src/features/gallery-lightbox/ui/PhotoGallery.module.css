@@ -405,6 +405,54 @@
   }
 }
 
+/* ── Кнопки переключения фото по бокам (только десктоп) ── */
+.sideBtn {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .sideBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(15, 23, 42, 0.75);
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition:
+      background 0.2s ease,
+      opacity 0.2s ease,
+      transform 0.2s ease;
+    opacity: 0;
+  }
+
+  .mainArea:hover .sideBtn {
+    opacity: 1;
+  }
+
+  .sideBtn:hover {
+    background: rgba(15, 23, 42, 0.95);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .sidePrev {
+    left: 14px;
+  }
+
+  .sideNext {
+    right: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .overlay {
     animation: none;

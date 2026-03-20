@@ -197,6 +197,76 @@ async function main() {
   })
 
   // Admin user — создаётся из ADMIN_EMAIL + ADMIN_PASSWORD в .env
+  // Building orgs
+  await prisma.buildingOrg.createMany({
+    data: [
+      {
+        name: 'Кафе «Бузовар»',
+        category: 'food',
+        description: 'Кафе бурятской кухни. Обеды, бизнес-ланч, авторские блюда.',
+        floor: 1,
+        color: 'amber',
+        order: 0,
+        active: true,
+      },
+      {
+        name: '«Пинобар»',
+        category: 'food',
+        description: 'Уютный бар с широким выбором напитков и закусок.',
+        floor: 1,
+        color: 'purple',
+        order: 1,
+        active: true,
+      },
+      {
+        name: '«Hait»',
+        category: 'food',
+        description: 'Современный craft-бар с авторскими коктейлями.',
+        floor: 1,
+        color: 'blue',
+        order: 2,
+        active: true,
+      },
+      {
+        name: 'Копицентр',
+        category: 'service',
+        description: 'Печать, копирование, сканирование, ламинирование и переплёт документов.',
+        floor: 1,
+        color: 'green',
+        order: 3,
+        active: true,
+      },
+      {
+        name: 'Банкомат Сбербанка',
+        category: 'bank',
+        description: 'Банкомат в холле первого этажа, работает круглосуточно.',
+        floor: 1,
+        color: 'green',
+        order: 4,
+        active: true,
+      },
+      {
+        name: 'Аптека',
+        category: 'retail',
+        description: 'Аптечный пункт с широким ассортиментом лекарств.',
+        floor: 1,
+        color: 'red',
+        order: 5,
+        active: true,
+      },
+      {
+        name: 'Нотариус',
+        category: 'service',
+        description:
+          'Нотариальные услуги: заверение документов, доверенности, сделки с недвижимостью.',
+        floor: 3,
+        color: 'indigo',
+        order: 6,
+        active: true,
+      },
+    ],
+  })
+
   const adminEmail = process.env.ADMIN_EMAIL
   const adminPassword = process.env.ADMIN_PASSWORD
   if (adminEmail && adminPassword) {

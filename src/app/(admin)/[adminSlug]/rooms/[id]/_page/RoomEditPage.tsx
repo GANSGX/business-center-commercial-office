@@ -61,6 +61,12 @@ interface Photo {
   order: number
 }
 
+interface PendingPhoto {
+  tempId: string
+  file: File
+  previewUrl: string
+}
+
 interface FormData {
   title: string
   slug: string
@@ -117,6 +123,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
 
   const [form, setForm] = useState<FormData>(EMPTY_FORM)
   const [photos, setPhotos] = useState<Photo[]>([])
+  const [pendingPhotos, setPendingPhotos] = useState<PendingPhoto[]>([])
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -232,6 +239,15 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
       }
 
       if (isNew) {
+        // Загружаем pending фото после создания
+        if (pendingPhotos.length > 0) {
+          for (const pending of pendingPhotos) {
+            const fd = new FormData()
+            fd.append('file', pending.file)
+            await fetch(`/api/rooms/${data.id}/photos`, { method: 'POST', body: fd })
+            URL.revokeObjectURL(pending.previewUrl)
+          }
+        }
         router.refresh()
         router.push(`/${adminSlug}/rooms/${data.id}`)
       } else {
@@ -246,7 +262,16 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
   }
 
   async function handlePhotoUpload(files: FileList | null) {
-    if (!files || isNew) return
+    if (!files) return
+    if (isNew) {
+      const added: PendingPhoto[] = Array.from(files).map((file) => ({
+        tempId: `tmp-${Date.now()}-${Math.random()}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }))
+      setPendingPhotos((prev) => [...prev, ...added])
+      return
+    }
     setUploading(true)
     for (const file of Array.from(files)) {
       const fd = new FormData()
@@ -258,6 +283,41 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
       }
     }
     setUploading(false)
+  }
+
+  function handlePendingDelete(tempId: string) {
+    setPendingPhotos((prev) => {
+      const photo = prev.find((p) => p.tempId === tempId)
+      if (photo) URL.revokeObjectURL(photo.previewUrl)
+      return prev.filter((p) => p.tempId !== tempId)
+    })
+  }
+
+  function handlePendingSetMain(tempId: string) {
+    setPendingPhotos((prev) => {
+      const idx = prev.findIndex((p) => p.tempId === tempId)
+      if (idx <= 0) return prev
+      const next = [...prev]
+      const [item] = next.splice(idx, 1)
+      next.unshift(item)
+      return next
+    })
+  }
+
+  async function handleSetMain(photoId: string) {
+    const ids = [photoId, ...photos.filter((p) => p.id !== photoId).map((p) => p.id)]
+    const res = await fetch(`/api/rooms/${roomId}/photos/order`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids }),
+    })
+    if (res.ok) {
+      setPhotos((prev) => {
+        const main = prev.find((p) => p.id === photoId)!
+        const rest = prev.filter((p) => p.id !== photoId)
+        return [main, ...rest].map((p, i) => ({ ...p, order: i }))
+      })
+    }
   }
 
   async function handlePhotoDelete(photoId: string) {
@@ -312,9 +372,6 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
       </div>
 
       {error && <div className={styles.errorBanner}>{error}</div>}
-      {isNew && (
-        <div className={styles.infoBanner}>После сохранения вы сможете добавить фотографии</div>
-      )}
 
       <div className={styles.layout}>
         {/* Основная форма */}
@@ -494,70 +551,146 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
         <aside className={styles.aside}>
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Фотографии</h2>
-            {isNew ? (
-              <p className={styles.photoHint}>Сохраните помещение, чтобы добавить фото</p>
-            ) : (
-              <>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  style={{ display: 'none' }}
-                  onChange={(e) => handlePhotoUpload(e.target.files)}
-                />
-                <button
-                  type="button"
-                  className={styles.photoDropzone}
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+            {isNew && (
+              <p className={styles.photoHint}>Фото будут загружены после сохранения офиса</p>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: 'none' }}
+              onChange={(e) => handlePhotoUpload(e.target.files)}
+            />
+            <button
+              type="button"
+              className={styles.photoDropzone}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <span>{uploading ? 'Загрузка...' : 'Загрузить фото'}</span>
+            </button>
+
+            {/* Pending фото (новый офис до сохранения) */}
+            {isNew && pendingPhotos.length > 0 && (
+              <div className={styles.photoGrid}>
+                {pendingPhotos.map((photo, idx) => (
+                  <div
+                    key={photo.tempId}
+                    className={`${styles.photoItem} ${idx === 0 ? styles.photoItemMain : ''}`}
                   >
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="17 8 12 3 7 8" />
-                    <line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
-                  <span>{uploading ? 'Загрузка...' : 'Загрузить фото'}</span>
-                </button>
-                {photos.length > 0 && (
-                  <div className={styles.photoGrid}>
-                    {photos.map((photo, idx) => (
-                      <div key={photo.id} className={styles.photoItem}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={photo.url} alt={`Фото ${idx + 1}`} loading="lazy" />
-                        {idx === 0 && <span className={styles.mainBadge}>Главное</span>}
-                        <button
-                          className={styles.photoDeleteBtn}
-                          onClick={() => handlePhotoDelete(photo.id)}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.previewUrl} alt={`Фото ${idx + 1}`} />
+                    {idx === 0 ? (
+                      <span className={styles.mainBadge}>Главное</span>
+                    ) : (
+                      <button
+                        type="button"
+                        className={styles.photoSetMainBtn}
+                        onClick={() => handlePendingSetMain(photo.tempId)}
+                        title="Сделать главным"
+                      >
+                        <svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          stroke="none"
                         >
-                          <svg
-                            width="10"
-                            height="10"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="18" y1="6" x2="6" y2="18" />
-                            <line x1="6" y1="6" x2="18" y2="18" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className={styles.photoDeleteBtn}
+                      onClick={() => handlePendingDelete(photo.tempId)}
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
+            )}
+
+            {/* Загруженные фото (существующий офис) */}
+            {!isNew && photos.length > 0 && (
+              <div className={styles.photoGrid}>
+                {photos.map((photo, idx) => (
+                  <div
+                    key={photo.id}
+                    className={`${styles.photoItem} ${idx === 0 ? styles.photoItemMain : ''}`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.url} alt={`Фото ${idx + 1}`} loading="lazy" />
+                    {idx === 0 ? (
+                      <span className={styles.mainBadge}>Главное</span>
+                    ) : (
+                      <button
+                        type="button"
+                        className={styles.photoSetMainBtn}
+                        onClick={() => handleSetMain(photo.id)}
+                        title="Сделать главным"
+                      >
+                        <svg
+                          width="11"
+                          height="11"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          stroke="none"
+                        >
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className={styles.photoDeleteBtn}
+                      onClick={() => handlePhotoDelete(photo.id)}
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </section>
         </aside>
