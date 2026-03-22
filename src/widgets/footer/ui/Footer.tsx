@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { LogoLink } from '@/shared/ui'
 import {
   IconPhone,
@@ -53,13 +54,13 @@ export async function Footer() {
           {/* Бренд + контакты */}
           <div className={styles.brand}>
             <LogoLink className={styles.logo} aria-label="На главную">
-              <div className={styles.logoMark}>
-                <span>БЦ</span>
-              </div>
-              <div className={styles.logoText}>
-                <span className={styles.logoTitle}>Коммунистическая-35</span>
-                <span className={styles.logoSub}>Бизнес-центр</span>
-              </div>
+              <Image
+                src="/images/logo.svg"
+                alt="БЦ Коммунистическая-35"
+                width={954}
+                height={781}
+                className={styles.logoImg}
+              />
             </LogoLink>
 
             <p className={styles.tagline}>

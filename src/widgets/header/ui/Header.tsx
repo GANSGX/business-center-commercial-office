@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect, useCallback } from 'react'
 import { IconMenu, IconClose } from '@/shared/ui/icons'
@@ -80,13 +81,14 @@ export function Header() {
         <div className={styles.inner}>
           {/* Logo */}
           <LogoLink className={styles.logo} aria-label="На главную">
-            <div className={styles.logoMark}>
-              <span>БЦ</span>
-            </div>
-            <div className={styles.logoText}>
-              <span className={styles.logoTitle}>Коммунистическая-35</span>
-              <span className={styles.logoSub}>Бизнес-центр</span>
-            </div>
+            <Image
+              src="/images/logo.svg"
+              alt="БЦ Коммунистическая-35"
+              width={954}
+              height={781}
+              className={styles.logoImg}
+              priority
+            />
           </LogoLink>
 
           {/* Desktop navigation */}
@@ -139,12 +141,13 @@ export function Header() {
       >
         <div className={styles.drawerHeader}>
           <LogoLink className={styles.logo} aria-label="На главную" onClick={closeDrawer}>
-            <div className={styles.logoMark}>
-              <span>БЦ</span>
-            </div>
-            <div className={styles.logoText}>
-              <span className={styles.logoTitle}>Коммунистическая-35</span>
-            </div>
+            <Image
+              src="/images/logo.svg"
+              alt="БЦ Коммунистическая-35"
+              width={954}
+              height={781}
+              className={styles.logoImg}
+            />
           </LogoLink>
           <button className={styles.drawerClose} onClick={closeDrawer} aria-label="Закрыть меню">
             <IconClose size={20} />
