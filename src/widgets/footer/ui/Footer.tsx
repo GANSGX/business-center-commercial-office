@@ -61,6 +61,10 @@ export async function Footer() {
                 height={781}
                 className={styles.logoImg}
               />
+              <div className={styles.logoText}>
+                <span className={styles.logoTitle}>Коммунистическая-35</span>
+                <span className={styles.logoSub}>Бизнес-центр</span>
+              </div>
             </LogoLink>
 
             <p className={styles.tagline}>

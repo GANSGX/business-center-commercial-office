@@ -89,6 +89,10 @@ export function Header() {
               className={styles.logoImg}
               priority
             />
+            <div className={styles.logoText}>
+              <span className={styles.logoTitle}>Коммунистическая-35</span>
+              <span className={styles.logoSub}>Бизнес-центр</span>
+            </div>
           </LogoLink>
 
           {/* Desktop navigation */}
@@ -148,6 +152,9 @@ export function Header() {
               height={781}
               className={styles.logoImg}
             />
+            <div className={styles.logoText}>
+              <span className={styles.logoTitle}>Коммунистическая-35</span>
+            </div>
           </LogoLink>
           <button className={styles.drawerClose} onClick={closeDrawer} aria-label="Закрыть меню">
             <IconClose size={20} />
