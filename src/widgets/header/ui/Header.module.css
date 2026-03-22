@@ -73,15 +73,38 @@
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
-  padding: 0 26px 0 12px;
+  padding: 0 20px 0 12px;
   margin-right: 10px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logoImg {
-  height: 44px;
+  height: 75px;
   width: auto;
   display: block;
+  flex-shrink: 0;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logoTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.2px;
+}
+
+.logoSub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ===== Desktop navigation ===== */
@@ -542,6 +565,6 @@
   }
 
   .logoImg {
-    height: 36px;
+    height: 46px;
   }
 }
