@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { IconChevronDown } from '@/shared/ui/icons'
 import styles from './Tenants.module.css'
 
 // TODO Sprint 1 S1-D2-03: заменить на данные из /api/tenants
@@ -51,12 +52,13 @@ export function Tenants() {
   return (
     <section className={styles.section} aria-labelledby="tenants-title">
       <div className={styles.head}>
-        <Link href="/in-building" className={styles.labelLink}>
-          <span className={styles.label}>Нам доверяют</span>
-        </Link>
+        <span className={styles.label}>Нам доверяют</span>
         <h2 className={styles.title} id="tenants-title">
           <Link href="/in-building" className={styles.titleLink}>
             Наши арендаторы
+            <span className={styles.titleArrow} aria-hidden="true">
+              <IconChevronDown size={32} />
+            </span>
           </Link>
         </h2>
         <p className={styles.subtitle}>
