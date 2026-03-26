@@ -153,10 +153,16 @@ export function SettingsPage() {
                 onChange={(v) => set('address', v)}
               />
               <Field
-                label="Часы работы"
-                placeholder="Пн–Пт: 9:00–18:00"
+                label="Часы работы БЦ"
+                placeholder="Ежедневно: 08:00–20:00"
                 value={settings['workHours'] ?? ''}
                 onChange={(v) => set('workHours', v)}
+              />
+              <Field
+                label="Часы работы администрации"
+                placeholder="Пн–Пт: 08:00–16:30"
+                value={settings['workHoursAdmin'] ?? ''}
+                onChange={(v) => set('workHoursAdmin', v)}
               />
             </div>
           )}

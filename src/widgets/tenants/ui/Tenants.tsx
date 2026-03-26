@@ -3,22 +3,55 @@ import Link from 'next/link'
 import { IconChevronDown } from '@/shared/ui/icons'
 import styles from './Tenants.module.css'
 
-// TODO Sprint 1 S1-D2-03: заменить на данные из /api/tenants
-// Только реальные компании с офисами в Новосибирске.
-// Логотипы — Google Favicon API (128px).
 const TENANTS = [
-  { id: '1', name: 'Яндекс', color: 'amber', domain: 'yandex.ru' },
-  { id: '2', name: 'Сбербанк', color: 'green', domain: 'sberbank.ru' },
-  { id: '3', name: 'Газпром нефть', color: 'blue', domain: 'gazprom-neft.ru' },
-  { id: '4', name: 'S7 Airlines', color: 'teal', domain: 's7.ru' },
-  { id: '5', name: '2ГИС', color: 'green', domain: '2gis.ru' },
-  { id: '6', name: 'МегаФон', color: 'green', domain: 'megafon.ru' },
-  { id: '7', name: 'МТС', color: 'red', domain: 'mts.ru' },
-  { id: '8', name: 'Ростелеком', color: 'amber', domain: 'rostelecom.ru' },
-  { id: '9', name: 'ВТБ', color: 'blue', domain: 'vtb.ru' },
-  { id: '10', name: 'Альфа-Банк', color: 'red', domain: 'alfabank.ru' },
-  { id: '11', name: 'Билайн', color: 'amber', domain: 'beeline.ru' },
-  { id: '12', name: 'GS Group', color: 'indigo', domain: 'gs.ru' },
+  {
+    id: '1',
+    name: 'ТКБ Банк',
+    color: 'blue',
+    logo: '/images/logo_part/ТКБ Банк.png',
+  },
+  {
+    id: '2',
+    name: 'СберПраво',
+    color: 'green',
+    logo: '/images/logo_part/сбер право.png',
+  },
+  {
+    id: '3',
+    name: 'I Dolci',
+    color: 'amber',
+    logo: '/images/logo_part/I Dolci.png',
+  },
+  {
+    id: '4',
+    name: 'Русский Фейерверк',
+    color: 'red',
+    logo: '/images/logo_part/Русский Фейерверк.webp',
+  },
+  {
+    id: '5',
+    name: 'Angiopharm',
+    color: 'purple',
+    logo: '/images/logo_part/Angiopharm.png',
+  },
+  {
+    id: '6',
+    name: 'НРК-Р.О.С.Т.',
+    color: 'indigo',
+    logo: '/images/logo_part/НРК-Р.О.С.Т..png',
+  },
+  {
+    id: '7',
+    name: 'ИНПЭС',
+    color: 'teal',
+    logo: '/images/logo_part/ИНПЭС.png',
+  },
+  {
+    id: '8',
+    name: 'Имплант Сибири',
+    color: 'orange',
+    logo: '/images/logo_part/Имплант Сибири.png',
+  },
 ]
 
 const TENANTS_REV = [...TENANTS].reverse()
@@ -27,24 +60,26 @@ const TENANTS_REV = [...TENANTS].reverse()
 const ROW_1 = [...TENANTS, ...TENANTS, ...TENANTS]
 const ROW_2 = [...TENANTS_REV, ...TENANTS_REV, ...TENANTS_REV]
 
-const FAVICON_API = 'https://www.google.com/s2/favicons'
-
 function LogoCard({ tenant }: { tenant: (typeof TENANTS)[number] }) {
   return (
-    <div className={`${styles.logo} ${styles[`color_${tenant.color}`]}`} aria-hidden="true">
+    <Link
+      href="/in-building"
+      className={`${styles.logo} ${styles[`color_${tenant.color}`]}`}
+      tabIndex={-1}
+      aria-hidden="true"
+    >
       <span className={styles.logoMark}>
         <Image
-          src={`${FAVICON_API}?domain=${tenant.domain}&sz=128`}
+          src={tenant.logo}
           alt={tenant.name}
-          width={26}
-          height={26}
+          width={38}
+          height={38}
           className={styles.faviconImg}
           loading="lazy"
-          unoptimized
         />
       </span>
       <span className={styles.logoName}>{tenant.name}</span>
-    </div>
+    </Link>
   )
 }
 

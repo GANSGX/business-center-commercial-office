@@ -160,11 +160,11 @@ export function LocationPage() {
                 <ul className={styles.transportList}>
                   <li className={styles.transportItem}>
                     <span className={styles.transportDot} aria-hidden="true" />
-                    Платная парковка прямо во дворе здания
+                    Парковка во дворе здания
                   </li>
                   <li className={styles.transportItem}>
                     <span className={styles.transportDot} aria-hidden="true" />
-                    Городская платная парковка на ул. Коммунистической (вдоль тротуара)
+                    Городская парковка на ул. Коммунистической (вдоль тротуара)
                   </li>
                 </ul>
               </div>

@@ -15,6 +15,7 @@ export async function ContactsPage() {
   const email = s['email']
   const address = s['address']
   const workHours = s['workHours']
+  const workHoursAdmin = s['workHoursAdmin']
 
   const breadcrumbJsonLd = buildBreadcrumbList([
     { name: 'Главная', url: `${BASE_URL}/` },
@@ -169,7 +170,18 @@ export async function ContactsPage() {
               </span>
               <div className={styles.hoursBody}>
                 <p className={styles.hoursTitle}>Режим работы</p>
-                <p className={styles.hoursTime}>{workHours}</p>
+                {workHours && (
+                  <p className={styles.hoursTime}>
+                    <span className={styles.hoursLabel}>БЦ:&nbsp;</span>
+                    {workHours}
+                  </p>
+                )}
+                {workHoursAdmin && (
+                  <p className={styles.hoursTime}>
+                    <span className={styles.hoursLabel}>Администрация:&nbsp;</span>
+                    {workHoursAdmin}
+                  </p>
+                )}
               </div>
             </div>
           </section>

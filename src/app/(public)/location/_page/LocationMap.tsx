@@ -88,7 +88,7 @@ export function LocationMap() {
             </span>
             <div>
               <p className={styles.mapBlockLabel}>Парковка</p>
-              <p className={styles.mapBlockValue}>Платная парковка во дворе здания</p>
+              <p className={styles.mapBlockValue}>Парковка во дворе здания</p>
               <p className={styles.mapBlockValue}>Городская парковка на ул. Коммунистической</p>
             </div>
           </div>

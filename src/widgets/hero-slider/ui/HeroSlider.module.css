@@ -64,7 +64,6 @@
 }
 
 .bgImg {
-  filter: blur(4px);
   transform: scale(1.03);
   transform-origin: center center;
 }
