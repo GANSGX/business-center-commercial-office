@@ -48,7 +48,7 @@ export function InBuildingPage({ orgs }: Props) {
             <div className={styles.ctaContent}>
               <h2 className={styles.ctaTitle}>Хотите арендовать офис здесь?</h2>
               <p className={styles.ctaText}>
-                Более 50 офисных помещений от 20 до 263 м² — подберём вариант под вашу задачу
+                Офисные помещения от 10 м² — подберём вариант под вашу задачу
               </p>
             </div>
             <InBuildingCtaButton />

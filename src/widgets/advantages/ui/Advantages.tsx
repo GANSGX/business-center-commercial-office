@@ -52,7 +52,7 @@ const ADVANTAGES = [
     id: 'flexible',
     wide: true,
     accentClass: 'accentTeal',
-    stat: 'от 15 м²',
+    stat: 'от 10 м²',
     tag: 'Аренда',
     Icon: IconBriefcase,
     title: 'Гибкие условия',
