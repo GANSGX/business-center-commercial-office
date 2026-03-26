@@ -34,7 +34,7 @@ const MOCK_SLIDES: HeroSlide[] = [
       'Современные офисы, переговорные комнаты и открытые пространства — всё для комфортной работы вашей команды.',
     primaryCta: { text: 'Свободные офисы', href: '/offices' },
     secondaryCta: { text: 'Подобрать офис', href: '/offices#filter' },
-    image: '/images/new-bgc-slider.jpg',
+    image: '/images/fix_bgc_slider.jpg',
   },
   {
     id: '2',
@@ -50,7 +50,7 @@ const MOCK_SLIDES: HeroSlide[] = [
       {
         icon: 'transport',
         title: 'Транспортная доступность',
-        text: 'Городской транспорт курсирует по всем направлениям, есть парковка',
+        text: 'Городской транспорт курсирует по всем направлениям, есть парковка во дворе',
       },
       {
         icon: 'culture',

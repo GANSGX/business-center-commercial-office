@@ -115,7 +115,7 @@ export function Header() {
             className={styles.ctaButton}
             aria-haspopup={pathname !== '/' ? 'dialog' : undefined}
           >
-            Оставить заявку
+            Нужен офис?
           </button>
 
           {/* Burger button */}
@@ -184,7 +184,7 @@ export function Header() {
               handleCta()
             }}
           >
-            Оставить заявку
+            Нужен офис?
           </button>
         </div>
       </aside>

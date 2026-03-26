@@ -36,7 +36,7 @@
   min-height: 600px;
   overflow: hidden;
   /* Нейтральный тёмный фолбэк до загрузки фото */
-  background: #0a0a0a;
+  background: #0f0d1c;
 }
 
 .swiper {
@@ -60,11 +60,10 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: #0a0a0a;
+  background: #0f0d1c;
 }
 
 .bgImg {
-  filter: blur(4px);
   transform: scale(1.03);
   transform-origin: center center;
 }

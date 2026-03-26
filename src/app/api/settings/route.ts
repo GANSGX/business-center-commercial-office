@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server'
 
 const MOCK_SETTINGS = {
-  phones: '+7 (383) 000-00-00',
-  email: 'info@kommunisticheskaya35.ru',
-  address: 'г. Новосибирск, ул. Коммунистическая, 35',
-  workHours: 'Пн–Пт: 9:00–18:00',
+  phone1: '+7 (383) 223-43-50',
+  phone2: '+7 (383) 217-80-07',
+  email: 'kommunist35@mail.ru',
+  address: '630007, г. Новосибирск, ул. Коммунистическая, 35',
+  workHours: 'Ежедневно: 08:00–20:00',
+  workHoursAdmin: 'Пн–Пт: 08:00–16:30',
   socials: '{}',
   mapProvider: 'yandex',
-  mapLat: '54.9736',
-  mapLng: '82.9282',
-  mapZoom: '16',
+  mapLat: '55.030456',
+  mapLng: '82.919659',
+  mapZoom: '17',
   transport: '',
   requisites: '',
 }
