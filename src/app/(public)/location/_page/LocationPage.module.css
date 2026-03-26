@@ -5,7 +5,7 @@
 
 .page {
   position: relative;
-  background: #0a0a0a;
+  background: #0f0d1c;
   min-height: 100vh;
 }
 
@@ -130,7 +130,7 @@
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  background: #0a0a0a;
+  background: #0f0d1c;
 }
 
 /* Зелёный орб (верхний правый) */
@@ -282,7 +282,7 @@
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(to bottom, transparent 0%, rgba(8, 6, 22, 0.92) 100%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(14, 11, 30, 0.92) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -294,7 +294,7 @@
 .panel {
   position: relative;
   z-index: 3;
-  background: rgba(8, 6, 22, 0.55);
+  background: rgba(14, 11, 30, 0.55);
   border-radius: 32px 32px 0 0;
   box-shadow:
     0 -1px 0 rgba(255, 255, 255, 0.1),
