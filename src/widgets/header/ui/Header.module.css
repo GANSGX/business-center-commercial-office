@@ -378,6 +378,16 @@
   flex-shrink: 0;
 }
 
+.drawerHeader .logoImg {
+  height: 44px;
+}
+
+.drawerHeader .logo {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
 .drawerClose {
   display: flex;
   align-items: center;
