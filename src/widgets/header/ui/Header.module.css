@@ -75,7 +75,18 @@
   flex-shrink: 0;
   padding: 0 20px 0 12px;
   margin-right: 10px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .logoImg {
