@@ -212,7 +212,7 @@ export function HeroSlider() {
                   <span className={styles.pillIcon}>
                     <IconBuilding />
                   </span>
-                  <span>от 20 до 263 м²</span>
+                  <span>от 10 м²</span>
                 </div>
                 <div className={`${styles.floatingPill} ${styles.floatingPill3} ${styles.pillRed}`}>
                   <span className={styles.pillIcon}>
