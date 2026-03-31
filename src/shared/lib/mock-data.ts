@@ -43,7 +43,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'ТКБ Банк — российский банк с более чем 30-летней историей, входящий в топ-10 частных банков по активам. Широкий спектр услуг для частных лиц и бизнеса.',
     website: 'https://www.tkbbank.ru',
-    logo: null,
+    logo: '/images/logo_part/ТКБ Банк.png',
     contact: null,
     floor: 2,
     color: 'blue',
@@ -57,7 +57,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Юридический сервис экосистемы Сбера: консультации, подготовка документов, судебное представительство. Банкротство физлиц, семейные и жилищные споры.',
     website: 'https://sberpravo.ru',
-    logo: null,
+    logo: '/images/logo_part/сбер право.png',
     contact: null,
     floor: 3,
     color: 'green',
@@ -71,7 +71,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Сеть кафе-кондитерских с натуральными десертами ручной работы: бисквитные и муссовые торты, пирожные, чизкейки. Доставка, мастер-классы, кейтеринг.',
     website: 'https://idolci.ru',
-    logo: null,
+    logo: '/images/logo_part/I Dolci.png',
     contact: null,
     floor: 1,
     color: 'amber',
@@ -85,7 +85,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Сеть магазинов пиротехники, представленная в десятках городов России. Безопасная продукция, система скидок до 40% по карте лояльности.',
     website: 'https://rusfireworks.ru',
-    logo: null,
+    logo: '/images/logo_part/Русский Фейерверк.webp',
     contact: null,
     floor: 1,
     color: 'red',
@@ -99,7 +99,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Лаборатория-производитель профессиональной уходовой косметики. Собственная разработка — рекомбинантный ангиогенин. Производство в наукограде Кольцово.',
     website: 'https://angiopharm.com',
-    logo: null,
+    logo: '/images/logo_part/Angiopharm.png',
     contact: null,
     floor: 4,
     color: 'purple',
@@ -113,7 +113,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Лидер регистраторской отрасли России. Ведение реестров акционеров, специализированный депозитарий, корпоративный консалтинг, цифровые сервисы для эмитентов.',
     website: 'https://rrost.ru',
-    logo: null,
+    logo: '/images/logo_part/НРК-Р.О.С.Т..png',
     contact: null,
     floor: 5,
     color: 'indigo',
@@ -127,7 +127,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Проектная компания, специализирующаяся на комплексном проектировании объектов электросетевой инфраструктуры. Опыт в 40 регионах России.',
     website: 'https://inpes.ru',
-    logo: null,
+    logo: '/images/logo_part/ИНПЭС.png',
     contact: null,
     floor: 6,
     color: 'teal',
@@ -141,7 +141,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Стоматологическая клиника с более чем 20-летним опытом. Имплантация, протезирование, пародонтология. Безболезненное лечение с использованием передовых технологий.',
     website: 'https://implantsibir.ru',
-    logo: null,
+    logo: '/images/logo_part/Имплант Сибири.png',
     contact: null,
     floor: 2,
     color: 'orange',
