@@ -37,7 +37,9 @@ const createSchema = z.object({
   name: z.string().min(1),
   category: z.enum(['food', 'service', 'retail', 'bank', 'other']),
   description: z.string().optional(),
+  logo: z.string().optional(),
   website: z.string().url().optional().or(z.literal('')),
+  contact: z.string().optional(),
   floor: z.number().int().default(1),
   color: z.string().default('blue'),
   order: z.number().int().default(0),
@@ -53,7 +55,12 @@ export async function POST(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
     }
-    const data = { ...parsed.data, website: parsed.data.website || null }
+    const data = {
+      ...parsed.data,
+      logo: parsed.data.logo || null,
+      website: parsed.data.website || null,
+      contact: parsed.data.contact || null,
+    }
     const org = await prisma.buildingOrg.create({ data })
     buildingOrgsEmitter.emit('orgs-updated')
     return NextResponse.json(org, { status: 201 })
@@ -79,7 +86,9 @@ export async function PUT(req: NextRequest) {
     const { id, ...rest } = parsed.data
     const data = {
       ...rest,
+      ...(rest.logo !== undefined ? { logo: rest.logo || null } : {}),
       ...(rest.website !== undefined ? { website: rest.website || null } : {}),
+      ...(rest.contact !== undefined ? { contact: rest.contact || null } : {}),
     }
     const org = await prisma.buildingOrg.update({ where: { id }, data })
     buildingOrgsEmitter.emit('orgs-updated')

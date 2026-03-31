@@ -19,7 +19,7 @@
 
 .page {
   position: relative;
-  background: #0f0d1c;
+  background: #1e1b2e;
   min-height: 100vh;
 }
 
@@ -144,7 +144,7 @@
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  background: #0f0d1c;
+  background: #1e1b2e;
 }
 
 .orbBlue {
@@ -403,6 +403,7 @@
 }
 
 .card {
+  scroll-margin-top: 120px;
   padding: 22px 24px 24px;
   border-radius: var(--radius-xl);
   background: rgba(255, 255, 255, 0.04);
@@ -530,6 +531,51 @@
 .cardWebsiteBtn:hover .cardWebsiteBtnArrow {
   transform: translate(2px, -2px);
   opacity: 0.9;
+}
+
+.cardContact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.cardContact:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.cardContactIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.cardContactLabel {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.cardContactValue {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: auto;
+  text-align: right;
 }
 
 /* ── Color variants for card icons ── */

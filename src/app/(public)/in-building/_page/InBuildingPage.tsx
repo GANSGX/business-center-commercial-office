@@ -15,6 +15,7 @@ export interface BuildingOrgItem {
   category: string
   description: string | null
   website: string | null
+  contact: string | null
   floor: number
   color: string
   order: number

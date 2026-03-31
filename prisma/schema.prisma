@@ -145,7 +145,9 @@ model BuildingOrg {
   name        String
   category    String   // food | service | retail | bank | other
   description String?
+  logo        String?
   website     String?
+  contact     String?
   floor       Int      @default(1)
   color       String   @default("blue")
   order       Int      @default(0)

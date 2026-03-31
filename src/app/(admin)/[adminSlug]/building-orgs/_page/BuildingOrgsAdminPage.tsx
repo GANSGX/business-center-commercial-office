@@ -8,7 +8,9 @@ interface BuildingOrg {
   name: string
   category: string
   description: string | null
+  logo: string | null
   website: string | null
+  contact: string | null
   floor: number
   color: string
   order: number
@@ -120,7 +122,9 @@ const EMPTY_FORM = {
   name: '',
   category: 'food',
   description: '',
+  logo: '',
   website: '',
+  contact: '',
   floor: 1,
   color: 'amber',
   order: 0,
@@ -131,10 +135,12 @@ export function BuildingOrgsAdminPage() {
   const [orgs, setOrgs] = useState<BuildingOrg[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploadingLogo, setUploadingLogo] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const formRef = useRef<HTMLDivElement>(null)
+  const logoInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     fetchOrgs()
@@ -163,7 +169,9 @@ export function BuildingOrgsAdminPage() {
       name: org.name,
       category: org.category,
       description: org.description ?? '',
+      logo: org.logo ?? '',
       website: org.website ?? '',
+      contact: org.contact ?? '',
       floor: org.floor,
       color: org.color,
       order: org.order,
@@ -186,7 +194,9 @@ export function BuildingOrgsAdminPage() {
       const payload = {
         ...form,
         description: form.description || undefined,
+        logo: form.logo || undefined,
         website: form.website || undefined,
+        contact: form.contact || undefined,
         ...(editingId ? { id: editingId } : {}),
       }
       const method = editingId ? 'PUT' : 'POST'
@@ -200,6 +210,23 @@ export function BuildingOrgsAdminPage() {
       await fetchOrgs()
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingLogo(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      if (!res.ok) return
+      const { url } = await res.json()
+      setForm((p) => ({ ...p, logo: url }))
+    } finally {
+      setUploadingLogo(false)
+      if (logoInputRef.current) logoInputRef.current.value = ''
     }
   }
 
@@ -317,14 +344,60 @@ export function BuildingOrgsAdminPage() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label}>Ссылка на сайт / соцсеть</label>
-              <input
-                className={styles.input}
-                type="url"
-                value={form.website}
-                onChange={(e) => setForm((p) => ({ ...p, website: e.target.value }))}
-                placeholder="https://example.ru"
-              />
+              <label className={styles.label}>Логотип организации</label>
+              <div className={styles.logoUploadRow}>
+                {form.logo && (
+                  <div className={styles.logoPreview}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={form.logo} alt="Логотип" className={styles.logoPreviewImg} />
+                    <button
+                      type="button"
+                      className={styles.logoRemoveBtn}
+                      onClick={() => setForm((p) => ({ ...p, logo: '' }))}
+                      title="Удалить логотип"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  className={styles.logoUploadBtn}
+                  onClick={() => logoInputRef.current?.click()}
+                  disabled={uploadingLogo}
+                >
+                  {uploadingLogo ? 'Загрузка...' : form.logo ? 'Заменить' : 'Загрузить логотип'}
+                </button>
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  style={{ display: 'none' }}
+                />
+              </div>
+            </div>
+
+            <div className={styles.fieldRow}>
+              <div className={styles.field}>
+                <label className={styles.label}>Ссылка на сайт / соцсеть</label>
+                <input
+                  className={styles.input}
+                  type="url"
+                  value={form.website}
+                  onChange={(e) => setForm((p) => ({ ...p, website: e.target.value }))}
+                  placeholder="https://example.ru"
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Контакт для связи</label>
+                <input
+                  className={styles.input}
+                  value={form.contact}
+                  onChange={(e) => setForm((p) => ({ ...p, contact: e.target.value }))}
+                  placeholder="+7 (999) 123-45-67 или email"
+                />
+              </div>
             </div>
 
             <div className={styles.fieldRow}>
@@ -430,6 +503,7 @@ export function BuildingOrgsAdminPage() {
                             </a>
                           </>
                         )}
+                        {org.contact && <> · {org.contact}</>}
                       </span>
                       {org.description && <span className={styles.rowDesc}>{org.description}</span>}
                     </div>
