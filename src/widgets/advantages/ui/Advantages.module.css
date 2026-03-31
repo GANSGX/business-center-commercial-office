@@ -241,6 +241,12 @@
   margin: 8px 0 20px;
 }
 
+.statNumberLong {
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
 /* ─── Card text ──────────────────────────────────── */
 
 .cardTitle {

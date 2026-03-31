@@ -7,7 +7,7 @@
 
 .page {
   position: relative;
-  background: #0f0d1c;
+  background: #1e1b2e;
   min-height: 100vh;
 }
 
@@ -133,7 +133,7 @@
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  background: #0f0d1c;
+  background: #1e1b2e;
 }
 
 /* Декоративный синий орб */

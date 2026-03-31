@@ -1,8 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { prisma } from '@/shared/lib/prisma'
-import { IconChevronDown } from '@/shared/ui/icons'
-import { TenantStrip } from './TenantStrip'
+import { useRef, useEffect } from 'react'
 import styles from './Tenants.module.css'
 
 function OrgIcon({ category }: { category: string }) {
@@ -95,33 +95,87 @@ function OrgIcon({ category }: { category: string }) {
   )
 }
 
-export async function Tenants() {
-  const orgs = await prisma.buildingOrg.findMany({
-    where: { active: true },
-    orderBy: { order: 'asc' },
-    select: { id: true, name: true, category: true, color: true, logo: true },
-  })
+interface Org {
+  id: string
+  name: string
+  category: string
+  color: string
+  logo: string | null
+}
 
-  if (orgs.length === 0) return null
+export function TenantStrip({ orgs }: { orgs: Org[] }) {
+  const stripRef = useRef<HTMLDivElement>(null)
+  const isDragging = useRef(false)
+  const startX = useRef(0)
+  const scrollLeft = useRef(0)
+
+  useEffect(() => {
+    const el = stripRef.current
+    if (!el) return
+
+    function onMouseDown(e: MouseEvent) {
+      isDragging.current = true
+      startX.current = e.pageX - el!.offsetLeft
+      scrollLeft.current = el!.scrollLeft
+      el!.style.cursor = 'grabbing'
+      el!.style.userSelect = 'none'
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      if (!isDragging.current) return
+      e.preventDefault()
+      const x = e.pageX - el!.offsetLeft
+      const walk = x - startX.current
+      el!.scrollLeft = scrollLeft.current - walk
+    }
+
+    function onMouseUp() {
+      isDragging.current = false
+      el!.style.cursor = 'grab'
+      el!.style.userSelect = ''
+    }
+
+    el.addEventListener('mousedown', onMouseDown)
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+
+    return () => {
+      el.removeEventListener('mousedown', onMouseDown)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+  }, [])
 
   return (
-    <section className={styles.section} aria-labelledby="tenants-title">
-      <div className={styles.head}>
-        <span className={styles.label}>Нам доверяют</span>
-        <h2 className={styles.title} id="tenants-title">
-          <Link href="/in-building" className={styles.titleLink}>
-            Наши арендаторы
-            <span className={styles.titleArrow} aria-hidden="true">
-              <IconChevronDown size={32} />
+    <div className={styles.stripWrapper}>
+      <div className={styles.strip} ref={stripRef}>
+        {orgs.map((org) => (
+          <Link
+            key={org.id}
+            href={`/in-building#org-${org.id}`}
+            className={`${styles.card} ${styles[`color_${org.color}`]}`}
+            draggable={false}
+          >
+            <span className={styles.cardIcon}>
+              {org.logo ? (
+                <Image
+                  src={org.logo}
+                  alt={org.name}
+                  width={36}
+                  height={36}
+                  className={styles.cardLogoImg}
+                  draggable={false}
+                />
+              ) : (
+                <OrgIcon category={org.category} />
+              )}
             </span>
+            <span className={styles.cardName}>{org.name}</span>
           </Link>
-        </h2>
-        <p className={styles.subtitle}>
-          Ведущие компании Новосибирска выбирают «Коммунистическая-35»
-        </p>
+        ))}
       </div>
-
-      <TenantStrip orgs={orgs} />
-    </section>
+      <div className={styles.fadeLeft} />
+      <div className={styles.fadeRight} />
+    </div>
   )
 }

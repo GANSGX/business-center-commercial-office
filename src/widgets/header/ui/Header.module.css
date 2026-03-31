@@ -560,6 +560,10 @@
     padding-right: 0;
     margin-right: 0;
   }
+
+  .logo::after {
+    display: none;
+  }
 }
 
 @media (min-width: 1201px) {
