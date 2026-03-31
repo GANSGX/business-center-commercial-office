@@ -43,6 +43,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'ТКБ Банк — российский банк с более чем 30-летней историей, входящий в топ-10 частных банков по активам. Широкий спектр услуг для частных лиц и бизнеса.',
     website: 'https://www.tkbbank.ru',
+    contact: null,
     floor: 2,
     color: 'blue',
     order: 0,
@@ -55,6 +56,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Юридический сервис экосистемы Сбера: консультации, подготовка документов, судебное представительство. Банкротство физлиц, семейные и жилищные споры.',
     website: 'https://sberpravo.ru',
+    contact: null,
     floor: 3,
     color: 'green',
     order: 1,
@@ -67,6 +69,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Сеть кафе-кондитерских с натуральными десертами ручной работы: бисквитные и муссовые торты, пирожные, чизкейки. Доставка, мастер-классы, кейтеринг.',
     website: 'https://idolci.ru',
+    contact: null,
     floor: 1,
     color: 'amber',
     order: 2,
@@ -79,6 +82,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Сеть магазинов пиротехники, представленная в десятках городов России. Безопасная продукция, система скидок до 40% по карте лояльности.',
     website: 'https://rusfireworks.ru',
+    contact: null,
     floor: 1,
     color: 'red',
     order: 3,
@@ -91,6 +95,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Лаборатория-производитель профессиональной уходовой косметики. Собственная разработка — рекомбинантный ангиогенин. Производство в наукограде Кольцово.',
     website: 'https://angiopharm.com',
+    contact: null,
     floor: 4,
     color: 'purple',
     order: 4,
@@ -103,6 +108,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Лидер регистраторской отрасли России. Ведение реестров акционеров, специализированный депозитарий, корпоративный консалтинг, цифровые сервисы для эмитентов.',
     website: 'https://rrost.ru',
+    contact: null,
     floor: 5,
     color: 'indigo',
     order: 5,
@@ -115,6 +121,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Проектная компания, специализирующаяся на комплексном проектировании объектов электросетевой инфраструктуры. Опыт в 40 регионах России.',
     website: 'https://inpes.ru',
+    contact: null,
     floor: 6,
     color: 'teal',
     order: 6,
@@ -127,6 +134,7 @@ export const MOCK_BUILDING_ORGS = [
     description:
       'Стоматологическая клиника с более чем 20-летним опытом. Имплантация, протезирование, пародонтология. Безболезненное лечение с использованием передовых технологий.',
     website: 'https://implantsibir.ru',
+    contact: null,
     floor: 2,
     color: 'orange',
     order: 7,
