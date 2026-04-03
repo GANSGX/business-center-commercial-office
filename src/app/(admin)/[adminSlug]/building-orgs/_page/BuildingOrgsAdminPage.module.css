@@ -22,7 +22,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .addBtn {
@@ -291,13 +291,13 @@
 .loadingText {
   padding: 2rem;
   text-align: center;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .emptyState {
   padding: 48px 24px;
   text-align: center;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   border: 2px dashed var(--admin-border);
   border-radius: 12px;
   font-size: 0.9rem;
@@ -404,7 +404,7 @@
 
 .rowMeta {
   font-size: 0.78rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .rowWebsiteLink {

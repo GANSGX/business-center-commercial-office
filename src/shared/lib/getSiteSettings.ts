@@ -3,7 +3,8 @@ const DEFAULTS: Record<string, string> = {
   phone2: '+7 (383) 217-80-07',
   email: 'kommunist35@mail.ru',
   address: '630007, г. Новосибирск, ул. Коммунистическая, 35',
-  workHours: 'Пн–Пт: 9:00–18:00',
+  workHours: '08:00–20:00',
+  workHoursAdmin: '08:00–16:30',
 }
 
 export async function getSiteSettings(): Promise<Record<string, string>> {

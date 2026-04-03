@@ -22,7 +22,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .uploadBtn {
@@ -181,7 +181,7 @@
 
 .toggleLabel {
   font-size: 0.78rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 /* ── Actions ── */

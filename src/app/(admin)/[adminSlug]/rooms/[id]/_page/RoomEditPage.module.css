@@ -20,7 +20,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .breadcrumbLink {

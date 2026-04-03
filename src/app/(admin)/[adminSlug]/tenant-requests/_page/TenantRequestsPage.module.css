@@ -27,8 +27,8 @@
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 20px;
-  background: var(--admin-error-bg);
-  color: var(--admin-error);
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
 }
 
 .subtitle {
@@ -122,7 +122,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
-  min-width: 680px;
+  min-width: 720px;
 }
 
 .table th {
@@ -158,11 +158,19 @@
 }
 
 .rowNew td:first-child {
-  border-left: 2px solid var(--admin-error);
+  border-left: 2px solid var(--admin-warning);
 }
 
-.rowInProgress td:first-child {
-  border-left: 2px solid var(--admin-warning);
+.rowProcessed td:first-child {
+  border-left: 2px solid var(--admin-accent);
+}
+
+.rowApproved td:first-child {
+  border-left: 2px solid var(--admin-success);
+}
+
+.rowRejected td:first-child {
+  border-left: 2px solid var(--admin-border);
 }
 
 .rowExpanded td {
@@ -175,19 +183,50 @@
   white-space: nowrap;
 }
 
-.nameCell {
+.companyCell {
   color: var(--admin-text) !important;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.phoneCell {
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--admin-border);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   white-space: nowrap;
+}
+
+.contactCell {
+  white-space: nowrap;
+}
+
+.contactName {
+  font-weight: 500;
+  color: var(--admin-text-secondary);
+  display: block;
+  font-size: 0.82rem;
+}
+
+.contactPhone {
+  color: var(--admin-text-secondary);
+  font-size: 0.8rem;
+  display: block;
 }
 
 .mutedCell {
   color: var(--admin-text-muted) !important;
+  font-size: 0.82rem;
 }
+
+/* ── Status badge + dropdown ── */
 
 .statusBadge {
   display: inline-flex;
@@ -207,15 +246,32 @@
   font-size: 0.65rem;
 }
 
+.statusNew {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+
+.statusProcessed {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+}
+
+.statusApproved {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+}
+
+.statusRejected {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--admin-text-muted);
+}
+
 .statusDropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
   background: #1a2236;
   border: 1px solid var(--admin-border);
   border-radius: 8px;
   padding: 4px;
-  min-width: 140px;
+  min-width: 150px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
@@ -247,99 +303,7 @@
   font-weight: 600;
 }
 
-.optionBadge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.statusNew {
-  background: var(--admin-error-bg);
-  color: var(--admin-error);
-}
-
-.statusInProgress {
-  background: var(--admin-warning-bg);
-  color: var(--admin-warning);
-}
-
-.statusDone {
-  background: var(--admin-success-bg);
-  color: var(--admin-success);
-}
-
 /* ── Actions ── */
-
-.actionBtn {
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  background: var(--admin-surface-hover);
-  border: 1px solid var(--admin-border);
-  color: var(--admin-text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.actionBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--admin-text);
-}
-
-.actionBtnPrimary {
-  background: var(--admin-success-bg);
-  border-color: rgba(34, 197, 94, 0.2);
-  color: var(--admin-success);
-}
-
-.actionBtnPrimary:hover {
-  background: rgba(34, 197, 94, 0.2);
-  color: var(--admin-success);
-}
-
-/* ── Expanded row ── */
-
-.expandRow td {
-  padding: 0 14px 14px !important;
-  border-bottom: 1px solid var(--admin-border-subtle);
-  background: var(--admin-surface-hover);
-}
-
-.messageBox {
-  background: var(--admin-surface);
-  border: 1px solid var(--admin-border);
-  border-radius: 8px;
-  padding: 12px 16px;
-}
-
-.messageLabel {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--admin-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.messageText {
-  font-size: 0.875rem;
-  color: var(--admin-text-secondary);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* ── Delete button ── */
 
 .actionCell {
   width: 36px;
@@ -369,7 +333,13 @@
   border-color: rgba(239, 68, 68, 0.25);
 }
 
-/* ── Source link ── */
+/* ── Expanded row ── */
+
+.expandRow td {
+  padding: 0 14px 14px !important;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  background: var(--admin-surface-hover);
+}
 
 .expandContent {
   display: flex;
@@ -377,26 +347,28 @@
   gap: 10px;
 }
 
-.sourceRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+.descBox {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 12px 16px;
 }
 
-.sourceLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  color: var(--admin-accent);
-  text-decoration: none;
-  word-break: break-all;
-  transition: opacity var(--transition-fast);
+.descLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 6px;
 }
 
-.sourceLink:hover {
-  opacity: 0.75;
+.descText {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ── Empty ── */

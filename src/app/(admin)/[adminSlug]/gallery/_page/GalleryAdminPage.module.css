@@ -22,7 +22,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .uploadBtn {
@@ -54,7 +54,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   cursor: pointer;
   transition:
     border-color var(--transition-fast),
@@ -75,7 +75,7 @@
 
 .dropzoneHint {
   font-size: 0.78rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 /* ── Grid ── */

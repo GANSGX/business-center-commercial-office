@@ -24,7 +24,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .addBtn {
@@ -94,7 +94,7 @@
 
 .count {
   font-size: 0.8rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   white-space: nowrap;
   margin-left: auto;
 }
@@ -121,7 +121,7 @@
   text-align: left;
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--admin-border);
@@ -189,7 +189,7 @@
 
 .roomNumber {
   font-size: 0.75rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .mutedCell {
