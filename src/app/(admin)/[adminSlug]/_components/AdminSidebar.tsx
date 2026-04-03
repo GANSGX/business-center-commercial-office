@@ -261,11 +261,18 @@ export function AdminSidebar() {
     fetchNewTenantRequests()
 
     // SSE для мгновенного обновления бейджа лидов
-    const es = new EventSource('/api/leads/stream')
-    es.onmessage = (e) => {
+    const esLeads = new EventSource('/api/leads/stream')
+    esLeads.onmessage = (e) => {
       if (e.data === 'new-lead') fetchNewLeads()
     }
-    es.onerror = () => es.close()
+    esLeads.onerror = () => esLeads.close()
+
+    // SSE для мгновенного обновления бейджа заявок арендаторов
+    const esTenant = new EventSource('/api/tenant-requests/stream')
+    esTenant.onmessage = (e) => {
+      if (e.data === 'new-tenant-request') fetchNewTenantRequests()
+    }
+    esTenant.onerror = () => esTenant.close()
 
     // Резервный поллинг раз в 60 сек
     const fallback = setInterval(() => {
@@ -275,7 +282,8 @@ export function AdminSidebar() {
 
     return () => {
       cancelled = true
-      es.close()
+      esLeads.close()
+      esTenant.close()
       clearInterval(fallback)
     }
   }, [])

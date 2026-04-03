@@ -93,8 +93,25 @@ export function TenantRequestsPage() {
   }, [fetchItems])
 
   useEffect(() => {
+    const es = new EventSource('/api/tenant-requests/stream')
+
+    es.onmessage = (e) => {
+      if (e.data === 'new-tenant-request') silentRefresh()
+    }
+
+    es.onerror = () => {
+      es.close()
+      setTimeout(() => {
+        window.dispatchEvent(new Event('sse-reconnect'))
+      }, 5_000)
+    }
+
     const fallback = setInterval(silentRefresh, 60_000)
-    return () => clearInterval(fallback)
+
+    return () => {
+      es.close()
+      clearInterval(fallback)
+    }
   }, [silentRefresh])
 
   const newCount = items.filter((i) => i.status === 'NEW').length

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/shared/lib/prisma'
 import { requireAdmin } from '@/shared/lib/require-admin'
+import { tenantRequestsEmitter } from '@/shared/lib/tenant-requests-emitter'
 
 const CreateSchema = z.object({
   companyName: z.string().min(2).max(100),
@@ -42,6 +43,8 @@ export async function POST(req: NextRequest) {
       email: data.email || null,
     },
   })
+
+  tenantRequestsEmitter.emit('new-tenant-request')
 
   return NextResponse.json({ ok: true }, { status: 201 })
 }
