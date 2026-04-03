@@ -32,3 +32,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   return NextResponse.json(updated)
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const check = await requireAdmin()
+  if (!check.ok) return check.response
+
+  const { id } = await params
+  await prisma.tenantRequest.delete({ where: { id } })
+  return NextResponse.json({ ok: true })
+}

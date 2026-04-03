@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './TenantRequestsPage.module.css'
 
 type Status = 'NEW' | 'PROCESSED' | 'APPROVED' | 'REJECTED'
@@ -25,37 +26,28 @@ const STATUS_LABELS: Record<Status, string> = {
   REJECTED: 'Отклонена',
 }
 
-const BADGE_CLASSES: Record<Status, string> = {
-  NEW: styles.badgeNew,
-  PROCESSED: styles.badgeProcessed,
-  APPROVED: styles.badgeApproved,
-  REJECTED: styles.badgeRejected,
+const STATUS_COLORS: Record<Status, { bg: string; color: string }> = {
+  NEW: { bg: 'rgba(245, 158, 11, 0.12)', color: '#f59e0b' },
+  PROCESSED: { bg: 'rgba(99, 102, 241, 0.12)', color: '#818cf8' },
+  APPROVED: { bg: 'rgba(34, 197, 94, 0.12)', color: '#22c55e' },
+  REJECTED: { bg: 'rgba(107, 114, 128, 0.1)', color: '#6b7280' },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  food: 'Кафе / еда',
+  food: 'Кафе',
   service: 'Услуги',
   retail: 'Магазин',
   bank: 'Банк',
   other: 'Другое',
 }
 
-const FILTERS: { value: 'ALL' | Status; label: string }[] = [
-  { value: 'ALL', label: 'Все' },
-  { value: 'NEW', label: 'Новые' },
-  { value: 'PROCESSED', label: 'В работе' },
-  { value: 'APPROVED', label: 'Одобрены' },
-  { value: 'REJECTED', label: 'Отклонены' },
-]
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+function formatDateTime(iso: string) {
+  const d = new Date(iso)
+  return (
+    d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' }) +
+    ' ' +
+    d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+  )
 }
 
 export function TenantRequestsPage() {
@@ -63,253 +55,284 @@ export function TenantRequestsPage() {
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'ALL' | Status>('ALL')
+  const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+
+  const buildParams = useCallback(() => {
+    const params = new URLSearchParams({ page: String(page), limit: '20' })
+    if (filter !== 'ALL') params.set('status', filter)
+    if (search) params.set('search', search)
+    return params
+  }, [filter, search, page])
 
   const fetchItems = useCallback(async () => {
     setLoading(true)
-    try {
-      const params = new URLSearchParams({ page: String(page), limit: '20' })
-      if (filter !== 'ALL') params.set('status', filter)
-      const res = await fetch(`/api/tenant-requests?${params}`, { cache: 'no-store' })
-      if (!res.ok) return
+    const res = await fetch(`/api/tenant-requests?${buildParams()}`, { cache: 'no-store' })
+    if (res.ok) {
       const data = await res.json()
       setItems(data.items)
       setTotal(data.total)
-    } finally {
-      setLoading(false)
     }
-  }, [filter, page])
+    setLoading(false)
+  }, [buildParams])
+
+  const silentRefresh = useCallback(async () => {
+    const res = await fetch(`/api/tenant-requests?${buildParams()}`, { cache: 'no-store' })
+    if (res.ok) {
+      const data = await res.json()
+      setItems(data.items)
+      setTotal(data.total)
+    }
+  }, [buildParams])
 
   useEffect(() => {
     fetchItems()
   }, [fetchItems])
 
+  useEffect(() => {
+    const fallback = setInterval(silentRefresh, 60_000)
+    return () => clearInterval(fallback)
+  }, [silentRefresh])
+
+  const newCount = items.filter((i) => i.status === 'NEW').length
+
   async function changeStatus(id: string, status: Status) {
+    setOpenDropdownId(null)
+    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status } : i)))
     await fetch(`/api/tenant-requests/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     })
-    fetchItems()
   }
 
-  const totalPages = Math.ceil(total / 20)
+  async function deleteItem(e: React.MouseEvent, id: string) {
+    e.stopPropagation()
+    if (!confirm('Удалить заявку? Действие необратимо.')) return
+    setItems((prev) => prev.filter((i) => i.id !== id))
+    setTotal((prev) => prev - 1)
+    await fetch(`/api/tenant-requests/${id}`, { method: 'DELETE' })
+  }
+
+  function statusBadgeClass(status: Status) {
+    if (status === 'NEW') return styles.statusNew
+    if (status === 'PROCESSED') return styles.statusProcessed
+    if (status === 'APPROVED') return styles.statusApproved
+    return styles.statusRejected
+  }
+
+  function rowClass(status: Status) {
+    if (status === 'NEW') return styles.rowNew
+    if (status === 'PROCESSED') return styles.rowProcessed
+    if (status === 'APPROVED') return styles.rowApproved
+    return styles.rowRejected
+  }
 
   return (
     <div className={styles.page}>
+      {openDropdownId && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 9 }}
+          onClick={() => setOpenDropdownId(null)}
+        />
+      )}
+
       <div className={styles.header}>
-        <h1 className={styles.title}>Заявки арендаторов</h1>
-        <div className={styles.filters}>
-          {FILTERS.map((f) => (
-            <button
-              key={f.value}
-              className={`${styles.filterBtn} ${filter === f.value ? styles.filterBtnActive : ''}`}
-              onClick={() => {
-                setFilter(f.value)
-                setPage(1)
-              }}
-            >
-              {f.label}
-            </button>
-          ))}
+        <div>
+          <h1 className={styles.title}>
+            Заявки арендаторов
+            {newCount > 0 && <span className={styles.newBadge}>{newCount} новых</span>}
+          </h1>
+          <p className={styles.subtitle}>Всего: {total}</p>
         </div>
       </div>
 
-      {loading ? (
-        <div className={styles.empty}>Загрузка...</div>
-      ) : items.length === 0 ? (
-        <div className={styles.empty}>Заявок нет</div>
-      ) : (
-        <div className={styles.list}>
-          {items.map((item) => (
-            <div key={item.id} className={styles.card}>
-              {/* Status */}
-              <div className={styles.cardStatus}>
-                <span className={styles.tenantMark} aria-hidden="true">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                  </svg>
-                </span>
-                <span className={`${styles.badge} ${BADGE_CLASSES[item.status]}`}>
-                  {STATUS_LABELS[item.status]}
-                </span>
-              </div>
-
-              {/* Body */}
-              <div className={styles.cardBody}>
-                <div className={styles.cardTop}>
-                  <span className={styles.companyName}>{item.companyName}</span>
-                  <span className={styles.categoryBadge}>
-                    {CATEGORY_LABELS[item.category] ?? item.category}
-                  </span>
-                </div>
-
-                <div className={styles.cardMeta}>
-                  <span className={styles.metaItem}>
-                    <span className={styles.metaIcon}>
-                      <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                      </svg>
-                    </span>
-                    {item.contactName}
-                  </span>
-
-                  <span className={styles.metaItem}>
-                    <span className={styles.metaIcon}>
-                      <svg
-                        width="13"
-                        height="13"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.58 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-                      </svg>
-                    </span>
-                    <a href={`tel:${item.phone}`}>{item.phone}</a>
-                  </span>
-
-                  {item.email && (
-                    <span className={styles.metaItem}>
-                      <span className={styles.metaIcon}>
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                          <polyline points="22,6 12,13 2,6" />
-                        </svg>
-                      </span>
-                      <a href={`mailto:${item.email}`}>{item.email}</a>
-                    </span>
-                  )}
-
-                  {item.floor && (
-                    <span className={styles.metaItem}>
-                      <span className={styles.metaIcon}>
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="8" y1="6" x2="21" y2="6" />
-                          <line x1="8" y1="12" x2="21" y2="12" />
-                          <line x1="8" y1="18" x2="21" y2="18" />
-                          <line x1="3" y1="6" x2="3.01" y2="6" />
-                          <line x1="3" y1="12" x2="3.01" y2="12" />
-                          <line x1="3" y1="18" x2="3.01" y2="18" />
-                        </svg>
-                      </span>
-                      Этаж {item.floor}
-                    </span>
-                  )}
-                </div>
-
-                {item.description && <div className={styles.cardDesc}>{item.description}</div>}
-
-                <div className={styles.cardDate}>{formatDate(item.createdAt)}</div>
-              </div>
-
-              {/* Actions */}
-              <div className={styles.cardActions}>
-                {item.status === 'NEW' && (
-                  <button
-                    className={`${styles.actionBtn} ${styles.actionBtnApprove}`}
-                    onClick={() => changeStatus(item.id, 'APPROVED')}
-                  >
-                    Одобрить
-                  </button>
-                )}
-                {item.status === 'NEW' && (
-                  <button
-                    className={styles.actionBtn}
-                    onClick={() => changeStatus(item.id, 'PROCESSED')}
-                  >
-                    В работу
-                  </button>
-                )}
-                {item.status === 'PROCESSED' && (
-                  <button
-                    className={`${styles.actionBtn} ${styles.actionBtnApprove}`}
-                    onClick={() => changeStatus(item.id, 'APPROVED')}
-                  >
-                    Одобрить
-                  </button>
-                )}
-                {(item.status === 'NEW' || item.status === 'PROCESSED') && (
-                  <button
-                    className={`${styles.actionBtn} ${styles.actionBtnReject}`}
-                    onClick={() => changeStatus(item.id, 'REJECTED')}
-                  >
-                    Отклонить
-                  </button>
-                )}
-                {(item.status === 'APPROVED' || item.status === 'REJECTED') && (
-                  <button className={styles.actionBtn} onClick={() => changeStatus(item.id, 'NEW')}>
-                    Вернуть
-                  </button>
-                )}
-              </div>
-            </div>
+      <div className={styles.toolbar}>
+        <div className={styles.tabs}>
+          {(['ALL', 'NEW', 'PROCESSED', 'APPROVED', 'REJECTED'] as const).map((f) => (
+            <button
+              key={f}
+              className={`${styles.tab} ${filter === f ? styles.tabActive : ''}`}
+              onClick={() => {
+                setFilter(f)
+                setPage(1)
+              }}
+            >
+              {f === 'ALL' ? 'Все' : STATUS_LABELS[f]}
+              <span className={styles.tabCount}>
+                {f === 'ALL' ? total : items.filter((i) => i.status === f).length}
+              </span>
+            </button>
           ))}
         </div>
-      )}
+        <input
+          className={styles.searchInput}
+          placeholder="Поиск по компании или телефону..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            setPage(1)
+          }}
+        />
+      </div>
 
-      {totalPages > 1 && (
-        <div className={styles.pagination}>
-          <button
-            className={styles.pageBtn}
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-          >
-            ← Назад
-          </button>
-          <span className={styles.pageInfo}>
-            {page} / {totalPages}
-          </span>
-          <button
-            className={styles.pageBtn}
-            disabled={page >= totalPages}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Вперёд →
-          </button>
+      {loading ? (
+        <div className={styles.emptyRow} style={{ padding: '3rem', textAlign: 'center' }}>
+          Загрузка...
+        </div>
+      ) : (
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Компания</th>
+                <th>Категория</th>
+                <th>Контакт</th>
+                <th>Email</th>
+                <th>Этаж</th>
+                <th>Статус</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <React.Fragment key={item.id}>
+                  <tr
+                    className={`${styles.row} ${rowClass(item.status)} ${expanded === item.id ? styles.rowExpanded : ''}`}
+                    onClick={() => setExpanded(expanded === item.id ? null : item.id)}
+                  >
+                    <td className={styles.dateCell}>{formatDateTime(item.createdAt)}</td>
+                    <td className={styles.companyCell}>{item.companyName}</td>
+                    <td>
+                      <span className={styles.categoryBadge}>
+                        {CATEGORY_LABELS[item.category] ?? item.category}
+                      </span>
+                    </td>
+                    <td className={styles.contactCell}>
+                      <span className={styles.contactName}>{item.contactName}</span>
+                      <span className={styles.contactPhone}>{item.phone}</span>
+                    </td>
+                    <td className={styles.mutedCell}>{item.email ?? '—'}</td>
+                    <td className={styles.mutedCell}>{item.floor ?? '—'}</td>
+                    <td>
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        <span
+                          className={`${styles.statusBadge} ${statusBadgeClass(item.status)}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (openDropdownId === item.id) {
+                              setOpenDropdownId(null)
+                            } else {
+                              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                              setDropdownPos({ top: rect.bottom + 6, left: rect.left })
+                              setOpenDropdownId(item.id)
+                            }
+                          }}
+                        >
+                          {STATUS_LABELS[item.status]}
+                        </span>
+                      </div>
+                    </td>
+                    <td className={styles.actionCell}>
+                      <button
+                        className={styles.deleteBtn}
+                        title="Удалить заявку"
+                        onClick={(e) => deleteItem(e, item.id)}
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                          <path d="M10 11v6M14 11v6" />
+                          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                  {expanded === item.id && item.description && (
+                    <tr key={`${item.id}-exp`} className={styles.expandRow}>
+                      <td colSpan={8}>
+                        <div className={styles.expandContent}>
+                          <div className={styles.descBox}>
+                            <span className={styles.descLabel}>Описание деятельности:</span>
+                            <p className={styles.descText}>{item.description}</p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+              {items.length === 0 && (
+                <tr>
+                  <td colSpan={8} className={styles.emptyRow}>
+                    Заявок не найдено
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       )}
+
+      {/* Дропдаун статуса через портал */}
+      {openDropdownId &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className={styles.statusDropdown}
+            style={{
+              position: 'fixed',
+              top: dropdownPos.top,
+              left: dropdownPos.left,
+              zIndex: 1000,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {(['NEW', 'PROCESSED', 'APPROVED', 'REJECTED'] as Status[]).map((s) => {
+              const current = items.find((i) => i.id === openDropdownId)?.status
+              return (
+                <button
+                  key={s}
+                  className={`${styles.statusOption} ${s === current ? styles.statusOptionActive : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    changeStatus(openDropdownId, s)
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '3px 10px',
+                      borderRadius: '20px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      background: STATUS_COLORS[s].bg,
+                      color: STATUS_COLORS[s].color,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {STATUS_LABELS[s]}
+                  </span>
+                </button>
+              )
+            })}
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

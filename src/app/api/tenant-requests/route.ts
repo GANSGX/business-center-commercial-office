@@ -53,13 +53,19 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = req.nextUrl
   const status = searchParams.get('status')
+  const search = searchParams.get('search')?.trim()
   const page = Math.max(1, Number(searchParams.get('page') ?? 1))
   const limit = 20
 
-  const where =
-    status && status !== 'ALL'
-      ? { status: status as 'NEW' | 'PROCESSED' | 'APPROVED' | 'REJECTED' }
-      : {}
+  const where: Record<string, unknown> = {}
+  if (status && status !== 'ALL') where.status = status
+  if (search) {
+    where.OR = [
+      { companyName: { contains: search, mode: 'insensitive' } },
+      { phone: { contains: search } },
+      { contactName: { contains: search, mode: 'insensitive' } },
+    ]
+  }
 
   const [items, total] = await Promise.all([
     prisma.tenantRequest.findMany({
