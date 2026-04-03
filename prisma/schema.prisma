@@ -19,6 +19,13 @@ enum LeadStatus {
   PROCESSED
 }
 
+enum TenantRequestStatus {
+  NEW
+  PROCESSED
+  APPROVED
+  REJECTED
+}
+
 model Room {
   id          String      @id @default(cuid())
   createdAt   DateTime    @default(now())
@@ -152,6 +159,19 @@ model BuildingOrg {
   color       String   @default("blue")
   order       Int      @default(0)
   active      Boolean  @default(true)
+}
+
+model TenantRequest {
+  id          String              @id @default(cuid())
+  createdAt   DateTime            @default(now())
+  companyName String
+  category    String              // food | service | retail | bank | other
+  floor       Int?
+  description String?
+  contactName String
+  phone       String
+  email       String?
+  status      TenantRequestStatus @default(NEW)
 }
 
 model PageView {

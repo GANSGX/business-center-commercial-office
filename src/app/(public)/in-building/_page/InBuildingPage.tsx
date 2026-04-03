@@ -1,5 +1,6 @@
 import { InBuildingHero } from './InBuildingHero'
 import { InBuildingCtaButton } from './InBuildingCtaButton'
+import { InBuildingPlacementButton } from './InBuildingPlacementButton'
 import { InBuildingLiveList } from './InBuildingLiveList'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
@@ -45,14 +46,27 @@ export function InBuildingPage({ orgs }: Props) {
         <div className={styles.panelInner}>
           <InBuildingLiveList initialOrgs={orgs} />
 
-          <div className={styles.cta}>
-            <div className={styles.ctaContent}>
-              <h2 className={styles.ctaTitle}>Хотите арендовать офис здесь?</h2>
-              <p className={styles.ctaText}>
-                Офисные помещения от 10 м² — подберём вариант под вашу задачу
-              </p>
+          <div className={styles.ctaRow}>
+            <div className={styles.cta}>
+              <div className={styles.ctaContent}>
+                <h2 className={styles.ctaTitle}>Хотите арендовать офис здесь?</h2>
+                <p className={styles.ctaText}>
+                  Офисные помещения от 10 м² — подберём вариант под вашу задачу
+                </p>
+              </div>
+              <InBuildingCtaButton />
             </div>
-            <InBuildingCtaButton />
+
+            <div id="placement" className={`${styles.cta} ${styles.ctaTenant}`}>
+              <div className={styles.ctaTenantBadge}>Для арендаторов</div>
+              <div className={styles.ctaContent}>
+                <h2 className={styles.ctaTitle}>Вы уже наш арендатор?</h2>
+                <p className={styles.ctaText}>
+                  Разместите вашу компанию в справочнике здания — клиенты найдут вас быстрее
+                </p>
+              </div>
+              <InBuildingPlacementButton />
+            </div>
           </div>
         </div>
 

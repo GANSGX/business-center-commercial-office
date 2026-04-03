@@ -132,6 +132,25 @@ function IconBuilding() {
     </svg>
   )
 }
+function IconTenantRequest() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <line x1="12" y1="22" x2="12" y2="12" />
+      <path d="M9 12h6" />
+      <path d="M15 7l3 3" />
+    </svg>
+  )
+}
 function IconSettings() {
   return (
     <svg
@@ -192,6 +211,7 @@ const NAV_ITEMS = [
   { segment: '', label: 'Дашборд', icon: <IconDashboard /> },
   { segment: 'rooms', label: 'Помещения', icon: <IconRooms /> },
   { segment: 'leads', label: 'Заявки', icon: <IconLeads /> },
+  { segment: 'tenant-requests', label: 'Заявки арендаторов', icon: <IconTenantRequest /> },
   { segment: 'building-orgs', label: 'В здании', icon: <IconBuilding /> },
   { segment: 'gallery', label: 'Галерея', icon: <IconGallery /> },
   { segment: 'analytics', label: 'Аналитика', icon: <IconAnalytics /> },
@@ -210,6 +230,7 @@ export function AdminSidebar() {
   const { isOpen, close } = useSidebarStore()
 
   const [newLeadsCount, setNewLeadsCount] = useState(0)
+  const [newTenantRequestsCount, setNewTenantRequestsCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -225,9 +246,21 @@ export function AdminSidebar() {
       }
     }
 
-    fetchNewLeads()
+    async function fetchNewTenantRequests() {
+      try {
+        const res = await fetch('/api/tenant-requests?status=NEW&limit=1', { cache: 'no-store' })
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled) setNewTenantRequestsCount(data.total ?? 0)
+      } catch {
+        /* ignore */
+      }
+    }
 
-    // SSE для мгновенного обновления бейджа
+    fetchNewLeads()
+    fetchNewTenantRequests()
+
+    // SSE для мгновенного обновления бейджа лидов
     const es = new EventSource('/api/leads/stream')
     es.onmessage = (e) => {
       if (e.data === 'new-lead') fetchNewLeads()
@@ -235,7 +268,10 @@ export function AdminSidebar() {
     es.onerror = () => es.close()
 
     // Резервный поллинг раз в 60 сек
-    const fallback = setInterval(fetchNewLeads, 60_000)
+    const fallback = setInterval(() => {
+      fetchNewLeads()
+      fetchNewTenantRequests()
+    }, 60_000)
 
     return () => {
       cancelled = true
@@ -275,7 +311,12 @@ export function AdminSidebar() {
           {NAV_ITEMS.map(({ segment, label, icon }) => {
             const href = segment === '' ? base : `${base}/${segment}`
             const active = isActive(segment)
-            const badge = segment === 'leads' ? newLeadsCount : 0
+            const badge =
+              segment === 'leads'
+                ? newLeadsCount
+                : segment === 'tenant-requests'
+                  ? newTenantRequestsCount
+                  : 0
             return (
               <Link
                 key={segment}
