@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import styles from './Tenants.module.css'
 
 function OrgIcon({ category }: { category: string }) {
@@ -105,34 +105,74 @@ interface Org {
 
 export function TenantStrip({ orgs }: { orgs: Org[] }) {
   const stripRef = useRef<HTMLDivElement>(null)
-  const isDragging = useRef(false)
-  const startX = useRef(0)
-  const scrollLeft = useRef(0)
+  const [isScrollable, setIsScrollable] = useState(false)
 
   useEffect(() => {
     const el = stripRef.current
     if (!el) return
 
+    function checkScrollable() {
+      setIsScrollable(el!.scrollWidth > el!.clientWidth + 4)
+    }
+
+    checkScrollable()
+    const ro = new ResizeObserver(checkScrollable)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [orgs])
+
+  useEffect(() => {
+    const el = stripRef.current
+    if (!el) return
+
+    let dragging = false
+    let startX = 0
+    let startScroll = 0
+    let velX = 0
+    let lastX = 0
+    let lastTime = 0
+    let rafId = 0
+
     function onMouseDown(e: MouseEvent) {
-      isDragging.current = true
-      startX.current = e.pageX - el!.offsetLeft
-      scrollLeft.current = el!.scrollLeft
+      dragging = true
+      startX = e.pageX - el!.offsetLeft
+      startScroll = el!.scrollLeft
+      lastX = e.pageX
+      lastTime = Date.now()
+      velX = 0
+      cancelAnimationFrame(rafId)
       el!.style.cursor = 'grabbing'
       el!.style.userSelect = 'none'
     }
 
     function onMouseMove(e: MouseEvent) {
-      if (!isDragging.current) return
+      if (!dragging) return
       e.preventDefault()
       const x = e.pageX - el!.offsetLeft
-      const walk = x - startX.current
-      el!.scrollLeft = scrollLeft.current - walk
+      el!.scrollLeft = startScroll - (x - startX)
+
+      const now = Date.now()
+      const dt = now - lastTime
+      if (dt > 0) {
+        velX = (e.pageX - lastX) / dt
+        lastX = e.pageX
+        lastTime = now
+      }
+    }
+
+    function momentum() {
+      if (Math.abs(velX) < 0.05) return
+      el!.scrollLeft -= velX * 16
+      velX *= 0.9
+      rafId = requestAnimationFrame(momentum)
     }
 
     function onMouseUp() {
-      isDragging.current = false
+      if (!dragging) return
+      dragging = false
       el!.style.cursor = 'grab'
       el!.style.userSelect = ''
+      rafId = requestAnimationFrame(momentum)
     }
 
     el.addEventListener('mousedown', onMouseDown)
@@ -143,39 +183,42 @@ export function TenantStrip({ orgs }: { orgs: Org[] }) {
       el.removeEventListener('mousedown', onMouseDown)
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
+      cancelAnimationFrame(rafId)
     }
   }, [])
 
   return (
     <div className={styles.stripWrapper}>
       <div className={styles.strip} ref={stripRef}>
-        {orgs.map((org) => (
-          <Link
-            key={org.id}
-            href={`/in-building#org-${org.id}`}
-            className={`${styles.card} ${styles[`color_${org.color}`]}`}
-            draggable={false}
-          >
-            <span className={styles.cardIcon}>
-              {org.logo ? (
-                <Image
-                  src={org.logo}
-                  alt={org.name}
-                  width={36}
-                  height={36}
-                  className={styles.cardLogoImg}
-                  draggable={false}
-                />
-              ) : (
-                <OrgIcon category={org.category} />
-              )}
-            </span>
-            <span className={styles.cardName}>{org.name}</span>
-          </Link>
-        ))}
+        <div className={styles.stripInner}>
+          {orgs.map((org) => (
+            <Link
+              key={org.id}
+              href={`/in-building#org-${org.id}`}
+              className={`${styles.card} ${styles[`color_${org.color}`]}`}
+              draggable={false}
+            >
+              <span className={styles.cardIcon}>
+                {org.logo ? (
+                  <Image
+                    src={org.logo}
+                    alt={org.name}
+                    width={36}
+                    height={36}
+                    className={styles.cardLogoImg}
+                    draggable={false}
+                  />
+                ) : (
+                  <OrgIcon category={org.category} />
+                )}
+              </span>
+              <span className={styles.cardName}>{org.name}</span>
+            </Link>
+          ))}
+        </div>
       </div>
-      <div className={styles.fadeLeft} />
-      <div className={styles.fadeRight} />
+      {isScrollable && <div className={styles.fadeLeft} />}
+      {isScrollable && <div className={styles.fadeRight} />}
     </div>
   )
 }
