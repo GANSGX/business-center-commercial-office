@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { prisma } from '@/shared/lib/prisma'
+import { MOCK_BUILDING_ORGS } from '@/shared/lib/mock-data'
 import { IconChevronDown } from '@/shared/ui/icons'
 import { TenantStrip } from './TenantStrip'
 import styles from './Tenants.module.css'
@@ -94,12 +94,8 @@ function OrgIcon({ category }: { category: string }) {
   )
 }
 
-export async function Tenants() {
-  const orgs = await prisma.buildingOrg.findMany({
-    where: { active: true },
-    orderBy: { order: 'asc' },
-    select: { id: true, name: true, category: true, color: true, logo: true },
-  })
+export function Tenants() {
+  const orgs = MOCK_BUILDING_ORGS.filter((o) => o.active).sort((a, b) => a.order - b.order)
 
   if (orgs.length === 0) return null
 
