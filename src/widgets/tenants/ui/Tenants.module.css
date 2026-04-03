@@ -310,3 +310,38 @@
     margin-bottom: 28px;
   }
 }
+
+/* ─── Placement hint ─────────────────────── */
+
+.placementHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0 24px;
+  flex-wrap: wrap;
+}
+
+.placementHintText {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.placementHintLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(245, 185, 80, 0.7);
+  text-decoration: none;
+  transition:
+    color var(--transition-fast),
+    gap var(--transition-fast);
+}
+
+.placementHintLink:hover {
+  color: rgba(252, 200, 100, 1);
+  gap: 8px;
+}

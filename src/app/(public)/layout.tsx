@@ -1,6 +1,7 @@
 import { Header } from '@/widgets/header'
 import { CookieBannerLazy } from '@/widgets/cookie-banner'
 import { LeadModalLazy } from '@/widgets/lead-form'
+import { TenantPlacementModal } from '@/features/tenant-placement'
 import { AnalyticsTracker, MetrikaScript } from '@/widgets/analytics-tracker'
 import { ScrollToTop, Preloader } from '@/shared/ui'
 import { getSiteSettings } from '@/shared/lib/getSiteSettings'
@@ -19,6 +20,7 @@ export default async function PublicLayout({ children }: { children: React.React
       <Header />
       <main>{children}</main>
       <LeadModalLazy />
+      <TenantPlacementModal />
       <CookieBannerLazy />
     </div>
   )

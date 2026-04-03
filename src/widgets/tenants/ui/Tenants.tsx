@@ -1,6 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { MOCK_BUILDING_ORGS } from '@/shared/lib/mock-data'
+import { prisma } from '@/shared/lib/prisma'
 import { IconChevronDown } from '@/shared/ui/icons'
 import { TenantStrip } from './TenantStrip'
 import styles from './Tenants.module.css'
@@ -95,8 +94,12 @@ function OrgIcon({ category }: { category: string }) {
   )
 }
 
-export function Tenants() {
-  const orgs = MOCK_BUILDING_ORGS.filter((o) => o.active).sort((a, b) => a.order - b.order)
+export async function Tenants() {
+  const orgs = await prisma.buildingOrg.findMany({
+    where: { active: true },
+    orderBy: { order: 'asc' },
+    select: { id: true, name: true, category: true, color: true, logo: true },
+  })
 
   if (orgs.length === 0) return null
 
@@ -118,6 +121,27 @@ export function Tenants() {
       </div>
 
       <TenantStrip orgs={orgs} />
+
+      <div className={styles.placementHint}>
+        <span className={styles.placementHintText}>Вы наш арендатор?</span>
+        <Link href="/in-building#placement" className={styles.placementHintLink}>
+          Разместите компанию в справочнике
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </Link>
+      </div>
     </section>
   )
 }
