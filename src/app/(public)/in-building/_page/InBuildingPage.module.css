@@ -777,10 +777,17 @@
   color: #fb923c;
 }
 
-/* ── CTA блок внизу ── */
+/* ── CTA блоки внизу ── */
+
+.ctaRow {
+  margin-top: 72px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
 
 .cta {
-  margin-top: 72px;
+  position: relative;
   padding: 40px 48px;
   border-radius: var(--radius-2xl);
   background:
@@ -859,6 +866,37 @@
   transform: translateY(0);
 }
 
+/* Вариант блока для арендаторов — золотистая акцентная рамка */
+.ctaTenant {
+  border-color: rgba(245, 158, 11, 0.2);
+  border-top-color: rgba(245, 158, 11, 0.38);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.06) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0.06) 100%
+    ),
+    rgba(6, 5, 16, 0.65);
+}
+
+.ctaTenantBadge {
+  position: absolute;
+  top: -12px;
+  left: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #9b6133 0%, #c8862a 100%);
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 12px rgba(139, 85, 35, 0.4);
+}
+
 /* ══════════════════════════════════════════
    Адаптив
 ══════════════════════════════════════════ */
@@ -926,12 +964,16 @@
     grid-template-columns: 1fr;
   }
 
+  .ctaRow {
+    grid-template-columns: 1fr;
+    margin-top: 52px;
+  }
+
   .cta {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
     padding: 24px 20px;
-    margin-top: 52px;
     border-radius: var(--radius-xl);
   }
 
