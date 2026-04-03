@@ -22,7 +22,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .addBtn {
@@ -92,7 +92,7 @@
   text-align: left;
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--admin-border);
@@ -136,7 +136,7 @@
 .slugCell {
   font-family: monospace;
   font-size: 0.8rem;
-  color: var(--admin-text-muted) !important;
+  color: var(--admin-text-secondary) !important;
 }
 
 .priceCell {

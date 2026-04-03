@@ -9,8 +9,8 @@
   --admin-border-subtle: rgba(255, 255, 255, 0.04);
 
   --admin-text: rgba(232, 234, 240, 0.95);
-  --admin-text-secondary: rgba(136, 146, 166, 0.9);
-  --admin-text-muted: rgba(79, 89, 119, 0.9);
+  --admin-text-secondary: rgba(165, 175, 195, 0.95);
+  --admin-text-muted: rgba(120, 132, 156, 0.9);
 
   --admin-accent: #8b5523;
   --admin-accent-hover: #7a4418;

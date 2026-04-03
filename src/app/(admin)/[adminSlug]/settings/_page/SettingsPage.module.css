@@ -23,7 +23,7 @@
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
 }
 
 .saveBtn {
@@ -132,7 +132,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.78rem;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   margin: 0;
 }
 
@@ -211,7 +211,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: var(--admin-text-muted);
+  color: var(--admin-text-secondary);
   font-size: 0.8rem;
 }
 
