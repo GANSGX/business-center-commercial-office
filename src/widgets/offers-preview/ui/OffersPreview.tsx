@@ -80,9 +80,7 @@ export function OffersPreview() {
         {/* Сетка карточек */}
         {offices === null && <div className={styles.emptyState}>Загрузка...</div>}
         {offices !== null && offices.length === 0 && (
-          <div className={styles.emptyState}>
-            Свободных офисов пока нет — следите за обновлениями
-          </div>
+          <div className={styles.emptyState}>Свободные помещения уточняйте по телефону</div>
         )}
         <div className={styles.grid}>
           {(offices ?? []).map((office) => {
