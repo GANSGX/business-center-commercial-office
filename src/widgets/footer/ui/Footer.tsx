@@ -55,7 +55,7 @@ export async function Footer() {
           <div className={styles.brand}>
             <LogoLink className={styles.logo} aria-label="На главную">
               <Image
-                src="/images/logo.svg"
+                src="/images/logo_new.svg"
                 alt="БЦ Коммунистическая-35"
                 width={954}
                 height={781}
