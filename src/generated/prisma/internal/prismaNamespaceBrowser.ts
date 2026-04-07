@@ -60,6 +60,7 @@ export const ModelName = {
   SiteSettings: 'SiteSettings',
   User: 'User',
   BuildingOrg: 'BuildingOrg',
+  TenantRequest: 'TenantRequest',
   PageView: 'PageView',
 } as const
 
@@ -242,6 +243,22 @@ export const BuildingOrgScalarFieldEnum = {
 
 export type BuildingOrgScalarFieldEnum =
   (typeof BuildingOrgScalarFieldEnum)[keyof typeof BuildingOrgScalarFieldEnum]
+
+export const TenantRequestScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  companyName: 'companyName',
+  category: 'category',
+  floor: 'floor',
+  description: 'description',
+  contactName: 'contactName',
+  phone: 'phone',
+  email: 'email',
+  status: 'status',
+} as const
+
+export type TenantRequestScalarFieldEnum =
+  (typeof TenantRequestScalarFieldEnum)[keyof typeof TenantRequestScalarFieldEnum]
 
 export const PageViewScalarFieldEnum = {
   id: 'id',

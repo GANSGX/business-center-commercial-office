@@ -4,6 +4,7 @@ import { prisma } from '@/shared/lib/prisma'
 import { requireAdmin } from '@/shared/lib/require-admin'
 import { leadsEmitter } from '@/shared/lib/leads-emitter'
 import { dashboardEmitter } from '@/shared/lib/dashboard-emitter'
+import { sendLeadNotification } from '@/shared/lib/email'
 
 // ── Rate limit (in-memory, 5 req / 15 min per IP) ────────────────────────────
 
@@ -71,6 +72,17 @@ export async function POST(req: NextRequest) {
     // Уведомляем SSE-подписчиков (админки и дашборда) мгновенно
     leadsEmitter.emit('new-lead')
     dashboardEmitter.emit('update')
+
+    // Email-уведомление (fire-and-forget, не блокируем ответ)
+    sendLeadNotification({
+      name: lead.name,
+      phone: lead.phone,
+      email: lead.email,
+      message: lead.message,
+      roomId: lead.roomId,
+      serviceName: lead.serviceName,
+      pageUrl: lead.pageUrl,
+    }).catch((e) => console.error('[email] lead notification failed:', e))
 
     return NextResponse.json({ ok: true, id: lead.id }, { status: 201 })
   } catch (e) {

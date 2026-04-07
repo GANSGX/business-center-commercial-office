@@ -387,6 +387,7 @@ export const ModelName = {
   SiteSettings: 'SiteSettings',
   User: 'User',
   BuildingOrg: 'BuildingOrg',
+  TenantRequest: 'TenantRequest',
   PageView: 'PageView',
 } as const
 
@@ -420,6 +421,7 @@ export type TypeMap<
       | 'siteSettings'
       | 'user'
       | 'buildingOrg'
+      | 'tenantRequest'
       | 'pageView'
     txIsolationLevel: TransactionIsolationLevel
   }
@@ -1314,6 +1316,82 @@ export type TypeMap<
         }
       }
     }
+    TenantRequest: {
+      payload: Prisma.$TenantRequestPayload<ExtArgs>
+      fields: Prisma.TenantRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TenantRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TenantRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.TenantRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TenantRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        findMany: {
+          args: Prisma.TenantRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>[]
+        }
+        create: {
+          args: Prisma.TenantRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        createMany: {
+          args: Prisma.TenantRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TenantRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.TenantRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        update: {
+          args: Prisma.TenantRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.TenantRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TenantRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TenantRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.TenantRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TenantRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.TenantRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTenantRequest>
+        }
+        groupBy: {
+          args: Prisma.TenantRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TenantRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TenantRequestCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.TenantRequestCountAggregateOutputType>
+            | number
+        }
+      }
+    }
     PageView: {
       payload: Prisma.$PageViewPayload<ExtArgs>
       fields: Prisma.PageViewFieldRefs
@@ -1591,6 +1669,22 @@ export const BuildingOrgScalarFieldEnum = {
 export type BuildingOrgScalarFieldEnum =
   (typeof BuildingOrgScalarFieldEnum)[keyof typeof BuildingOrgScalarFieldEnum]
 
+export const TenantRequestScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  companyName: 'companyName',
+  category: 'category',
+  floor: 'floor',
+  description: 'description',
+  contactName: 'contactName',
+  phone: 'phone',
+  email: 'email',
+  status: 'status',
+} as const
+
+export type TenantRequestScalarFieldEnum =
+  (typeof TenantRequestScalarFieldEnum)[keyof typeof TenantRequestScalarFieldEnum]
+
 export const PageViewScalarFieldEnum = {
   id: 'id',
   path: 'path',
@@ -1732,6 +1826,22 @@ export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 >
 
 /**
+ * Reference to a field of type 'TenantRequestStatus'
+ */
+export type EnumTenantRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'TenantRequestStatus'
+>
+
+/**
+ * Reference to a field of type 'TenantRequestStatus[]'
+ */
+export type ListEnumTenantRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'TenantRequestStatus[]'
+>
+
+/**
  * Batch Payload for updateMany & deleteMany & createMany
  */
 export type BatchPayload = {
@@ -1846,6 +1956,7 @@ export type GlobalOmitConfig = {
   siteSettings?: Prisma.SiteSettingsOmit
   user?: Prisma.UserOmit
   buildingOrg?: Prisma.BuildingOrgOmit
+  tenantRequest?: Prisma.TenantRequestOmit
   pageView?: Prisma.PageViewOmit
 }
 

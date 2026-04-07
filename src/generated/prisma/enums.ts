@@ -23,3 +23,12 @@ export const LeadStatus = {
 } as const
 
 export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+export const TenantRequestStatus = {
+  NEW: 'NEW',
+  PROCESSED: 'PROCESSED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+} as const
+
+export type TenantRequestStatus = (typeof TenantRequestStatus)[keyof typeof TenantRequestStatus]

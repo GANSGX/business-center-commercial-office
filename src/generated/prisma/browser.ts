@@ -77,6 +77,11 @@ export type User = Prisma.UserModel
  */
 export type BuildingOrg = Prisma.BuildingOrgModel
 /**
+ * Model TenantRequest
+ *
+ */
+export type TenantRequest = Prisma.TenantRequestModel
+/**
  * Model PageView
  *
  */

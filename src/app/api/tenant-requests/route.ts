@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/shared/lib/prisma'
 import { requireAdmin } from '@/shared/lib/require-admin'
 import { tenantRequestsEmitter } from '@/shared/lib/tenant-requests-emitter'
+import { sendTenantRequestNotification } from '@/shared/lib/email'
 
 const CreateSchema = z.object({
   companyName: z.string().min(2).max(100),
@@ -45,6 +46,17 @@ export async function POST(req: NextRequest) {
   })
 
   tenantRequestsEmitter.emit('new-tenant-request')
+
+  // Email-уведомление (fire-and-forget, не блокируем ответ)
+  sendTenantRequestNotification({
+    companyName: data.companyName,
+    category: data.category,
+    floor: data.floor,
+    description: data.description,
+    contactName: data.contactName,
+    phone: data.phone,
+    email: data.email,
+  }).catch((e) => console.error('[email] tenant-request notification failed:', e))
 
   return NextResponse.json({ ok: true }, { status: 201 })
 }
