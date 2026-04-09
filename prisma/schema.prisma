@@ -7,25 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum RoomStatus {
-  FREE
-  RESERVED
-  RENTED
-}
-
-enum LeadStatus {
-  NEW
-  IN_PROGRESS
-  PROCESSED
-}
-
-enum TenantRequestStatus {
-  NEW
-  PROCESSED
-  APPROVED
-  REJECTED
-}
-
 model Room {
   id          String      @id @default(cuid())
   createdAt   DateTime    @default(now())
@@ -57,8 +38,8 @@ model RoomPhoto {
   id     String @id @default(cuid())
   url    String
   order  Int    @default(0)
-  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model HeroSlide {
@@ -106,8 +87,8 @@ model ServiceOption {
   description String?
   price       String?
   order       Int     @default(0)
-  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId   String
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model GalleryImage {
@@ -150,22 +131,22 @@ model BuildingOrg {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   name        String
-  category    String   // food | service | retail | bank | other
+  category    String
   description String?
-  logo        String?
-  website     String?
-  contact     String?
   floor       Int      @default(1)
   color       String   @default("blue")
   order       Int      @default(0)
   active      Boolean  @default(true)
+  website     String?
+  contact     String?
+  logo        String?
 }
 
 model TenantRequest {
   id          String              @id @default(cuid())
   createdAt   DateTime            @default(now())
   companyName String
-  category    String              // food | service | retail | bank | other
+  category    String
   floor       Int?
   description String?
   contactName String
@@ -185,4 +166,23 @@ model PageView {
   @@index([createdAt])
   @@index([visitorId])
   @@index([path])
+}
+
+enum RoomStatus {
+  FREE
+  RESERVED
+  RENTED
+}
+
+enum LeadStatus {
+  NEW
+  IN_PROGRESS
+  PROCESSED
+}
+
+enum TenantRequestStatus {
+  NEW
+  PROCESSED
+  APPROVED
+  REJECTED
 }

@@ -42,13 +42,13 @@ export type BuildingOrgMinAggregateOutputType = {
   name: string | null
   category: string | null
   description: string | null
-  logo: string | null
-  website: string | null
-  contact: string | null
   floor: number | null
   color: string | null
   order: number | null
   active: boolean | null
+  website: string | null
+  contact: string | null
+  logo: string | null
 }
 
 export type BuildingOrgMaxAggregateOutputType = {
@@ -58,13 +58,13 @@ export type BuildingOrgMaxAggregateOutputType = {
   name: string | null
   category: string | null
   description: string | null
-  logo: string | null
-  website: string | null
-  contact: string | null
   floor: number | null
   color: string | null
   order: number | null
   active: boolean | null
+  website: string | null
+  contact: string | null
+  logo: string | null
 }
 
 export type BuildingOrgCountAggregateOutputType = {
@@ -74,13 +74,13 @@ export type BuildingOrgCountAggregateOutputType = {
   name: number
   category: number
   description: number
-  logo: number
-  website: number
-  contact: number
   floor: number
   color: number
   order: number
   active: number
+  website: number
+  contact: number
+  logo: number
   _all: number
 }
 
@@ -101,13 +101,13 @@ export type BuildingOrgMinAggregateInputType = {
   name?: true
   category?: true
   description?: true
-  logo?: true
-  website?: true
-  contact?: true
   floor?: true
   color?: true
   order?: true
   active?: true
+  website?: true
+  contact?: true
+  logo?: true
 }
 
 export type BuildingOrgMaxAggregateInputType = {
@@ -117,13 +117,13 @@ export type BuildingOrgMaxAggregateInputType = {
   name?: true
   category?: true
   description?: true
-  logo?: true
-  website?: true
-  contact?: true
   floor?: true
   color?: true
   order?: true
   active?: true
+  website?: true
+  contact?: true
+  logo?: true
 }
 
 export type BuildingOrgCountAggregateInputType = {
@@ -133,13 +133,13 @@ export type BuildingOrgCountAggregateInputType = {
   name?: true
   category?: true
   description?: true
-  logo?: true
-  website?: true
-  contact?: true
   floor?: true
   color?: true
   order?: true
   active?: true
+  website?: true
+  contact?: true
+  logo?: true
   _all?: true
 }
 
@@ -241,13 +241,13 @@ export type BuildingOrgGroupByOutputType = {
   name: string
   category: string
   description: string | null
-  logo: string | null
-  website: string | null
-  contact: string | null
   floor: number
   color: string
   order: number
   active: boolean
+  website: string | null
+  contact: string | null
+  logo: string | null
   _count: BuildingOrgCountAggregateOutputType | null
   _avg: BuildingOrgAvgAggregateOutputType | null
   _sum: BuildingOrgSumAggregateOutputType | null
@@ -277,13 +277,13 @@ export type BuildingOrgWhereInput = {
   name?: Prisma.StringFilter<'BuildingOrg'> | string
   category?: Prisma.StringFilter<'BuildingOrg'> | string
   description?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-  logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-  website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-  contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
   floor?: Prisma.IntFilter<'BuildingOrg'> | number
   color?: Prisma.StringFilter<'BuildingOrg'> | string
   order?: Prisma.IntFilter<'BuildingOrg'> | number
   active?: Prisma.BoolFilter<'BuildingOrg'> | boolean
+  website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+  contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+  logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
 }
 
 export type BuildingOrgOrderByWithRelationInput = {
@@ -293,13 +293,13 @@ export type BuildingOrgOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  website?: Prisma.SortOrderInput | Prisma.SortOrder
-  contact?: Prisma.SortOrderInput | Prisma.SortOrder
   floor?: Prisma.SortOrder
   color?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  contact?: Prisma.SortOrderInput | Prisma.SortOrder
+  logo?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type BuildingOrgWhereUniqueInput = Prisma.AtLeast<
@@ -313,13 +313,13 @@ export type BuildingOrgWhereUniqueInput = Prisma.AtLeast<
     name?: Prisma.StringFilter<'BuildingOrg'> | string
     category?: Prisma.StringFilter<'BuildingOrg'> | string
     description?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-    logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-    website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
-    contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
     floor?: Prisma.IntFilter<'BuildingOrg'> | number
     color?: Prisma.StringFilter<'BuildingOrg'> | string
     order?: Prisma.IntFilter<'BuildingOrg'> | number
     active?: Prisma.BoolFilter<'BuildingOrg'> | boolean
+    website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+    contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+    logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
   },
   'id'
 >
@@ -331,13 +331,13 @@ export type BuildingOrgOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  website?: Prisma.SortOrderInput | Prisma.SortOrder
-  contact?: Prisma.SortOrderInput | Prisma.SortOrder
   floor?: Prisma.SortOrder
   color?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  contact?: Prisma.SortOrderInput | Prisma.SortOrder
+  logo?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BuildingOrgCountOrderByAggregateInput
   _avg?: Prisma.BuildingOrgAvgOrderByAggregateInput
   _max?: Prisma.BuildingOrgMaxOrderByAggregateInput
@@ -359,13 +359,13 @@ export type BuildingOrgScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<'BuildingOrg'> | string
   category?: Prisma.StringWithAggregatesFilter<'BuildingOrg'> | string
   description?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
-  logo?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
-  website?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
-  contact?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
   floor?: Prisma.IntWithAggregatesFilter<'BuildingOrg'> | number
   color?: Prisma.StringWithAggregatesFilter<'BuildingOrg'> | string
   order?: Prisma.IntWithAggregatesFilter<'BuildingOrg'> | number
   active?: Prisma.BoolWithAggregatesFilter<'BuildingOrg'> | boolean
+  website?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
+  contact?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
+  logo?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
 }
 
 export type BuildingOrgCreateInput = {
@@ -375,13 +375,13 @@ export type BuildingOrgCreateInput = {
   name: string
   category: string
   description?: string | null
-  logo?: string | null
-  website?: string | null
-  contact?: string | null
   floor?: number
   color?: string
   order?: number
   active?: boolean
+  website?: string | null
+  contact?: string | null
+  logo?: string | null
 }
 
 export type BuildingOrgUncheckedCreateInput = {
@@ -391,13 +391,13 @@ export type BuildingOrgUncheckedCreateInput = {
   name: string
   category: string
   description?: string | null
-  logo?: string | null
-  website?: string | null
-  contact?: string | null
   floor?: number
   color?: string
   order?: number
   active?: boolean
+  website?: string | null
+  contact?: string | null
+  logo?: string | null
 }
 
 export type BuildingOrgUpdateInput = {
@@ -407,13 +407,13 @@ export type BuildingOrgUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floor?: Prisma.IntFieldUpdateOperationsInput | number
   color?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgUncheckedUpdateInput = {
@@ -423,13 +423,13 @@ export type BuildingOrgUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floor?: Prisma.IntFieldUpdateOperationsInput | number
   color?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgCreateManyInput = {
@@ -439,13 +439,13 @@ export type BuildingOrgCreateManyInput = {
   name: string
   category: string
   description?: string | null
-  logo?: string | null
-  website?: string | null
-  contact?: string | null
   floor?: number
   color?: string
   order?: number
   active?: boolean
+  website?: string | null
+  contact?: string | null
+  logo?: string | null
 }
 
 export type BuildingOrgUpdateManyMutationInput = {
@@ -455,13 +455,13 @@ export type BuildingOrgUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floor?: Prisma.IntFieldUpdateOperationsInput | number
   color?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgUncheckedUpdateManyInput = {
@@ -471,13 +471,13 @@ export type BuildingOrgUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   floor?: Prisma.IntFieldUpdateOperationsInput | number
   color?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgCountOrderByAggregateInput = {
@@ -487,13 +487,13 @@ export type BuildingOrgCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  website?: Prisma.SortOrder
-  contact?: Prisma.SortOrder
   floor?: Prisma.SortOrder
   color?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  contact?: Prisma.SortOrder
+  logo?: Prisma.SortOrder
 }
 
 export type BuildingOrgAvgOrderByAggregateInput = {
@@ -508,13 +508,13 @@ export type BuildingOrgMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  website?: Prisma.SortOrder
-  contact?: Prisma.SortOrder
   floor?: Prisma.SortOrder
   color?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  contact?: Prisma.SortOrder
+  logo?: Prisma.SortOrder
 }
 
 export type BuildingOrgMinOrderByAggregateInput = {
@@ -524,13 +524,13 @@ export type BuildingOrgMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   category?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  logo?: Prisma.SortOrder
-  website?: Prisma.SortOrder
-  contact?: Prisma.SortOrder
   floor?: Prisma.SortOrder
   color?: Prisma.SortOrder
   order?: Prisma.SortOrder
   active?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  contact?: Prisma.SortOrder
+  logo?: Prisma.SortOrder
 }
 
 export type BuildingOrgSumOrderByAggregateInput = {
@@ -548,13 +548,13 @@ export type BuildingOrgSelect<
     name?: boolean
     category?: boolean
     description?: boolean
-    logo?: boolean
-    website?: boolean
-    contact?: boolean
     floor?: boolean
     color?: boolean
     order?: boolean
     active?: boolean
+    website?: boolean
+    contact?: boolean
+    logo?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -569,13 +569,13 @@ export type BuildingOrgSelectCreateManyAndReturn<
     name?: boolean
     category?: boolean
     description?: boolean
-    logo?: boolean
-    website?: boolean
-    contact?: boolean
     floor?: boolean
     color?: boolean
     order?: boolean
     active?: boolean
+    website?: boolean
+    contact?: boolean
+    logo?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -590,13 +590,13 @@ export type BuildingOrgSelectUpdateManyAndReturn<
     name?: boolean
     category?: boolean
     description?: boolean
-    logo?: boolean
-    website?: boolean
-    contact?: boolean
     floor?: boolean
     color?: boolean
     order?: boolean
     active?: boolean
+    website?: boolean
+    contact?: boolean
+    logo?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -608,13 +608,13 @@ export type BuildingOrgSelectScalar = {
   name?: boolean
   category?: boolean
   description?: boolean
-  logo?: boolean
-  website?: boolean
-  contact?: boolean
   floor?: boolean
   color?: boolean
   order?: boolean
   active?: boolean
+  website?: boolean
+  contact?: boolean
+  logo?: boolean
 }
 
 export type BuildingOrgOmit<
@@ -626,13 +626,13 @@ export type BuildingOrgOmit<
   | 'name'
   | 'category'
   | 'description'
-  | 'logo'
-  | 'website'
-  | 'contact'
   | 'floor'
   | 'color'
   | 'order'
-  | 'active',
+  | 'active'
+  | 'website'
+  | 'contact'
+  | 'logo',
   ExtArgs['result']['buildingOrg']
 >
 
@@ -649,13 +649,13 @@ export type $BuildingOrgPayload<
       name: string
       category: string
       description: string | null
-      logo: string | null
-      website: string | null
-      contact: string | null
       floor: number
       color: string
       order: number
       active: boolean
+      website: string | null
+      contact: string | null
+      logo: string | null
     },
     ExtArgs['result']['buildingOrg']
   >
@@ -1231,13 +1231,13 @@ export interface BuildingOrgFieldRefs {
   readonly name: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly category: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly description: Prisma.FieldRef<'BuildingOrg', 'String'>
-  readonly logo: Prisma.FieldRef<'BuildingOrg', 'String'>
-  readonly website: Prisma.FieldRef<'BuildingOrg', 'String'>
-  readonly contact: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly floor: Prisma.FieldRef<'BuildingOrg', 'Int'>
   readonly color: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly order: Prisma.FieldRef<'BuildingOrg', 'Int'>
   readonly active: Prisma.FieldRef<'BuildingOrg', 'Boolean'>
+  readonly website: Prisma.FieldRef<'BuildingOrg', 'String'>
+  readonly contact: Prisma.FieldRef<'BuildingOrg', 'String'>
+  readonly logo: Prisma.FieldRef<'BuildingOrg', 'String'>
 }
 
 // Custom InputTypes

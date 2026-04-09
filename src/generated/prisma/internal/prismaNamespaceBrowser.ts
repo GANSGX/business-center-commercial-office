@@ -232,13 +232,13 @@ export const BuildingOrgScalarFieldEnum = {
   name: 'name',
   category: 'category',
   description: 'description',
-  logo: 'logo',
-  website: 'website',
-  contact: 'contact',
   floor: 'floor',
   color: 'color',
   order: 'order',
   active: 'active',
+  website: 'website',
+  contact: 'contact',
+  logo: 'logo',
 } as const
 
 export type BuildingOrgScalarFieldEnum =
