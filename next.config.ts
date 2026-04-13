@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // output: 'standalone' — for Docker only, not Vercel
+  output: 'standalone',
   serverExternalPackages: ['@prisma/adapter-pg', 'pg'],
   trailingSlash: false,
 
