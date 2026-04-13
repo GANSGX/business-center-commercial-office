@@ -59,6 +59,9 @@ export const ModelName = {
   Lead: 'Lead',
   SiteSettings: 'SiteSettings',
   User: 'User',
+  BuildingOrg: 'BuildingOrg',
+  TenantRequest: 'TenantRequest',
+  PageView: 'PageView',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -221,6 +224,53 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+export const BuildingOrgScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  floor: 'floor',
+  color: 'color',
+  order: 'order',
+  active: 'active',
+  website: 'website',
+  contact: 'contact',
+  logo: 'logo',
+} as const
+
+export type BuildingOrgScalarFieldEnum =
+  (typeof BuildingOrgScalarFieldEnum)[keyof typeof BuildingOrgScalarFieldEnum]
+
+export const TenantRequestScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  companyName: 'companyName',
+  category: 'category',
+  floor: 'floor',
+  description: 'description',
+  contactName: 'contactName',
+  phone: 'phone',
+  email: 'email',
+  status: 'status',
+} as const
+
+export type TenantRequestScalarFieldEnum =
+  (typeof TenantRequestScalarFieldEnum)[keyof typeof TenantRequestScalarFieldEnum]
+
+export const PageViewScalarFieldEnum = {
+  id: 'id',
+  path: 'path',
+  referrer: 'referrer',
+  device: 'device',
+  visitorId: 'visitorId',
+  createdAt: 'createdAt',
+} as const
+
+export type PageViewScalarFieldEnum =
+  (typeof PageViewScalarFieldEnum)[keyof typeof PageViewScalarFieldEnum]
 
 export const SortOrder = {
   asc: 'asc',

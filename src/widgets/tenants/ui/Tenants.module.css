@@ -1,10 +1,8 @@
-/* ===== Tenants — infinite marquee ticker ===== */
+/* ===== Tenants — grid layout ===== */
 
 .section {
   position: relative;
   width: 100%;
-  background: transparent;
-  /* padding-top: 0 — секция вплотную к Advantages как продолжение */
   padding: 0 0 96px;
 }
 
@@ -18,6 +16,34 @@
   gap: 12px;
   margin-bottom: 48px;
   padding: 0 24px;
+}
+
+.titleLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.titleLink:hover {
+  opacity: 0.75;
+}
+
+.titleArrow {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  transform: rotate(90deg);
+  transition:
+    transform var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.titleLink:hover .titleArrow {
+  transform: rotate(90deg) translateY(5px);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .label {
@@ -72,121 +98,102 @@
   max-width: 440px;
 }
 
-/* ─── Marquee area (overflow clipping zone) ──── */
+/* ─── Strip ──────────────────────────────────── */
 
-.marqueeArea {
+.stripWrapper {
   position: relative;
-  overflow: hidden;
 }
 
-/* ─── Marquee rows ───────────────────────────── */
-
-.marqueeWrap {
-  overflow: hidden;
-  margin-bottom: 14px;
+.strip {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  scrollbar-width: none;
 }
 
-.marqueeWrap:last-of-type {
-  margin-bottom: 0;
+.strip::-webkit-scrollbar {
+  display: none;
 }
 
-/* gap заменён на margin-right на .logo,
-   чтобы translateX(-50%) делил трек ровно пополам */
-.marqueeTrack {
+.stripInner {
   display: flex;
-  gap: 0;
+  gap: 12px;
   width: max-content;
-  will-change: transform;
+  min-width: 100%;
+  justify-content: center;
+  padding: 4px 32px 16px;
+  box-sizing: border-box;
 }
 
-/* Row 1 — scrolls left */
-.trackLeft {
-  animation: marqueeLeft 40s linear infinite;
+.fadeLeft,
+.fadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 16px;
+  width: 48px;
+  pointer-events: none;
+  z-index: 2;
 }
 
-/* Row 2 — scrolls right */
-.trackRight {
-  animation: marqueeRight 38s linear infinite;
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(to right, rgba(30, 27, 46, 0.9) 0%, transparent 100%);
 }
 
-@keyframes marqueeLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    /* -33.333% = одна копия из трёх, бесшовный цикл на любом экране */
-    transform: translateX(-33.333%);
-  }
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, rgba(30, 27, 46, 0.9) 0%, transparent 100%);
 }
 
-@keyframes marqueeRight {
-  from {
-    transform: translateX(-33.333%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
+/* ─── Card (pill) ────────────────────────────── */
 
-/* ─── Logo card (glass pill) ─────────────────── */
-
-.logo {
+.card {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
-  padding: 12px 20px 12px 12px;
+  gap: 10px;
+  padding: 10px 20px 10px 10px;
   border-radius: 100px;
   white-space: nowrap;
+  text-decoration: none;
   flex-shrink: 0;
-  cursor: default;
-  /* Spacing between cards — margin-right гарантирует ровный -50% */
-  margin-right: 14px;
 
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.09);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
+  scroll-snap-align: none;
   transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
+    background var(--transition-fast),
+    border-color var(--transition-fast),
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.logo:hover {
+.card:hover {
   background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.16);
-  transform: scale(1.04);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
 }
 
-/* Logo badge — содержит SVG-иконку компании */
-.logoMark {
+.cardIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
-.logoMark svg {
-  width: 22px;
-  height: 22px;
-  display: block;
-}
-
-/* Favicon от Google API — сброс фона, масштаб */
-.faviconImg {
-  width: 24px;
-  height: 24px;
+.cardLogoImg {
+  width: 36px;
+  height: 36px;
   object-fit: contain;
-  border-radius: 4px;
+  border-radius: 6px;
   display: block;
 }
 
-/* Company name */
-.logoName {
+.cardName {
   font-size: var(--text-sm);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.78);
@@ -195,7 +202,7 @@
 
 /* ─── Color variants ─────────────────────────── */
 
-.color_blue .logoMark {
+.color_blue .cardIcon {
   background: rgba(59, 130, 246, 0.18);
   border: 1px solid rgba(59, 130, 246, 0.32);
   color: rgba(147, 197, 253, 0.95);
@@ -204,7 +211,7 @@
   border-color: rgba(59, 130, 246, 0.14);
 }
 
-.color_green .logoMark {
+.color_green .cardIcon {
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.3);
   color: rgba(110, 231, 183, 0.95);
@@ -213,7 +220,7 @@
   border-color: rgba(16, 185, 129, 0.12);
 }
 
-.color_amber .logoMark {
+.color_amber .cardIcon {
   background: rgba(245, 158, 11, 0.16);
   border: 1px solid rgba(245, 158, 11, 0.32);
   color: rgba(252, 196, 99, 0.95);
@@ -222,7 +229,7 @@
   border-color: rgba(245, 158, 11, 0.12);
 }
 
-.color_teal .logoMark {
+.color_teal .cardIcon {
   background: rgba(20, 184, 166, 0.16);
   border: 1px solid rgba(20, 184, 166, 0.3);
   color: rgba(94, 234, 212, 0.95);
@@ -231,7 +238,7 @@
   border-color: rgba(20, 184, 166, 0.12);
 }
 
-.color_purple .logoMark {
+.color_purple .cardIcon {
   background: rgba(139, 92, 246, 0.16);
   border: 1px solid rgba(139, 92, 246, 0.3);
   color: rgba(196, 181, 253, 0.95);
@@ -240,7 +247,7 @@
   border-color: rgba(139, 92, 246, 0.12);
 }
 
-.color_red .logoMark {
+.color_red .cardIcon {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.28);
   color: rgba(252, 165, 165, 0.95);
@@ -249,7 +256,7 @@
   border-color: rgba(239, 68, 68, 0.1);
 }
 
-.color_indigo .logoMark {
+.color_indigo .cardIcon {
   background: rgba(99, 102, 241, 0.16);
   border: 1px solid rgba(99, 102, 241, 0.3);
   color: rgba(165, 180, 252, 0.95);
@@ -258,35 +265,13 @@
   border-color: rgba(99, 102, 241, 0.12);
 }
 
-.color_orange .logoMark {
+.color_orange .cardIcon {
   background: rgba(251, 146, 60, 0.15);
   border: 1px solid rgba(251, 146, 60, 0.3);
   color: rgba(253, 186, 116, 0.95);
 }
 .color_orange {
   border-color: rgba(251, 146, 60, 0.12);
-}
-
-/* ─── Edge fade masks (только над marqueeArea) ── */
-
-.fadeLeft,
-.fadeRight {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.fadeLeft {
-  left: 0;
-  background: linear-gradient(to right, rgba(8, 6, 22, 0.85) 0%, transparent 100%);
-}
-
-.fadeRight {
-  right: 0;
-  background: linear-gradient(to left, rgba(8, 6, 22, 0.85) 0%, transparent 100%);
 }
 
 /* ─── Responsive ─────────────────────────────── */
@@ -301,23 +286,18 @@
     margin-bottom: 36px;
   }
 
-  .logo {
-    padding: 10px 16px 10px 10px;
+  .stripInner {
+    padding: 4px 16px 14px;
+    gap: 10px;
   }
 
-  .logoMark {
+  .card {
+    padding: 8px 16px 8px 8px;
+  }
+
+  .cardIcon {
     width: 30px;
     height: 30px;
-  }
-
-  .logoMark svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .fadeLeft,
-  .fadeRight {
-    width: 72px;
   }
 }
 
@@ -331,21 +311,37 @@
   }
 }
 
-@media (max-width: 375px) {
-  .section {
-    padding: 8px 0 44px;
-  }
+/* ─── Placement hint ─────────────────────── */
 
-  .head {
-    padding: 0 8px;
-  }
+.placementHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0 24px;
+  flex-wrap: wrap;
+}
 
-  .logo {
-    padding: 8px 12px 8px 8px;
-    gap: 7px;
-  }
+.placementHintText {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.32);
+}
 
-  .logoName {
-    font-size: 11px;
-  }
+.placementHintLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: rgba(245, 185, 80, 0.7);
+  text-decoration: none;
+  transition:
+    color var(--transition-fast),
+    gap var(--transition-fast);
+}
+
+.placementHintLink:hover {
+  color: rgba(252, 200, 100, 1);
+  gap: 8px;
 }

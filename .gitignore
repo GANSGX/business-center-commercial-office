@@ -45,4 +45,7 @@ docker/certs/
 *.tsbuildinfo
 next-env.d.ts
 
+# Загруженные файлы — переносить вместе с дампом БД
+/public/uploads/
+
 # src/generated/prisma is tracked (needed for TypeScript types)

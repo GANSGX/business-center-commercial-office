@@ -1,0 +1,465 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+.breadcrumbLink {
+  color: var(--admin-accent);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.breadcrumbLink:hover {
+  opacity: 0.8;
+}
+
+.breadcrumbSep {
+  color: var(--admin-border);
+}
+
+.headerActions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancelBtn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: none;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.cancelBtn:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.saveBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+/* ── Layout ── */
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 20px;
+  align-items: start;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 20px;
+}
+
+/* ── Section ── */
+
+.section {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.sectionTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+/* ── Form ── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldHint {
+  font-size: 0.72rem;
+  color: var(--admin-text-muted);
+  margin-top: -2px;
+}
+
+.fieldInput,
+.fieldSelect {
+  padding: 10px 14px;
+  background: var(--admin-bg);
+  border: 1.5px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  width: 100%;
+  line-height: 1.4;
+}
+
+.fieldInput::placeholder {
+  color: var(--admin-text-muted);
+  opacity: 0.7;
+}
+
+.fieldInput:focus,
+.fieldSelect:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px rgba(139, 85, 35, 0.15);
+}
+
+.fieldInput:hover:not(:focus),
+.fieldSelect:hover:not(:focus) {
+  border-color: color-mix(in srgb, var(--admin-border) 60%, var(--admin-accent));
+}
+
+.fieldSelect {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.fieldLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  letter-spacing: 0.01em;
+}
+
+/* ── Checkboxes ── */
+
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkboxField input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkboxBox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--admin-border);
+  background: var(--admin-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+  color: #fff;
+}
+
+.checkboxField input:checked ~ .checkboxBox {
+  background: var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+
+.checkboxLabel {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+/* ── Editor placeholder ── */
+
+.editorPlaceholder {
+  border: 1px dashed var(--admin-border);
+  border-radius: 10px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--admin-text-muted);
+  font-size: 0.8rem;
+}
+
+/* ── Photos ── */
+
+.photoDropzone {
+  border: 1.5px dashed var(--admin-border);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--admin-text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+  margin-bottom: 14px;
+}
+
+.photoDropzone:hover {
+  border-color: var(--admin-accent);
+  background: var(--admin-accent-light);
+  color: var(--admin-text-secondary);
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.photoItem {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--admin-bg);
+}
+
+.photoItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mainBadge {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.photoDeleteBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.85);
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.photoItem:hover .photoDeleteBtn {
+  opacity: 1;
+}
+
+.photoItemMain {
+  outline: 2px solid #8b5523;
+  outline-offset: -2px;
+}
+
+.photoSetMainBtn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.photoSetMainBtn:hover {
+  color: #f59e0b;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.photoItem:hover .photoSetMainBtn {
+  opacity: 1;
+}
+
+/* ── State banners ── */
+
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+.errorBanner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+}
+
+.infoBanner {
+  background: rgba(139, 85, 35, 0.1);
+  border: 1px solid rgba(139, 85, 35, 0.25);
+  color: var(--admin-accent);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+}
+
+.photoHint {
+  color: var(--admin-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Toast ── */
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--admin-success);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: slideInToast 0.25s ease;
+  z-index: 999;
+}
+
+@keyframes slideInToast {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Adaptive ── */
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .aside {
+    position: static;
+  }
+
+  .photoGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+
+  .checkboxGrid {
+    grid-template-columns: 1fr;
+  }
+}

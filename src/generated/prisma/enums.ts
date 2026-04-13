@@ -18,7 +18,17 @@ export type RoomStatus = (typeof RoomStatus)[keyof typeof RoomStatus]
 
 export const LeadStatus = {
   NEW: 'NEW',
+  IN_PROGRESS: 'IN_PROGRESS',
   PROCESSED: 'PROCESSED',
 } as const
 
 export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
+
+export const TenantRequestStatus = {
+  NEW: 'NEW',
+  PROCESSED: 'PROCESSED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+} as const
+
+export type TenantRequestStatus = (typeof TenantRequestStatus)[keyof typeof TenantRequestStatus]

@@ -1,4 +1,10 @@
-// TODO Sprint 3 [S3-D1-04, S3-D1-05]: Форма помещения — все поля, Tiptap, фото upload+dnd
-export default function AdminRoomEditPage() {
-  return null
+import { RoomEditPage } from './_page/RoomEditPage'
+
+interface Props {
+  params: Promise<{ adminSlug: string; id: string }>
+}
+
+export default async function Page({ params }: Props) {
+  const { id } = await params
+  return <RoomEditPage roomId={id} />
 }

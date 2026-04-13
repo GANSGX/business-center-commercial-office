@@ -1,5 +1,6 @@
 import { OfficesHero } from './OfficesHero'
 import { OfficesContent } from './OfficesContent'
+import { OfficesCtaButton } from './OfficesCtaButton'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import type { Room } from '@/entities/room'
@@ -69,9 +70,7 @@ export function OfficesPage({ allRooms, initialStatus, initialSort, initialType 
                 Оставьте заявку — подберём офис под ваши требования и бюджет
               </p>
             </div>
-            <a href="#contact" className={styles.ctaBtn}>
-              Оставить заявку
-            </a>
+            <OfficesCtaButton />
           </div>
         </div>
 

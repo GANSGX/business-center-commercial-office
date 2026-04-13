@@ -1,0 +1,72 @@
+.wrap {
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--admin-surface);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--admin-border);
+  background: var(--admin-bg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--admin-text);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn:hover {
+  background: var(--admin-border);
+}
+
+.active {
+  background: var(--admin-accent);
+  color: #fff;
+}
+
+.sep {
+  width: 1px;
+  height: 18px;
+  background: var(--admin-border);
+  margin: 0 4px;
+}
+
+.editorContent {
+  padding: 12px;
+  min-height: 140px;
+  outline: none;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--admin-text);
+}
+
+.editorContent p {
+  margin: 0 0 0.5em;
+}
+.editorContent ul,
+.editorContent ol {
+  padding-left: 1.5em;
+  margin: 0 0 0.5em;
+}
+.editorContent li {
+  margin: 0.2em 0;
+}
+.editorContent strong {
+  font-weight: 600;
+}

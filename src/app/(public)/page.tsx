@@ -32,7 +32,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'Бизнес-центр «Коммунистическая-35»',
   url: BASE_URL,
-  logo: `${BASE_URL}/images/logo.png`,
+  logo: `${BASE_URL}/images/logo_new.svg`,
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'ул. Коммунистическая, 35',

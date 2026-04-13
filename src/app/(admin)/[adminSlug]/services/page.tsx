@@ -1,4 +1,5 @@
-// TODO Sprint 3 [S3-D1-08]: Список услуг + drag & drop сортировка
-export default function AdminServicesPage() {
-  return null
+import { ServicesAdminPage } from './_page/ServicesAdminPage'
+
+export default function Page() {
+  return <ServicesAdminPage />
 }

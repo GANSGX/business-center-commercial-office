@@ -61,32 +61,11 @@
   width: fit-content;
 }
 
-.logoMark {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.logoImg {
+  height: 70px;
+  width: auto;
+  display: block;
   flex-shrink: 0;
-  box-shadow:
-    0 2px 8px rgba(139, 85, 35, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition: box-shadow var(--transition-fast);
-}
-
-.logo:hover .logoMark {
-  box-shadow:
-    0 4px 14px rgba(139, 85, 35, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
-}
-
-.logoMark span {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
 }
 
 .logoText {
@@ -96,17 +75,19 @@
 }
 
 .logoTitle {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
   letter-spacing: -0.2px;
 }
 
 .logoSub {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
   font-weight: 400;
-  margin-top: 1px;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .tagline {

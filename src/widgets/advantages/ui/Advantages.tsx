@@ -21,11 +21,11 @@ const ADVANTAGES = [
     id: 'access',
     wide: true,
     accentClass: 'accentBlue',
-    stat: '24/7',
-    tag: 'Круглосуточно',
+    stat: 'Удобное время работы',
+    tag: 'Время работы',
     Icon: IconClock,
-    title: 'Круглосуточный доступ',
-    text: 'Работайте в удобное время без ограничений',
+    title: '',
+    text: 'Приходите и уходите когда удобно — без строгих ограничений и лишних согласований',
   },
   {
     id: 'metro',
@@ -52,7 +52,7 @@ const ADVANTAGES = [
     id: 'flexible',
     wide: true,
     accentClass: 'accentTeal',
-    stat: 'от 15 м²',
+    stat: 'от 10 м²',
     tag: 'Аренда',
     Icon: IconBriefcase,
     title: 'Гибкие условия',
@@ -87,7 +87,7 @@ const ADVANTAGES = [
     tag: 'Рядом',
     Icon: IconHome,
     title: 'Инфраструктура',
-    text: 'В здании: кафе «Бузовар», бары «Пинобар» и «Hait». Банки и магазины рядом',
+    text: 'Кафе, банки, магазины — всё необходимое в здании и рядом',
   },
   {
     id: 'internet',
@@ -138,14 +138,19 @@ export function Advantages() {
 
               {/* Большое stat-число */}
               {item.stat && (
-                <p className={styles.statNumber} aria-hidden="true">
+                <p
+                  className={[styles.statNumber, item.stat.length > 10 ? styles.statNumberLong : '']
+                    .filter(Boolean)
+                    .join(' ')}
+                  aria-hidden="true"
+                >
                   {item.stat}
                 </p>
               )}
 
               {/* Текст */}
               <div className={styles.cardBottom}>
-                <strong className={styles.cardTitle}>{item.title}</strong>
+                {item.title && <strong className={styles.cardTitle}>{item.title}</strong>}
                 <p className={styles.cardText}>{item.text}</p>
               </div>
             </li>

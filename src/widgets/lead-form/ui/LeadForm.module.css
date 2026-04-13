@@ -20,6 +20,7 @@
   position: relative;
   width: 100%;
   padding: 80px 0 120px;
+  overflow: hidden;
 }
 
 /* Синий ambient glow — отличает от amber-glow в Tenants */

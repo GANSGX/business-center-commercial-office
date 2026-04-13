@@ -34,7 +34,7 @@ const MOCK_SLIDES: HeroSlide[] = [
       'Современные офисы, переговорные комнаты и открытые пространства — всё для комфортной работы вашей команды.',
     primaryCta: { text: 'Свободные офисы', href: '/offices' },
     secondaryCta: { text: 'Подобрать офис', href: '/offices#filter' },
-    image: '/images/hero-1.png',
+    image: '/images/fix_bgc_slider.jpg',
   },
   {
     id: '2',
@@ -50,7 +50,7 @@ const MOCK_SLIDES: HeroSlide[] = [
       {
         icon: 'transport',
         title: 'Транспортная доступность',
-        text: 'Городской транспорт курсирует по всем направлениям, есть парковка',
+        text: 'Городской транспорт курсирует по всем направлениям, есть парковка во дворе',
       },
       {
         icon: 'culture',
@@ -169,6 +169,7 @@ export function HeroSlider() {
                 priority={index === 0}
                 fetchPriority={index === 0 ? 'high' : 'low'}
                 sizes="100vw"
+                className={slide.type === 'welcome' ? styles.bgImg : undefined}
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
               <div className={styles.overlay} />
@@ -211,7 +212,7 @@ export function HeroSlider() {
                   <span className={styles.pillIcon}>
                     <IconBuilding />
                   </span>
-                  <span>от 20 до 263 м²</span>
+                  <span>от 10 м²</span>
                 </div>
                 <div className={`${styles.floatingPill} ${styles.floatingPill3} ${styles.pillRed}`}>
                   <span className={styles.pillIcon}>

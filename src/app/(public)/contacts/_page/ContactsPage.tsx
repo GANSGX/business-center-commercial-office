@@ -2,20 +2,34 @@ import { ContactsHero } from './ContactsHero'
 import { LeadForm } from '@/widgets/lead-form'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
+import { getSiteSettings, toTelHref } from '@/shared/lib/getSiteSettings'
 import styles from './ContactsPage.module.css'
 
 const BASE_URL = process.env.NEXTAUTH_URL ?? 'https://kommunisticheskaya35.ru'
 
-function buildLocalBusinessSchema() {
-  return {
+export async function ContactsPage() {
+  const s = await getSiteSettings()
+
+  const phone1 = s['phone1']
+  const phone2 = s['phone2']
+  const email = s['email']
+  const address = s['address']
+  const workHours = s['workHours']
+  const workHoursAdmin = s['workHoursAdmin']
+
+  const breadcrumbJsonLd = buildBreadcrumbList([
+    { name: 'Главная', url: `${BASE_URL}/` },
+    { name: 'Контакты', url: `${BASE_URL}/contacts` },
+  ])
+
+  const localBusinessJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: 'АО «Коммунистическая-35»',
     legalName: 'Акционерное общество «Коммунистическая-35»',
     url: BASE_URL,
-    telephone: '+73833223450',
-    faxNumber: '+73832177224',
-    email: 'kommunist35@mail.ru',
+    telephone: toTelHref(phone1).replace('tel:', ''),
+    email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'ул. Коммунистическая, 35',
@@ -23,20 +37,7 @@ function buildLocalBusinessSchema() {
       postalCode: '630007',
       addressCountry: 'RU',
     },
-    openingHoursSpecification: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '18:00',
-    },
   }
-}
-
-export function ContactsPage() {
-  const breadcrumbJsonLd = buildBreadcrumbList([
-    { name: 'Главная', url: `${BASE_URL}/` },
-    { name: 'Контакты', url: `${BASE_URL}/contacts` },
-  ])
 
   return (
     <div className={styles.page}>
@@ -46,7 +47,7 @@ export function ContactsPage() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildLocalBusinessSchema()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
       />
 
       <ContactsHero />
@@ -62,9 +63,8 @@ export function ContactsPage() {
               Свяжитесь с нами
             </h2>
 
-            {/* Четыре карточки */}
             <div className={styles.contactsGrid}>
-              <a href="tel:+73832234350" className={styles.contactCard}>
+              <a href={toTelHref(phone1)} className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -81,11 +81,11 @@ export function ContactsPage() {
                 </span>
                 <div>
                   <p className={styles.contactLabel}>Приёмная</p>
-                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;223-43-50</span>
+                  <span className={styles.contactValue}>{phone1}</span>
                 </div>
               </a>
 
-              <a href="tel:+73832178007" className={styles.contactCard}>
+              <a href={toTelHref(phone2)} className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -102,11 +102,11 @@ export function ContactsPage() {
                 </span>
                 <div>
                   <p className={styles.contactLabel}>Отдел аренды</p>
-                  <span className={styles.contactValue}>+7&nbsp;(383)&nbsp;217-80-07</span>
+                  <span className={styles.contactValue}>{phone2}</span>
                 </div>
               </a>
 
-              <a href="mailto:kommunist35@mail.ru" className={styles.contactCard}>
+              <a href={`mailto:${email}`} className={styles.contactCard}>
                 <span className={styles.contactIconWrap} aria-hidden="true">
                   <svg
                     width="22"
@@ -124,7 +124,7 @@ export function ContactsPage() {
                 </span>
                 <div>
                   <p className={styles.contactLabel}>E-mail</p>
-                  <span className={styles.contactValue}>kommunist35@mail.ru</span>
+                  <span className={styles.contactValue}>{email}</span>
                 </div>
               </a>
 
@@ -146,11 +146,7 @@ export function ContactsPage() {
                 </span>
                 <div>
                   <p className={styles.contactLabel}>Адрес</p>
-                  <span className={styles.contactValue}>
-                    630007, г.&nbsp;Новосибирск,
-                    <br />
-                    ул.&nbsp;Коммунистическая,&nbsp;35
-                  </span>
+                  <span className={styles.contactValue}>{address}</span>
                 </div>
               </div>
             </div>
@@ -174,25 +170,24 @@ export function ContactsPage() {
               </span>
               <div className={styles.hoursBody}>
                 <p className={styles.hoursTitle}>Режим работы</p>
-                <div className={styles.hoursRow}>
-                  <div className={styles.hoursItem}>
-                    <span className={styles.hoursDay}>Пн — Пт</span>
-                    <span className={styles.hoursTime}>9:00 — 18:00</span>
-                  </div>
-                  <span className={styles.hoursDivider} aria-hidden="true" />
-                  <div className={styles.hoursItem}>
-                    <span className={styles.hoursDay}>Сб — Вс</span>
-                    <span className={`${styles.hoursTime} ${styles.hoursOff}`}>выходной</span>
-                  </div>
-                </div>
+                {workHours && (
+                  <p className={styles.hoursTime}>
+                    <span className={styles.hoursLabel}>БЦ:&nbsp;</span>
+                    {workHours}
+                  </p>
+                )}
+                {workHoursAdmin && (
+                  <p className={styles.hoursTime}>
+                    <span className={styles.hoursLabel}>Администрация:&nbsp;</span>
+                    {workHoursAdmin}
+                  </p>
+                )}
               </div>
             </div>
           </section>
         </div>
 
-        {/* LeadForm — полная версия, на уровне panel (не внутри panelInner) */}
         <LeadForm />
-
         <Footer />
       </div>
     </div>

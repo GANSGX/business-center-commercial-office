@@ -1,5 +1,7 @@
-import { PrismaClient, RoomStatus } from '../src/generated/prisma/client'
+import 'dotenv/config'
+import { PrismaClient } from '../src/generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
+import bcrypt from 'bcryptjs'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
@@ -175,163 +177,134 @@ async function main() {
     ],
   })
 
-  // Rooms
-  const roomsData = [
-    {
-      slug: 'ofis-101',
-      title: 'Офис 101',
-      roomNumber: '101',
-      area: 35,
-      floor: 1,
-      priceMonth: 52500,
-      priceM2: 1500,
-      status: RoomStatus.FREE,
-      showOnHome: true,
-      windows: true,
-      internet: 'Оптоволокно 1 Гбит/с',
-    },
-    {
-      slug: 'ofis-201',
-      title: 'Офис 201',
-      roomNumber: '201',
-      area: 55,
-      floor: 2,
-      priceMonth: 77000,
-      priceM2: 1400,
-      status: RoomStatus.FREE,
-      showOnHome: true,
-      water: true,
-      wc: true,
-      windows: true,
-    },
-    {
-      slug: 'ofis-205',
-      title: 'Офис 205',
-      roomNumber: '205',
-      area: 80,
-      floor: 2,
-      priceMonth: 104000,
-      priceM2: 1300,
-      status: RoomStatus.RESERVED,
-      showOnHome: true,
-    },
-    {
-      slug: 'ofis-301',
-      title: 'Офис 301',
-      roomNumber: '301',
-      area: 120,
-      floor: 3,
-      priceMonth: 144000,
-      priceM2: 1200,
-      status: RoomStatus.FREE,
-      showOnHome: true,
-      water: true,
-      wc: true,
-    },
-    {
-      slug: 'ofis-302',
-      title: 'Офис 302',
-      roomNumber: '302',
-      area: 45,
-      floor: 3,
-      priceMonth: 63000,
-      priceM2: 1400,
-      status: RoomStatus.RENTED,
-      showOnHome: false,
-    },
-    {
-      slug: 'ofis-401',
-      title: 'Офис 401',
-      roomNumber: '401',
-      area: 200,
-      floor: 4,
-      priceMonth: 220000,
-      priceM2: 1100,
-      status: RoomStatus.FREE,
-      showOnHome: true,
-      water: true,
-      wc: true,
-      windows: true,
-    },
-  ]
-
-  for (const room of roomsData) {
-    await prisma.room.create({ data: room })
-  }
-
-  // Gallery
-  await prisma.galleryImage.createMany({
-    data: [
-      {
-        url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
-        caption: 'Холл бизнес-центра',
-        order: 0,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800',
-        caption: 'Офисное пространство',
-        order: 1,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
-        caption: 'Вид снаружи',
-        order: 2,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800',
-        caption: 'Переговорная комната',
-        order: 3,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800',
-        caption: 'Зона отдыха',
-        order: 4,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?w=800',
-        caption: 'Рабочие места',
-        order: 5,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=800',
-        caption: 'Парковка',
-        order: 6,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1577412647305-991150c7d163?w=800',
-        caption: 'Кафе',
-        order: 7,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1604328698692-f76ea9498e76?w=800',
-        caption: 'Лифтовый холл',
-        order: 8,
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=800',
-        caption: 'Панорамные окна',
-        order: 9,
-      },
-    ],
-  })
-
-  // Site settings
+  // Site settings (flat keys matching SettingsPage)
   await prisma.siteSettings.createMany({
     data: [
-      { key: 'phones', value: JSON.stringify(['+7 (495) 123-45-67', '+7 (495) 765-43-21']) },
-      { key: 'email', value: 'info@businesscenter.ru' },
-      { key: 'address', value: 'г. Москва, ул. Примерная, д. 1' },
-      { key: 'workHours', value: 'Пн–Пт: 9:00–18:00' },
-      {
-        key: 'socials',
-        value: JSON.stringify({ vk: 'https://vk.com/', telegram: 'https://t.me/' }),
-      },
+      { key: 'phone1', value: '+7 (383) 223-43-50' },
+      { key: 'phone2', value: '+7 (383) 217-80-07' },
+      { key: 'email', value: 'kommunist35@mail.ru' },
+      { key: 'address', value: '630007, г. Новосибирск, ул. Коммунистическая, 35' },
+      { key: 'workHours', value: 'Ежедневно: 08:00–20:00' },
+      { key: 'workHoursAdmin', value: 'Пн–Пт: 08:00–16:30' },
+      { key: 'socialVk', value: '' },
+      { key: 'socialTg', value: '' },
+      { key: 'socialWa', value: '' },
+      { key: 'socialAvito', value: '' },
       { key: 'mapProvider', value: 'yandex' },
-      { key: 'mapLat', value: '55.751244' },
-      { key: 'mapLng', value: '37.618423' },
-      { key: 'mapZoom', value: '15' },
+      { key: 'mapLat', value: '54.9965' },
+      { key: 'mapLng', value: '82.9167' },
+      { key: 'mapZoom', value: '16' },
     ],
   })
+
+  // Admin user — создаётся из ADMIN_EMAIL + ADMIN_PASSWORD в .env
+  // Building orgs — арендаторы бизнес-центра
+  await prisma.buildingOrg.createMany({
+    data: [
+      {
+        name: 'ТКБ Банк',
+        category: 'bank',
+        description:
+          'ТКБ Банк — российский банк с более чем 30-летней историей, входящий в топ-10 частных банков по активам. Широкий спектр услуг для частных лиц и бизнеса.',
+        website: 'https://www.tkbbank.ru',
+        floor: 2,
+        color: 'blue',
+        order: 0,
+        active: true,
+      },
+      {
+        name: 'СберПраво',
+        category: 'service',
+        description:
+          'Юридический сервис экосистемы Сбера: консультации, подготовка документов, судебное представительство. Банкротство физлиц, семейные и жилищные споры.',
+        website: 'https://sberpravo.ru',
+        floor: 3,
+        color: 'green',
+        order: 1,
+        active: true,
+      },
+      {
+        name: 'I Dolci',
+        category: 'food',
+        description:
+          'Сеть кафе-кондитерских с натуральными десертами ручной работы: бисквитные и муссовые торты, пирожные, чизкейки. Доставка, мастер-классы, кейтеринг.',
+        website: 'https://idolci.ru',
+        floor: 1,
+        color: 'amber',
+        order: 2,
+        active: true,
+      },
+      {
+        name: 'Русский Фейерверк',
+        category: 'retail',
+        description:
+          'Сеть магазинов пиротехники, представленная в десятках городов России. Безопасная продукция, система скидок до 40% по карте лояльности.',
+        website: 'https://rusfireworks.ru',
+        floor: 1,
+        color: 'red',
+        order: 3,
+        active: true,
+      },
+      {
+        name: 'Angiopharm',
+        category: 'other',
+        description:
+          'Лаборатория-производитель профессиональной уходовой косметики. Собственная разработка — рекомбинантный ангиогенин. Производство в наукограде Кольцово.',
+        website: 'https://angiopharm.com',
+        floor: 4,
+        color: 'purple',
+        order: 4,
+        active: true,
+      },
+      {
+        name: 'НРК-Р.О.С.Т.',
+        category: 'service',
+        description:
+          'Лидер регистраторской отрасли России. Ведение реестров акционеров, специализированный депозитарий, корпоративный консалтинг, цифровые сервисы для эмитентов.',
+        website: 'https://rrost.ru',
+        floor: 5,
+        color: 'indigo',
+        order: 5,
+        active: true,
+      },
+      {
+        name: 'ИНПЭС',
+        category: 'other',
+        description:
+          'Проектная компания, специализирующаяся на комплексном проектировании объектов электросетевой инфраструктуры. Опыт в 40 регионах России.',
+        website: 'https://inpes.ru',
+        floor: 6,
+        color: 'teal',
+        order: 6,
+        active: true,
+      },
+      {
+        name: 'Имплант Сибири',
+        category: 'other',
+        description:
+          'Стоматологическая клиника с более чем 20-летним опытом. Имплантация, протезирование, пародонтология. Безболезненное лечение с использованием передовых технологий.',
+        website: 'https://implantsibir.ru',
+        floor: 2,
+        color: 'orange',
+        order: 7,
+        active: true,
+      },
+    ],
+  })
+
+  const adminEmail = process.env.ADMIN_EMAIL
+  const adminPassword = process.env.ADMIN_PASSWORD
+  if (adminEmail && adminPassword) {
+    const passwordHash = await bcrypt.hash(adminPassword, 12)
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: { passwordHash },
+      create: { email: adminEmail, passwordHash },
+    })
+    console.log(`Admin created: ${adminEmail}`)
+  } else {
+    console.warn('ADMIN_EMAIL / ADMIN_PASSWORD not set — admin user skipped')
+  }
 
   console.log('Seeding complete!')
 }

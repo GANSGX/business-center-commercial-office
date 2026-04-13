@@ -1,0 +1,588 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.addBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+/* ── Form card ── */
+
+.formCard {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.formTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.formCloseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  background: transparent;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.formCloseBtn:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.input,
+.textarea {
+  padding: 9px 12px;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--admin-accent);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+/* ── Category buttons ── */
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.categoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg);
+  color: var(--admin-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.categoryBtn:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.categoryBtnActive {
+  background: var(--admin-accent-light);
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+}
+
+.categoryBtnIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.categoryBtnLabel {
+  white-space: nowrap;
+}
+
+/* ── Color picker ── */
+
+.colorGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.colorDotBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.colorDotBtn:hover {
+  transform: scale(1.18);
+}
+
+.colorDotBtnActive {
+  box-shadow:
+    0 0 0 3px var(--admin-bg),
+    0 0 0 5px currentColor;
+}
+
+/* ── Checkbox ── */
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--admin-text);
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--admin-accent);
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 4px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.cancelBtn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.cancelBtn:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.saveBtn {
+  padding: 9px 22px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: var(--admin-accent-hover);
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Loading / empty ── */
+
+.loadingText {
+  padding: 2rem;
+  text-align: center;
+  color: var(--admin-text-secondary);
+}
+
+.emptyState {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--admin-text-secondary);
+  border: 2px dashed var(--admin-border);
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+/* ── List ── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.row:hover {
+  background: var(--admin-surface-hover);
+}
+
+.rowInactive {
+  opacity: 0.5;
+}
+
+.rowMain {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Category icon in list row */
+.rowCatIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.catIcon_food {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+.catIcon_service {
+  background: rgba(99, 102, 241, 0.12);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+.catIcon_retail {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.catIcon_bank {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+.catIcon_other {
+  background: rgba(107, 114, 128, 0.12);
+  color: #6b7280;
+  border: 1px solid rgba(107, 114, 128, 0.25);
+}
+
+.colorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.rowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rowName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--admin-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rowMeta {
+  font-size: 0.78rem;
+  color: var(--admin-text-secondary);
+}
+
+.rowWebsiteLink {
+  color: var(--admin-accent);
+  text-decoration: none;
+}
+
+.rowWebsiteLink:hover {
+  text-decoration: underline;
+}
+
+.rowDesc {
+  font-size: 0.78rem;
+  color: var(--admin-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.toggleBtn {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.toggleActive {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.toggleActive:hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.toggleInactive {
+  background: rgba(107, 114, 128, 0.1);
+  border-color: rgba(107, 114, 128, 0.25);
+  color: var(--admin-text-muted);
+}
+
+.toggleInactive:hover {
+  background: rgba(107, 114, 128, 0.18);
+}
+
+.editBtn,
+.deleteBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border);
+  background: transparent;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.editBtn:hover {
+  background: var(--admin-accent-light);
+  color: var(--admin-accent);
+  border-color: var(--admin-accent);
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Color dot styles (used in picker and list) */
+.dot_amber {
+  background: #f59e0b;
+}
+.dot_blue {
+  background: #3b82f6;
+}
+.dot_green {
+  background: #10b981;
+}
+.dot_purple {
+  background: #8b5cf6;
+}
+.dot_red {
+  background: #ef4444;
+}
+.dot_teal {
+  background: #14b8a6;
+}
+.dot_indigo {
+  background: #6366f1;
+}
+.dot_orange {
+  background: #fb923c;
+}
+
+/* ─── Logo upload ─────────────────────────────── */
+.logoUploadRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.logoPreview {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.logoPreviewImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.logoRemoveBtn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  line-height: 1;
+}
+
+.logoUploadBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.logoUploadBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.logoUploadBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

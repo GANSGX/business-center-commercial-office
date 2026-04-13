@@ -2,71 +2,22 @@
 
 import Link from 'next/link'
 import { useLeadModal } from '@/features/lead-submit'
+import { useState, useEffect } from 'react'
 import styles from './OffersPreview.module.css'
 
-// TODO Sprint 1 S1-D2-01: заменить на данные из /api/rooms
-const MOCK_OFFICES = [
-  {
-    id: '1',
-    slug: 'office-400b-1',
-    number: '400б/1',
-    area: 36.0,
-    floor: 4,
-    layout: 'Открытая',
-    hasWater: false,
-    price: 25000,
-  },
-  {
-    id: '2',
-    slug: 'office-301-2',
-    number: '301/2',
-    area: 24.5,
-    floor: 3,
-    layout: 'Кабинетная',
-    hasWater: true,
-    price: 18000,
-  },
-  {
-    id: '3',
-    slug: 'office-502-a',
-    number: '502/А',
-    area: 48.0,
-    floor: 5,
-    layout: 'Открытая',
-    hasWater: false,
-    price: 34000,
-  },
-  {
-    id: '4',
-    slug: 'office-210-1',
-    number: '210/1',
-    area: 18.0,
-    floor: 2,
-    layout: 'Кабинетная',
-    hasWater: true,
-    price: 13500,
-  },
-  {
-    id: '5',
-    slug: 'office-601-3',
-    number: '601/3',
-    area: 72.0,
-    floor: 6,
-    layout: 'Открытая',
-    hasWater: true,
-    price: 52000,
-  },
-  {
-    id: '6',
-    slug: 'office-105-b',
-    number: '105/Б',
-    area: 15.0,
-    floor: 1,
-    layout: 'Кабинетная',
-    hasWater: false,
-    price: 11000,
-  },
-]
+interface Office {
+  id: string
+  slug: string
+  roomNumber?: string | null
+  title: string
+  area: number
+  floor: number
+  layoutType?: string | null
+  water: boolean
+  priceMonth: number
+  status: string
+  photos: { url: string }[]
+}
 
 function formatPrice(price: number) {
   return price.toLocaleString('ru-RU') + '\u00a0₽/мес'
@@ -78,6 +29,23 @@ function formatArea(area: number) {
 
 export function OffersPreview() {
   const { open } = useLeadModal()
+  const [offices, setOffices] = useState<Office[] | null>(null)
+
+  useEffect(() => {
+    function load() {
+      fetch(`/api/rooms?showOnHome=true&status=FREE&limit=6&_t=${Date.now()}`, {
+        cache: 'no-store',
+      })
+        .then((r) => (r.ok ? r.json() : { rooms: [] }))
+        .then((data) => setOffices(data.rooms ?? []))
+    }
+    load()
+    function onVisible() {
+      if (!document.hidden) load()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
 
   return (
     <section className={styles.section} id="offers">
@@ -110,66 +78,78 @@ export function OffersPreview() {
         </div>
 
         {/* Сетка карточек */}
+        {offices === null && <div className={styles.emptyState}>Загрузка...</div>}
+        {offices !== null && offices.length === 0 && (
+          <div className={styles.emptyState}>Свободные помещения уточняйте по телефону</div>
+        )}
         <div className={styles.grid}>
-          {MOCK_OFFICES.map((office) => (
-            <article
-              key={office.id}
-              className={styles.card}
-              aria-label={`Офис ${office.number}, ${formatArea(office.area)}, ${office.floor} этаж`}
-            >
-              {/* Фото */}
-              <div className={styles.cardPhoto}>
-                <div className={styles.photoPlaceholder} aria-hidden="true" />
-                <span className={styles.statusBadge}>Свободен</span>
-                <span className={styles.floorBadge}>{office.floor} этаж</span>
-              </div>
-
-              {/* Тело карточки */}
-              <div className={styles.cardBody}>
-                <Link href={`/offices/${office.slug}`} className={styles.cardTitle}>
-                  Офис, {formatArea(office.area)}
-                </Link>
-
-                <dl className={styles.details}>
-                  <div className={styles.detailRow}>
-                    <dt className={styles.detailLabel}>Номер офиса</dt>
-                    <dd className={styles.detailValue}>{office.number}</dd>
-                  </div>
-                  <div className={styles.detailRow}>
-                    <dt className={styles.detailLabel}>Площадь</dt>
-                    <dd className={styles.detailValue}>{formatArea(office.area)}</dd>
-                  </div>
-                  <div className={styles.detailRow}>
-                    <dt className={styles.detailLabel}>Этаж</dt>
-                    <dd className={styles.detailValue}>{office.floor}</dd>
-                  </div>
-                  <div className={styles.detailRow}>
-                    <dt className={styles.detailLabel}>Планировка</dt>
-                    <dd className={styles.detailValue}>{office.layout}</dd>
-                  </div>
-                  <div className={styles.detailRow}>
-                    <dt className={styles.detailLabel}>Вода в офисе</dt>
-                    <dd className={styles.detailValue}>{office.hasWater ? 'Есть' : 'Нет'}</dd>
-                  </div>
-                </dl>
-
-                <div className={styles.cardFooter}>
-                  <div className={styles.priceWrap}>
-                    <span className={styles.priceLabel}>от</span>
-                    <span className={styles.price}>{formatPrice(office.price)}</span>
-                  </div>
-                  <button
-                    type="button"
-                    className={styles.ctaBtn}
-                    aria-label={`Оставить заявку на офис ${office.number}`}
-                    onClick={() => open(`Офис ${office.number}, ${formatArea(office.area)}`)}
-                  >
-                    Оставить заявку
-                  </button>
+          {(offices ?? []).map((office) => {
+            const num = office.roomNumber
+            const photo = office.photos?.[0]?.url ?? null
+            const label = `Офис${num ? ` ${num}` : ''}, ${formatArea(office.area)}`
+            return (
+              <article key={office.id} className={styles.card} aria-label={label}>
+                <div className={styles.cardPhoto}>
+                  {photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={photo} alt={label} className={styles.photoImg} loading="lazy" />
+                  ) : (
+                    <div className={styles.photoPlaceholder} aria-hidden="true" />
+                  )}
+                  <span className={styles.statusBadge}>Свободен</span>
+                  <span className={styles.floorBadge}>{office.floor} этаж</span>
                 </div>
-              </div>
-            </article>
-          ))}
+
+                <div className={styles.cardBody}>
+                  <Link href={`/offices/${office.slug}`} className={styles.cardTitle}>
+                    Офис, {formatArea(office.area)}
+                  </Link>
+
+                  <dl className={styles.details}>
+                    {num && (
+                      <div className={styles.detailRow}>
+                        <dt className={styles.detailLabel}>Номер офиса</dt>
+                        <dd className={styles.detailValue}>{num}</dd>
+                      </div>
+                    )}
+                    <div className={styles.detailRow}>
+                      <dt className={styles.detailLabel}>Площадь</dt>
+                      <dd className={styles.detailValue}>{formatArea(office.area)}</dd>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <dt className={styles.detailLabel}>Этаж</dt>
+                      <dd className={styles.detailValue}>{office.floor}</dd>
+                    </div>
+                    {office.layoutType && (
+                      <div className={styles.detailRow}>
+                        <dt className={styles.detailLabel}>Планировка</dt>
+                        <dd className={styles.detailValue}>{office.layoutType}</dd>
+                      </div>
+                    )}
+                    <div className={styles.detailRow}>
+                      <dt className={styles.detailLabel}>Вода в офисе</dt>
+                      <dd className={styles.detailValue}>{office.water ? 'Есть' : 'Нет'}</dd>
+                    </div>
+                  </dl>
+
+                  <div className={styles.cardFooter}>
+                    <div className={styles.priceWrap}>
+                      <span className={styles.priceLabel}>от</span>
+                      <span className={styles.price}>{formatPrice(office.priceMonth)}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.ctaBtn}
+                      aria-label={`Оставить заявку на ${label}`}
+                      onClick={() => open(label)}
+                    >
+                      Оставить заявку
+                    </button>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>

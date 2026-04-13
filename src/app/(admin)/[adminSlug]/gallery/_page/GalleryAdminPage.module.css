@@ -1,0 +1,192 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.uploadBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+/* ── Dropzone ── */
+
+.dropzone {
+  border: 2px dashed var(--admin-border);
+  border-radius: 12px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.dropzone:hover {
+  border-color: var(--admin-accent);
+  background: var(--admin-accent-light);
+  color: var(--admin-text-secondary);
+}
+
+.dropzoneText {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.dropzoneHint {
+  font-size: 0.78rem;
+  color: var(--admin-text-secondary);
+}
+
+/* ── Grid ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.photoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.photoThumb {
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: var(--admin-surface);
+}
+
+.photoThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-fast);
+}
+
+.photoCard:hover .photoThumb img {
+  transform: scale(1.03);
+}
+
+.photoOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.photoCard:hover .photoOverlay {
+  opacity: 1;
+}
+
+.deleteBtn,
+.dragHandle {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.8);
+  color: #fff;
+}
+
+.dragHandle {
+  cursor: grab;
+}
+
+.captionInput {
+  padding: 6px 10px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  color: var(--admin-text);
+  font-size: 0.78rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.captionInput::placeholder {
+  color: var(--admin-text-muted);
+}
+
+.captionInput:focus {
+  border-color: var(--admin-accent);
+}
+
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}

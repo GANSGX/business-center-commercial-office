@@ -1,0 +1,360 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Header ── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.addBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+/* ── Toolbar ── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--admin-text-muted);
+}
+
+.searchInput:focus {
+  border-color: var(--admin-accent);
+}
+
+.select {
+  padding: 9px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text-secondary);
+  font-size: 0.875rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.select:focus {
+  border-color: var(--admin-accent);
+}
+
+.count {
+  font-size: 0.8rem;
+  color: var(--admin-text-secondary);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ── Table ── */
+
+.tableWrap {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 700px;
+}
+
+.table th {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px 14px;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border-subtle);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background: var(--admin-surface-hover);
+}
+
+/* ── Room cell ── */
+
+.roomCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roomThumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--admin-surface-hover);
+}
+
+.roomThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.roomThumbEmpty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--admin-text-muted);
+}
+
+.roomInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.roomTitle {
+  font-weight: 600;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+}
+
+.roomNumber {
+  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+}
+
+.mutedCell {
+  color: var(--admin-text-muted) !important;
+  white-space: nowrap;
+}
+
+.priceCell {
+  color: var(--admin-text) !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Status inline-select ── */
+
+.statusSelect {
+  position: relative;
+  display: inline-block;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.statusBadge::after {
+  content: '▾';
+  margin-left: 5px;
+  font-size: 0.65rem;
+}
+
+.badgeFree {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+}
+.badgeReserved {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+.badgeRented {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+}
+
+.statusDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: #1a2236;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.statusOption {
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  color: var(--admin-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast);
+}
+
+.statusOption:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.statusOptionActive {
+  color: var(--admin-accent) !important;
+}
+
+/* ── Toggle ── */
+
+.toggle {
+  width: 38px;
+  height: 22px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: var(--admin-accent);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(16px);
+  background: #fff;
+}
+
+/* ── Actions ── */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.actionBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--admin-surface-hover);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--admin-text);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.actionBtnDanger:hover {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ── Empty ── */
+
+.emptyRow {
+  text-align: center;
+  color: var(--admin-text-muted) !important;
+  padding: 40px !important;
+  font-size: 0.875rem;
+}

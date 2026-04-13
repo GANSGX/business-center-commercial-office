@@ -7,17 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum RoomStatus {
-  FREE
-  RESERVED
-  RENTED
-}
-
-enum LeadStatus {
-  NEW
-  PROCESSED
-}
-
 model Room {
   id          String      @id @default(cuid())
   createdAt   DateTime    @default(now())
@@ -49,8 +38,8 @@ model RoomPhoto {
   id     String @id @default(cuid())
   url    String
   order  Int    @default(0)
-  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }
 
 model HeroSlide {
@@ -98,8 +87,8 @@ model ServiceOption {
   description String?
   price       String?
   order       Int     @default(0)
-  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId   String
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model GalleryImage {
@@ -135,4 +124,65 @@ model User {
   email        String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
+}
+
+model BuildingOrg {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  category    String
+  description String?
+  floor       Int      @default(1)
+  color       String   @default("blue")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  website     String?
+  contact     String?
+  logo        String?
+}
+
+model TenantRequest {
+  id          String              @id @default(cuid())
+  createdAt   DateTime            @default(now())
+  companyName String
+  category    String
+  floor       Int?
+  description String?
+  contactName String
+  phone       String
+  email       String?
+  status      TenantRequestStatus @default(NEW)
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String?
+  device    String?
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([visitorId])
+  @@index([path])
+}
+
+enum RoomStatus {
+  FREE
+  RESERVED
+  RENTED
+}
+
+enum LeadStatus {
+  NEW
+  IN_PROGRESS
+  PROCESSED
+}
+
+enum TenantRequestStatus {
+  NEW
+  PROCESSED
+  APPROVED
+  REJECTED
 }

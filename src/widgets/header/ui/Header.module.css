@@ -27,7 +27,7 @@
       rgba(255, 255, 255, 0.02) 50%,
       rgba(0, 0, 0, 0.06) 100%
     ),
-    rgba(6, 5, 14, 0.78);
+    rgba(12, 9, 24, 0.75);
   backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
   -webkit-backdrop-filter: blur(40px) saturate(2.2) brightness(0.92);
 
@@ -56,7 +56,7 @@
       rgba(255, 255, 255, 0.03) 50%,
       rgba(0, 0, 0, 0.08) 100%
     ),
-    rgba(4, 3, 10, 0.88);
+    rgba(11, 8, 22, 0.85);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 -1px 0 rgba(0, 0, 0, 0.4),
@@ -73,37 +73,27 @@
   gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
-  padding: 0 26px 0 12px;
+  padding: 0 20px 0 12px;
   margin-right: 10px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
 }
 
-.logoMark {
-  width: 36px;
+.logo::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
   height: 36px;
-  background: linear-gradient(135deg, #9b6133 0%, #7a4418 100%);
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.logoImg {
+  height: 60px;
+  width: auto;
+  display: block;
   flex-shrink: 0;
-  transition: box-shadow var(--transition-fast);
-  box-shadow:
-    0 2px 8px rgba(139, 85, 35, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-.logo:hover .logoMark {
-  box-shadow:
-    0 4px 14px rgba(139, 85, 35, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
-}
-
-.logoMark span {
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
 }
 
 .logoText {
@@ -121,9 +111,11 @@
 
 .logoSub {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.4);
   font-weight: 400;
-  margin-top: 1px;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ===== Desktop navigation ===== */
@@ -397,6 +389,17 @@
   flex-shrink: 0;
 }
 
+.drawerHeader .logoImg {
+  height: 30px;
+  height: 30px;
+}
+
+.drawerHeader .logo {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
 .drawerClose {
   display: flex;
   align-items: center;
@@ -558,6 +561,10 @@
     padding-right: 0;
     margin-right: 0;
   }
+
+  .logo::after {
+    display: none;
+  }
 }
 
 @media (min-width: 1201px) {
@@ -583,11 +590,7 @@
     height: 56px;
   }
 
-  .logoTitle {
-    font-size: 12px;
-  }
-
-  .logoSub {
-    font-size: 9px;
+  .logoImg {
+    height: 30px;
   }
 }

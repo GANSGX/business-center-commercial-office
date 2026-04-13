@@ -1,4 +1,5 @@
-// TODO Sprint 3 [S3-D2-04]: Галерея — массовый upload, caption, dnd sort, удаление
-export default function AdminGalleryPage() {
-  return null
+import { GalleryAdminPage } from './_page/GalleryAdminPage'
+
+export default function Page() {
+  return <GalleryAdminPage />
 }

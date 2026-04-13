@@ -1,0 +1,246 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: var(--admin-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.uploadBtn:hover {
+  background: var(--admin-accent-hover);
+}
+
+/* ── Hint ── */
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+/* ── Grid ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* ── Card ── */
+
+.card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+  position: relative;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.cardInactive {
+  opacity: 0.45;
+}
+
+.orderBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  background: var(--admin-bg);
+  overflow: hidden;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-slow);
+}
+
+.card:hover .thumb img {
+  transform: scale(1.03);
+}
+
+/* ── Card footer ── */
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 8px;
+}
+
+/* ── Toggle ── */
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleTrack {
+  display: block;
+  width: 34px;
+  height: 19px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background var(--transition-fast);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.toggleTrack::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: transform var(--transition-fast);
+}
+
+.toggle input:checked + .toggleTrack {
+  background: var(--admin-accent);
+}
+
+.toggle input:checked + .toggleTrack::after {
+  transform: translateX(15px);
+  background: #fff;
+}
+
+.toggleLabel {
+  font-size: 0.78rem;
+  color: var(--admin-text-secondary);
+}
+
+/* ── Actions ── */
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.actionBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--admin-surface-hover);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--admin-text);
+}
+
+.actionBtnDanger:hover {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ── Add card ── */
+
+.addCard {
+  border: 1.5px dashed var(--admin-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 16 / 7;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background var(--transition-fast);
+  font-size: 0.8rem;
+  min-height: 120px;
+}
+
+.addCard:hover {
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+  background: var(--admin-accent-light);
+}

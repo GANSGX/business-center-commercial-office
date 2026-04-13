@@ -92,6 +92,25 @@ export function OfficesContent({ allRooms, initialStatus, initialSort, initialTy
             </li>
           ))}
         </ul>
+      ) : allRooms.length === 0 ? (
+        <div className={styles.empty} role="status">
+          <div className={styles.emptyIcon} aria-hidden="true">
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div>
+          <p className={styles.emptyTitle}>Свободные помещения уточняйте по телефону</p>
+        </div>
       ) : (
         <div className={styles.empty} role="status">
           <div className={styles.emptyIcon} aria-hidden="true">

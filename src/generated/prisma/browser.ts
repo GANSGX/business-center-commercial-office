@@ -71,3 +71,18 @@ export type SiteSettings = Prisma.SiteSettingsModel
  *
  */
 export type User = Prisma.UserModel
+/**
+ * Model BuildingOrg
+ *
+ */
+export type BuildingOrg = Prisma.BuildingOrgModel
+/**
+ * Model TenantRequest
+ *
+ */
+export type TenantRequest = Prisma.TenantRequestModel
+/**
+ * Model PageView
+ *
+ */
+export type PageView = Prisma.PageViewModel

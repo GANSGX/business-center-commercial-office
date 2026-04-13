@@ -1,2 +1,2 @@
 export { Header } from './ui/Header'
-export type { HeaderProps, NavService } from './types'
+export type { HeaderProps } from './types'

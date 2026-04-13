@@ -6,7 +6,6 @@ import { Badge } from '@/shared/ui'
 import type { Room, RoomStatus } from '@/entities/room'
 import { PhotoGallery } from '@/features/gallery-lightbox'
 import { OfficeCtaButton } from './OfficeCtaButton'
-import { Footer } from '@/widgets/footer'
 import styles from './OfficePage.module.css'
 
 interface Props {
@@ -240,7 +239,6 @@ export function OfficePage({ room }: Props) {
             </aside>
           </div>
         </div>
-        <Footer />
       </div>
     </div>
   )

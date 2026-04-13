@@ -1,8 +1,2 @@
-export interface NavService {
-  title: string
-  slug: string
-}
-
-export interface HeaderProps {
-  services: NavService[]
-}
+// Header has no external props
+export type HeaderProps = Record<string, never>

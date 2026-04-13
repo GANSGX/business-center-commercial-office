@@ -1,0 +1,380 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-text);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.newBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+}
+
+/* ── Toolbar ── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--admin-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--admin-text-secondary);
+}
+
+.tabActive {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.tabCount {
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 14px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--admin-text-muted);
+}
+
+.searchInput:focus {
+  border-color: var(--admin-accent);
+}
+
+/* ── Table ── */
+
+.tableWrap {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 720px;
+}
+
+.table th {
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 13px 14px;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border-subtle);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.row {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.row:hover td {
+  background: var(--admin-surface-hover);
+}
+
+.rowNew td:first-child {
+  border-left: 2px solid var(--admin-warning);
+}
+
+.rowProcessed td:first-child {
+  border-left: 2px solid var(--admin-accent);
+}
+
+.rowApproved td:first-child {
+  border-left: 2px solid var(--admin-success);
+}
+
+.rowRejected td:first-child {
+  border-left: 2px solid var(--admin-border);
+}
+
+.rowExpanded td {
+  background: var(--admin-surface-hover);
+}
+
+.dateCell {
+  color: var(--admin-text-secondary) !important;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.companyCell {
+  color: var(--admin-text) !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--admin-border);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.contactCell {
+  white-space: nowrap;
+}
+
+.contactName {
+  font-weight: 500;
+  color: var(--admin-text-secondary);
+  display: block;
+  font-size: 0.82rem;
+}
+
+.contactPhone {
+  color: var(--admin-text-secondary);
+  font-size: 0.8rem;
+  display: block;
+}
+
+.mutedCell {
+  color: var(--admin-text-muted) !important;
+  font-size: 0.82rem;
+}
+
+/* ── Status badge + dropdown ── */
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.statusBadge::after {
+  content: '▾';
+  margin-left: 5px;
+  font-size: 0.65rem;
+}
+
+.statusNew {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+
+.statusProcessed {
+  background: rgba(99, 102, 241, 0.12);
+  color: #818cf8;
+}
+
+.statusApproved {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+}
+
+.statusRejected {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--admin-text-muted);
+}
+
+.statusDropdown {
+  background: #1a2236;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 150px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.statusOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  color: var(--admin-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background var(--transition-fast);
+}
+
+.statusOption:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.statusOptionActive {
+  color: var(--admin-text) !important;
+  font-weight: 600;
+}
+
+/* ── Actions ── */
+
+.actionCell {
+  width: 36px;
+  padding: 0 8px !important;
+}
+
+.deleteBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--admin-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* ── Expanded row ── */
+
+.expandRow td {
+  padding: 0 14px 14px !important;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  background: var(--admin-surface-hover);
+}
+
+.expandContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.descBox {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.descLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.descText {
+  font-size: 0.875rem;
+  color: var(--admin-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Empty ── */
+
+.emptyRow {
+  text-align: center;
+  color: var(--admin-text-muted) !important;
+  padding: 40px !important;
+}

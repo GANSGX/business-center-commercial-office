@@ -1,4 +1,5 @@
-// TODO Sprint 3 [S3-D2-07]: Настройки — контакты, соцсети, реквизиты, карта
-export default function AdminSettingsPage() {
-  return null
+import { SettingsPage } from './_page/SettingsPage'
+
+export default function Page() {
+  return <SettingsPage />
 }

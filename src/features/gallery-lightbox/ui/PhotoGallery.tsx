@@ -207,6 +207,17 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
     <div className={styles.gallery}>
       {/* ── Главное фото ── */}
       <div className={styles.mainArea} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {/* Блюр-подложка: та же фотка, cover + сильный blur — заполняет пустые края */}
+        <Image
+          src={photos[activeIndex].url}
+          alt=""
+          aria-hidden="true"
+          fill
+          className={styles.blurBg}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+        />
+
         <button
           type="button"
           className={styles.mainBtn}
@@ -242,10 +253,28 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
         </button>
 
         {photos.length > 1 && (
+          <span className={styles.photoCount} aria-hidden="true">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            {activeIndex + 1} / {photos.length}
+          </span>
+        )}
+
+        {photos.length > 1 && (
           <>
             <button
               type="button"
-              className={`${styles.galleryNav} ${styles.galleryNavPrev}`}
+              className={`${styles.sideBtn} ${styles.sidePrev}`}
               onClick={(e) => {
                 e.stopPropagation()
                 prevActive()
@@ -267,7 +296,7 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
             </button>
             <button
               type="button"
-              className={`${styles.galleryNav} ${styles.galleryNavNext}`}
+              className={`${styles.sideBtn} ${styles.sideNext}`}
               onClick={(e) => {
                 e.stopPropagation()
                 nextActive()
@@ -288,24 +317,6 @@ export function PhotoGallery({ photos, alt, overlaySlot }: Props) {
               </svg>
             </button>
           </>
-        )}
-
-        {photos.length > 1 && (
-          <span className={styles.photoCount} aria-hidden="true">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            {activeIndex + 1} / {photos.length}
-          </span>
         )}
 
         {photos.length > 1 && (
