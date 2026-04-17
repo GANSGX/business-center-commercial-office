@@ -7,6 +7,8 @@ import { ScrollToTop, Preloader } from '@/shared/ui'
 import { getSiteSettings } from '@/shared/lib/getSiteSettings'
 import styles from './layout.module.css'
 
+export const dynamic = 'force-dynamic'
+
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings()
   const metrikaId = settings['metrikaId'] ?? ''
