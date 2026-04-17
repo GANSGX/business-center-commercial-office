@@ -9,9 +9,16 @@ const DEFAULTS: Record<string, string> = {
 }
 
 export async function getSiteSettings(): Promise<Record<string, string>> {
-  const rows = await prisma.siteSettings.findMany()
-  const stored = Object.fromEntries(rows.map((r) => [r.key, r.value]))
-  return { ...DEFAULTS, ...stored }
+  try {
+    const rows = await prisma.siteSettings.findMany()
+    const stored = Object.fromEntries(
+      rows.map((r: { key: string; value: string }) => [r.key, r.value])
+    )
+    return { ...DEFAULTS, ...stored }
+  } catch (error) {
+    console.warn('Failed to load site settings from DB, using defaults.', error)
+    return DEFAULTS
+  }
 }
 
 /** Конвертирует "+7 (383) 223-43-50" → "+73832234350" для href="tel:..." */
