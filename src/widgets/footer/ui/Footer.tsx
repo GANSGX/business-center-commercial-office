@@ -130,6 +130,15 @@ export async function Footer() {
             </Link>
           </div>
 
+          <a
+            href="https://amf-marketing.ru/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.devCredit}
+          >
+            Разработка сайта: АМФ-маркетинг
+          </a>
+
           {hasSocials && (
             <div className={styles.socialsGroup}>
               <span className={styles.socialsLabel}>Мы в сети</span>
