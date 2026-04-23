@@ -10,6 +10,7 @@ import styles from './OfficePage.module.css'
 
 interface Props {
   room: Room
+  children?: React.ReactNode
 }
 
 function toStatus(s: RoomStatus): 'free' | 'reserved' | 'rented' {
@@ -38,7 +39,7 @@ function SpecRow({ label, value }: SpecRowProps) {
   )
 }
 
-export function OfficePage({ room }: Props) {
+export function OfficePage({ room, children }: Props) {
   const statusLabel = { FREE: 'Свободен', RESERVED: 'Забронирован', RENTED: 'Сдан' }[room.status]
   const heroRef = useRef<HTMLDivElement>(null)
 
@@ -239,6 +240,7 @@ export function OfficePage({ room }: Props) {
             </aside>
           </div>
         </div>
+        {children}
       </div>
     </div>
   )
