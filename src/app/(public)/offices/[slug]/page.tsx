@@ -75,15 +75,14 @@ export default async function OfficeSlugPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
-      <div style={{ background: '#0a0a0a' }}>
-        <OfficePage
-          room={{
-            ...room,
-            description: room.description ? sanitizeRichText(room.description) : null,
-          }}
-        />
+      <OfficePage
+        room={{
+          ...room,
+          description: room.description ? sanitizeRichText(room.description) : null,
+        }}
+      >
         <Footer />
-      </div>
+      </OfficePage>
     </>
   )
 }
