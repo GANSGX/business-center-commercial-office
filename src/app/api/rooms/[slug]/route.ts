@@ -12,7 +12,31 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
     const { slug } = await ctx.params
     const room = await prisma.room.findFirst({
       where: { OR: [{ slug }, { id: slug }] },
-      include: { photos: { orderBy: { order: 'asc' } } },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        buildingNumber: true,
+        roomNumber: true,
+        type: true,
+        area: true,
+        floor: true,
+        layoutType: true,
+        water: true,
+        wc: true,
+        windows: true,
+        entrance: true,
+        rentType: true,
+        internet: true,
+        minRentTerm: true,
+        priceMonth: true,
+        priceM2: true,
+        description: true,
+        suitableFor: true,
+        status: true,
+        showOnHome: true,
+        photos: { orderBy: { order: 'asc' }, select: { id: true, url: true, order: true } },
+      },
     })
     if (!room) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json(room, {
@@ -33,10 +57,11 @@ const updateSchema = z.object({
     .min(1)
     .regex(/^[a-z0-9-]+$/)
     .optional(),
+  buildingNumber: z.string().nullable().optional(),
   roomNumber: z.string().optional(),
   type: z.string().optional(),
   area: z.number().positive().optional(),
-  floor: z.number().int().min(1).optional(),
+  floor: z.number().int().min(0).optional(),
   layoutType: z.string().optional(),
   water: z.boolean().optional(),
   wc: z.boolean().optional(),

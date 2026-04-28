@@ -70,6 +70,7 @@ interface PendingPhoto {
 interface FormData {
   title: string
   slug: string
+  buildingNumber: string
   roomNumber: string
   type: string
   status: string
@@ -93,6 +94,7 @@ interface FormData {
 const EMPTY_FORM: FormData = {
   title: '',
   slug: '',
+  buildingNumber: '',
   roomNumber: '',
   type: 'Офис',
   status: 'FREE',
@@ -144,6 +146,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
         setForm({
           title: data.title ?? '',
           slug: data.slug ?? '',
+          buildingNumber: data.buildingNumber ?? '',
           roomNumber: data.roomNumber ?? '',
           type: data.type ?? 'Офис',
           status: data.status ?? 'FREE',
@@ -187,6 +190,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
     const payload = {
       title: form.title.trim(),
       slug: isNew ? toSlug(form.title.trim()) || `room-${Date.now()}` : form.slug,
+      buildingNumber: form.buildingNumber.trim() ? form.buildingNumber.trim() : null,
       roomNumber: form.roomNumber || undefined,
       type: form.type || undefined,
       status: form.status,
@@ -408,6 +412,12 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
               </FieldRow>
               <FieldRow>
                 <Field
+                  label="Номер корпуса"
+                  placeholder="1, 2А, Б"
+                  value={form.buildingNumber}
+                  onChange={(v) => set('buildingNumber', v)}
+                />
+                <Field
                   label="Площадь, м² *"
                   type="number"
                   placeholder="45"
@@ -424,7 +434,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
                 <Field
                   label="Этаж *"
                   type="number"
-                  placeholder="4"
+                  placeholder="0 (цоколь) или 1+"
                   value={form.floor}
                   onChange={(v) => set('floor', v)}
                 />

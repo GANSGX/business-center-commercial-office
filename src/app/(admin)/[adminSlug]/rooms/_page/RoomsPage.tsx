@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import type { RoomStatus } from '@/entities/room'
+import { formatFloorLabel, type RoomStatus } from '@/entities/room'
 import styles from './RoomsPage.module.css'
 
 interface Room {
   id: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -195,6 +196,7 @@ export function RoomsPage() {
                 <th>Помещение</th>
                 <th>Тип</th>
                 <th>Площадь</th>
+                <th>Корпус</th>
                 <th>Этаж</th>
                 <th>Статус</th>
                 <th>Цена/мес</th>
@@ -240,7 +242,8 @@ export function RoomsPage() {
                   </td>
                   <td className={styles.mutedCell}>{room.type ?? '—'}</td>
                   <td className={styles.mutedCell}>{room.area} м²</td>
-                  <td className={styles.mutedCell}>{room.floor}</td>
+                  <td className={styles.mutedCell}>{room.buildingNumber ?? 'Не указано'}</td>
+                  <td className={styles.mutedCell}>{formatFloorLabel(room.floor)}</td>
                   <td>
                     <div className={styles.statusSelect}>
                       <span
@@ -319,7 +322,7 @@ export function RoomsPage() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={8} className={styles.emptyRow}>
+                  <td colSpan={9} className={styles.emptyRow}>
                     Помещений не найдено
                   </td>
                 </tr>

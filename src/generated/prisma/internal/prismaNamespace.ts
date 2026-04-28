@@ -1511,6 +1511,7 @@ export const RoomScalarFieldEnum = {
   updatedAt: 'updatedAt',
   slug: 'slug',
   title: 'title',
+  buildingNumber: 'buildingNumber',
   roomNumber: 'roomNumber',
   type: 'type',
   area: 'area',

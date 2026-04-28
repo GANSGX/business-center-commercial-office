@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { useLeadModal } from '@/features/lead-submit'
 import { useState, useEffect } from 'react'
+import { formatFloorLabel, formatFloorValue } from '@/entities/room'
 import styles from './OffersPreview.module.css'
 
 interface Office {
   id: string
   slug: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   title: string
   area: number
@@ -86,6 +88,7 @@ export function OffersPreview() {
           {(offices ?? []).map((office) => {
             const num = office.roomNumber
             const photo = office.photos?.[0]?.url ?? null
+            const floorLabel = formatFloorLabel(office.floor)
             const label = `Офис${num ? ` ${num}` : ''}, ${formatArea(office.area)}`
             return (
               <article key={office.id} className={styles.card} aria-label={label}>
@@ -97,7 +100,7 @@ export function OffersPreview() {
                     <div className={styles.photoPlaceholder} aria-hidden="true" />
                   )}
                   <span className={styles.statusBadge}>Свободен</span>
-                  <span className={styles.floorBadge}>{office.floor} этаж</span>
+                  <span className={styles.floorBadge}>{floorLabel}</span>
                 </div>
 
                 <div className={styles.cardBody}>
@@ -117,8 +120,14 @@ export function OffersPreview() {
                       <dd className={styles.detailValue}>{formatArea(office.area)}</dd>
                     </div>
                     <div className={styles.detailRow}>
+                      <dt className={styles.detailLabel}>Корпус</dt>
+                      <dd className={styles.detailValue}>
+                        {office.buildingNumber ?? 'Не указано'}
+                      </dd>
+                    </div>
+                    <div className={styles.detailRow}>
                       <dt className={styles.detailLabel}>Этаж</dt>
-                      <dd className={styles.detailValue}>{office.floor}</dd>
+                      <dd className={styles.detailValue}>{formatFloorValue(office.floor)}</dd>
                     </div>
                     {office.layoutType && (
                       <div className={styles.detailRow}>

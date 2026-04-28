@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getRoomBySlug } from '@/entities/room'
+import { getRoomBySlug } from '@/entities/room/api/getRoomBySlug'
 import { OfficePage } from '@/views/office-detail'
 import { Footer } from '@/widgets/footer'
 import { buildBreadcrumbList } from '@/shared/lib/jsonld'
 import { sanitizeRichText } from '@/shared/lib/sanitize'
+import { formatFloorLabel } from '@/entities/room'
 
 export const revalidate = 60
 
@@ -16,17 +17,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params
   const room = await getRoomBySlug(slug)
   if (!room) return {}
+  const floorLabel = formatFloorLabel(room.floor)
 
   const plainDesc = room.description?.replace(/<[^>]*>/g, '').slice(0, 155) ?? ''
-  const title = `${room.title} — аренда ${room.area}\u00a0м², этаж ${room.floor} | Коммунистическая-35`
+  const title = `${room.title} — аренда ${room.area}\u00a0м², ${floorLabel.toLowerCase()} | Коммунистическая-35`
 
   return {
     title,
     description:
       plainDesc ||
-      `Аренда офиса ${room.area}\u00a0м² на ${room.floor} этаже в бизнес-центре Коммунистическая-35. ${room.priceMonth.toLocaleString('ru-RU')}\u00a0₽/мес.`,
+      `Аренда офиса ${room.area}\u00a0м², ${floorLabel.toLowerCase()} в бизнес-центре Коммунистическая-35. ${room.priceMonth.toLocaleString('ru-RU')}\u00a0₽/мес.`,
     openGraph: {
-      title: `${room.title} — ${room.area}\u00a0м², этаж ${room.floor}`,
+      title: `${room.title} — ${room.area}\u00a0м², ${floorLabel.toLowerCase()}`,
       description: plainDesc,
       images: room.photos[0] ? [{ url: room.photos[0].url, alt: room.title }] : [],
     },
