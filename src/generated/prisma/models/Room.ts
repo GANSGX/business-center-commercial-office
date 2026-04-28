@@ -45,6 +45,7 @@ export type RoomMinAggregateOutputType = {
   updatedAt: Date | null
   slug: string | null
   title: string | null
+  buildingNumber: string | null
   roomNumber: string | null
   type: string | null
   area: number | null
@@ -70,6 +71,7 @@ export type RoomMaxAggregateOutputType = {
   updatedAt: Date | null
   slug: string | null
   title: string | null
+  buildingNumber: string | null
   roomNumber: string | null
   type: string | null
   area: number | null
@@ -95,6 +97,7 @@ export type RoomCountAggregateOutputType = {
   updatedAt: number
   slug: number
   title: number
+  buildingNumber: number
   roomNumber: number
   type: number
   area: number
@@ -136,6 +139,7 @@ export type RoomMinAggregateInputType = {
   updatedAt?: true
   slug?: true
   title?: true
+  buildingNumber?: true
   roomNumber?: true
   type?: true
   area?: true
@@ -161,6 +165,7 @@ export type RoomMaxAggregateInputType = {
   updatedAt?: true
   slug?: true
   title?: true
+  buildingNumber?: true
   roomNumber?: true
   type?: true
   area?: true
@@ -186,6 +191,7 @@ export type RoomCountAggregateInputType = {
   updatedAt?: true
   slug?: true
   title?: true
+  buildingNumber?: true
   roomNumber?: true
   type?: true
   area?: true
@@ -300,6 +306,7 @@ export type RoomGroupByOutputType = {
   updatedAt: Date
   slug: string
   title: string
+  buildingNumber: string | null
   roomNumber: string | null
   type: string | null
   area: number
@@ -346,6 +353,7 @@ export type RoomWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<'Room'> | Date | string
   slug?: Prisma.StringFilter<'Room'> | string
   title?: Prisma.StringFilter<'Room'> | string
+  buildingNumber?: Prisma.StringNullableFilter<'Room'> | string | null
   roomNumber?: Prisma.StringNullableFilter<'Room'> | string | null
   type?: Prisma.StringNullableFilter<'Room'> | string | null
   area?: Prisma.FloatFilter<'Room'> | number
@@ -373,6 +381,7 @@ export type RoomOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  buildingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   roomNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrderInput | Prisma.SortOrder
   area?: Prisma.SortOrder
@@ -404,6 +413,7 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<
     createdAt?: Prisma.DateTimeFilter<'Room'> | Date | string
     updatedAt?: Prisma.DateTimeFilter<'Room'> | Date | string
     title?: Prisma.StringFilter<'Room'> | string
+    buildingNumber?: Prisma.StringNullableFilter<'Room'> | string | null
     roomNumber?: Prisma.StringNullableFilter<'Room'> | string | null
     type?: Prisma.StringNullableFilter<'Room'> | string | null
     area?: Prisma.FloatFilter<'Room'> | number
@@ -433,6 +443,7 @@ export type RoomOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  buildingNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   roomNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrderInput | Prisma.SortOrder
   area?: Prisma.SortOrder
@@ -467,6 +478,7 @@ export type RoomScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<'Room'> | Date | string
   slug?: Prisma.StringWithAggregatesFilter<'Room'> | string
   title?: Prisma.StringWithAggregatesFilter<'Room'> | string
+  buildingNumber?: Prisma.StringNullableWithAggregatesFilter<'Room'> | string | null
   roomNumber?: Prisma.StringNullableWithAggregatesFilter<'Room'> | string | null
   type?: Prisma.StringNullableWithAggregatesFilter<'Room'> | string | null
   area?: Prisma.FloatWithAggregatesFilter<'Room'> | number
@@ -493,6 +505,7 @@ export type RoomCreateInput = {
   updatedAt?: Date | string
   slug: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -520,6 +533,7 @@ export type RoomUncheckedCreateInput = {
   updatedAt?: Date | string
   slug: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -547,6 +561,7 @@ export type RoomUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -574,6 +589,7 @@ export type RoomUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -601,6 +617,7 @@ export type RoomCreateManyInput = {
   updatedAt?: Date | string
   slug: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -627,6 +644,7 @@ export type RoomUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -653,6 +671,7 @@ export type RoomUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -687,6 +706,7 @@ export type RoomCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  buildingNumber?: Prisma.SortOrder
   roomNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   area?: Prisma.SortOrder
@@ -720,6 +740,7 @@ export type RoomMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  buildingNumber?: Prisma.SortOrder
   roomNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   area?: Prisma.SortOrder
@@ -745,6 +766,7 @@ export type RoomMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  buildingNumber?: Prisma.SortOrder
   roomNumber?: Prisma.SortOrder
   type?: Prisma.SortOrder
   area?: Prisma.SortOrder
@@ -861,6 +883,7 @@ export type RoomCreateWithoutPhotosInput = {
   updatedAt?: Date | string
   slug: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -887,6 +910,7 @@ export type RoomUncheckedCreateWithoutPhotosInput = {
   updatedAt?: Date | string
   slug: string
   title: string
+  buildingNumber?: string | null
   roomNumber?: string | null
   type?: string | null
   area: number
@@ -941,6 +965,7 @@ export type RoomUpdateWithoutPhotosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -967,6 +992,7 @@ export type RoomUncheckedUpdateWithoutPhotosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  buildingNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   roomNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   area?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1031,6 +1057,7 @@ export type RoomSelect<
     updatedAt?: boolean
     slug?: boolean
     title?: boolean
+    buildingNumber?: boolean
     roomNumber?: boolean
     type?: boolean
     area?: boolean
@@ -1064,6 +1091,7 @@ export type RoomSelectCreateManyAndReturn<
     updatedAt?: boolean
     slug?: boolean
     title?: boolean
+    buildingNumber?: boolean
     roomNumber?: boolean
     type?: boolean
     area?: boolean
@@ -1095,6 +1123,7 @@ export type RoomSelectUpdateManyAndReturn<
     updatedAt?: boolean
     slug?: boolean
     title?: boolean
+    buildingNumber?: boolean
     roomNumber?: boolean
     type?: boolean
     area?: boolean
@@ -1123,6 +1152,7 @@ export type RoomSelectScalar = {
   updatedAt?: boolean
   slug?: boolean
   title?: boolean
+  buildingNumber?: boolean
   roomNumber?: boolean
   type?: boolean
   area?: boolean
@@ -1151,6 +1181,7 @@ export type RoomOmit<
   | 'updatedAt'
   | 'slug'
   | 'title'
+  | 'buildingNumber'
   | 'roomNumber'
   | 'type'
   | 'area'
@@ -1198,6 +1229,7 @@ export type $RoomPayload<
       updatedAt: Date
       slug: string
       title: string
+      buildingNumber: string | null
       roomNumber: string | null
       type: string | null
       area: number
@@ -1773,6 +1805,7 @@ export interface RoomFieldRefs {
   readonly updatedAt: Prisma.FieldRef<'Room', 'DateTime'>
   readonly slug: Prisma.FieldRef<'Room', 'String'>
   readonly title: Prisma.FieldRef<'Room', 'String'>
+  readonly buildingNumber: Prisma.FieldRef<'Room', 'String'>
   readonly roomNumber: Prisma.FieldRef<'Room', 'String'>
   readonly type: Prisma.FieldRef<'Room', 'String'>
   readonly area: Prisma.FieldRef<'Room', 'Float'>

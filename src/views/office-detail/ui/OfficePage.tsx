@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Badge } from '@/shared/ui'
-import type { Room, RoomStatus } from '@/entities/room'
+import { formatFloorLabel, formatFloorValue, type Room, type RoomStatus } from '@/entities/room'
 import { PhotoGallery } from '@/features/gallery-lightbox'
 import { OfficeCtaButton } from './OfficeCtaButton'
 import styles from './OfficePage.module.css'
@@ -41,6 +41,7 @@ function SpecRow({ label, value }: SpecRowProps) {
 export function OfficePage({ room }: Props) {
   const statusLabel = { FREE: 'Свободен', RESERVED: 'Забронирован', RENTED: 'Сдан' }[room.status]
   const heroRef = useRef<HTMLDivElement>(null)
+  const floorLabel = formatFloorLabel(room.floor)
 
   useEffect(() => {
     let rafId: number | null = null
@@ -106,7 +107,7 @@ export function OfficePage({ room }: Props) {
                   <div className={styles.photoGradient} aria-hidden="true" />
                   <div className={styles.photoBadges}>
                     <Badge status={toStatus(room.status)} />
-                    <span className={styles.floorTag}>{room.floor}&thinsp;этаж</span>
+                    <span className={styles.floorTag}>{floorLabel}</span>
                   </div>
                 </>
               }
@@ -144,9 +145,10 @@ export function OfficePage({ room }: Props) {
                 <h2 className={styles.sectionTitle}>Характеристики</h2>
                 <dl className={styles.specs}>
                   {room.roomNumber && <SpecRow label="Номер офиса" value={room.roomNumber} />}
+                  <SpecRow label="Номер корпуса" value={room.buildingNumber ?? 'Не указано'} />
                   {room.type && <SpecRow label="Тип" value={room.type} />}
                   <SpecRow label="Площадь" value={formatArea(room.area)} />
-                  <SpecRow label="Этаж" value={String(room.floor)} />
+                  <SpecRow label="Этаж" value={formatFloorValue(room.floor)} />
                   {room.layoutType && <SpecRow label="Планировка" value={room.layoutType} />}
                   <SpecRow label="Вода в офисе" value={room.water ? 'Есть' : 'Нет'} />
                   <SpecRow label="Санузел" value={room.wc ? 'Есть' : 'Нет'} />
@@ -215,8 +217,12 @@ export function OfficePage({ room }: Props) {
                     <dd>{formatArea(room.area)}</dd>
                   </div>
                   <div className={styles.sidebarSpecRow}>
+                    <dt>Корпус</dt>
+                    <dd>{room.buildingNumber ?? 'Не указано'}</dd>
+                  </div>
+                  <div className={styles.sidebarSpecRow}>
                     <dt>Этаж</dt>
-                    <dd>{room.floor}</dd>
+                    <dd>{formatFloorValue(room.floor)}</dd>
                   </div>
                   {room.layoutType && (
                     <div className={styles.sidebarSpecRow}>

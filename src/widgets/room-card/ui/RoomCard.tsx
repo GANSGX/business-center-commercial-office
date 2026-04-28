@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLeadModal } from '@/features/lead-submit'
-import type { Room } from '@/entities/room'
+import { formatFloorLabel, formatFloorValue, type Room } from '@/entities/room'
 import styles from './RoomCard.module.css'
 
 // Короткие метки для бейджа на фото — не залезают на "X этаж"
@@ -41,11 +41,12 @@ interface Props {
 export function RoomCard({ room, priority = false }: Props) {
   const { open } = useLeadModal()
   const photo = room.photos[0]
+  const floorLabel = formatFloorLabel(room.floor)
 
   return (
     <article
       className={`${styles.card} ${room.status === 'RENTED' ? styles.cardRented : ''}`}
-      aria-label={`${room.title}, ${formatArea(room.area)}, ${room.floor} этаж`}
+      aria-label={`${room.title}, ${formatArea(room.area)}, ${floorLabel}`}
     >
       {/* ── Фото ── */}
       <Link
@@ -70,7 +71,7 @@ export function RoomCard({ room, priority = false }: Props) {
         <span className={`${styles.statusBadge} ${STATUS_CLASS[room.status]}`}>
           {STATUS_LABEL[room.status]}
         </span>
-        <span className={styles.floorBadge}>{`${room.floor}\u00a0этаж`}</span>
+        <span className={styles.floorBadge}>{floorLabel}</span>
       </Link>
 
       {/* ── Тело ── */}
@@ -84,6 +85,14 @@ export function RoomCard({ room, priority = false }: Props) {
           <div className={styles.row}>
             <dt className={styles.label}>Площадь</dt>
             <dd className={styles.value}>{formatArea(room.area)}</dd>
+          </div>
+          <div className={styles.row}>
+            <dt className={styles.label}>Корпус</dt>
+            <dd className={styles.value}>{room.buildingNumber ?? 'Не указано'}</dd>
+          </div>
+          <div className={styles.row}>
+            <dt className={styles.label}>Этаж</dt>
+            <dd className={styles.value}>{formatFloorValue(room.floor)}</dd>
           </div>
           {room.layoutType && (
             <div className={styles.row}>

@@ -1,4 +1,5 @@
 export type RoomStatus = 'FREE' | 'RESERVED' | 'RENTED'
+export type RoomSortOption = 'price_asc' | 'price_desc' | 'area_asc' | 'area_desc' | ''
 
 export interface RoomPhoto {
   id: string
@@ -10,6 +11,7 @@ export interface Room {
   id: string
   slug: string
   title: string
+  buildingNumber: string | null
   roomNumber: string | null
   type: string | null
   area: number

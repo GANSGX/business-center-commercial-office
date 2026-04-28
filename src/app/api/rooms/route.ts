@@ -62,7 +62,35 @@ export async function GET(req: NextRequest) {
         orderBy,
         skip: (page - 1) * limit,
         take: limit,
-        include: { photos: { orderBy: { order: 'asc' }, take: 1 } },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          buildingNumber: true,
+          roomNumber: true,
+          type: true,
+          area: true,
+          floor: true,
+          layoutType: true,
+          water: true,
+          wc: true,
+          windows: true,
+          entrance: true,
+          rentType: true,
+          internet: true,
+          minRentTerm: true,
+          priceMonth: true,
+          priceM2: true,
+          description: true,
+          suitableFor: true,
+          status: true,
+          showOnHome: true,
+          photos: {
+            orderBy: { order: 'asc' },
+            take: 1,
+            select: { id: true, url: true, order: true },
+          },
+        },
       }),
       prisma.room.count({ where }),
     ])
@@ -85,10 +113,11 @@ const createSchema = z.object({
     .string()
     .min(1)
     .regex(/^[a-z0-9-]+$/),
+  buildingNumber: z.string().optional(),
   roomNumber: z.string().optional(),
   type: z.string().optional(),
   area: z.number().positive(),
-  floor: z.number().int().min(1),
+  floor: z.number().int().min(0),
   layoutType: z.string().optional(),
   water: z.boolean().default(false),
   wc: z.boolean().default(false),
@@ -132,7 +161,10 @@ export async function POST(req: NextRequest) {
 
 // ── PUT /api/rooms (admin) ────────────────────────────────────────────────────
 
-const updateSchema = createSchema.partial().extend({ id: z.string() })
+const updateSchema = createSchema.partial().extend({
+  id: z.string(),
+  buildingNumber: z.string().nullable().optional(),
+})
 
 export async function PUT(req: NextRequest) {
   try {

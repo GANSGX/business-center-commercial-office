@@ -1,7 +1,6 @@
-import type { Room, RoomStatus } from '../types'
+import 'server-only'
+import type { Room, RoomStatus, RoomSortOption } from '../types'
 import { prisma } from '@/shared/lib/prisma'
-
-export type RoomSortOption = 'price_asc' | 'price_desc' | 'area_asc' | 'area_desc' | ''
 
 export interface GetRoomsParams {
   status?: RoomStatus | null
@@ -23,7 +22,34 @@ export async function getRooms(params: GetRoomsParams = {}): Promise<Room[]> {
 
   const rooms = await prisma.room.findMany({
     where,
-    include: { photos: { orderBy: { order: 'asc' } } },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      buildingNumber: true,
+      roomNumber: true,
+      type: true,
+      area: true,
+      floor: true,
+      layoutType: true,
+      water: true,
+      wc: true,
+      windows: true,
+      entrance: true,
+      rentType: true,
+      internet: true,
+      minRentTerm: true,
+      priceMonth: true,
+      priceM2: true,
+      description: true,
+      suitableFor: true,
+      status: true,
+      showOnHome: true,
+      photos: {
+        orderBy: { order: 'asc' },
+        select: { id: true, url: true, order: true },
+      },
+    },
   })
 
   const sort = params.sort

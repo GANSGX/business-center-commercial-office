@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getRooms } from '@/entities/room'
+import { getRooms } from '@/entities/room/api/getRooms'
 import type { RoomStatus, RoomSortOption } from '@/entities/room'
 import { OfficesPage } from './_page/OfficesPage'
 
