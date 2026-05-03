@@ -44,14 +44,68 @@ https://k35-bc.ru/<ADMIN_SLUG>
 
 ---
 
-## Обновление сайта
+## Обновление сайта (Docker)
+
+Сервер работает через Docker Compose. Node/npm на хосте **не установлены** — все команды через `docker compose exec`.
+
+### Стандартный деплой (только код, без изменений схемы БД)
 
 ```bash
+# 1. Сохранить серверные конфиги (Dockerfile, docker-compose.yml, nginx.conf)
+git stash push -m "server-configs-$(date +%Y-%m-%d)"
+
+# 2. Подтянуть новый код
 git pull origin main
-npm install --legacy-peer-deps
-npm run setup   # только если были изменения в БД (в commit-сообщении будет "prisma" или "migrate")
-npm run build
-pm2 restart all  # или systemctl restart, зависит от того как запущен
+
+# 3. Восстановить серверные конфиги
+git stash pop
+
+# 4. Пересобрать и перезапустить app-контейнер
+docker compose up --build -d app
+
+# 5. Проверить
+curl -s https://k35-bc.ru/api/health
+```
+
+### Если в коммите есть изменения схемы Prisma
+
+Признак: в commit-сообщении есть слова `prisma`, `schema`, `migrate`, `ADD COLUMN` или новые модели.
+
+Prisma CLI внутри prod-контейнера недоступен — миграцию применяем через **psql напрямую**.
+
+```bash
+# Посмотреть какие колонки нужно добавить (из diff схемы)
+git diff HEAD~1 prisma/schema.prisma
+
+# Добавить колонки вручную через postgres-контейнер
+docker compose exec postgres psql -U postgres -d businesscenter -c '
+  ALTER TABLE "ИмяМодели" ADD COLUMN IF NOT EXISTS "поле1" TEXT;
+  ALTER TABLE "ИмяМодели" ADD COLUMN IF NOT EXISTS "поле2" INTEGER DEFAULT 0;
+'
+
+# Затем стандартный деплой (шаги 1–5 выше)
+docker compose up --build -d app
+```
+
+> `IF NOT EXISTS` — безопасно, не падает если колонка уже есть.
+
+### Типы данных Prisma → PostgreSQL
+
+| Prisma     | SQL тип            |
+| ---------- | ------------------ |
+| `String?`  | `TEXT`             |
+| `String`   | `TEXT NOT NULL`    |
+| `Int`      | `INTEGER NOT NULL` |
+| `Int?`     | `INTEGER`          |
+| `Boolean`  | `BOOLEAN NOT NULL` |
+| `Float?`   | `DOUBLE PRECISION` |
+| `DateTime` | `TIMESTAMP(3)`     |
+
+### Посмотреть логи
+
+```bash
+docker compose logs --tail=50 app
+docker compose ps
 ```
 
 ---
