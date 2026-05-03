@@ -1665,6 +1665,8 @@ export const BuildingOrgScalarFieldEnum = {
   website: 'website',
   contact: 'contact',
   logo: 'logo',
+  corpusNumber: 'corpusNumber',
+  officeNumber: 'officeNumber',
 } as const
 
 export type BuildingOrgScalarFieldEnum =

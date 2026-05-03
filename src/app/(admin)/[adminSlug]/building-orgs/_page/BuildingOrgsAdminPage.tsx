@@ -15,6 +15,8 @@ interface BuildingOrg {
   color: string
   order: number
   active: boolean
+  corpusNumber: string | null
+  officeNumber: string | null
 }
 
 const CATEGORIES = [
@@ -129,6 +131,8 @@ const EMPTY_FORM = {
   color: 'amber',
   order: 0,
   active: true,
+  corpusNumber: '',
+  officeNumber: '',
 }
 
 export function BuildingOrgsAdminPage() {
@@ -176,6 +180,8 @@ export function BuildingOrgsAdminPage() {
       color: org.color,
       order: org.order,
       active: org.active,
+      corpusNumber: org.corpusNumber ?? '',
+      officeNumber: org.officeNumber ?? '',
     })
     setShowForm(true)
     setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
@@ -197,6 +203,8 @@ export function BuildingOrgsAdminPage() {
         logo: form.logo || undefined,
         website: form.website || undefined,
         contact: form.contact || undefined,
+        corpusNumber: form.corpusNumber || undefined,
+        officeNumber: form.officeNumber || undefined,
         ...(editingId ? { id: editingId } : {}),
       }
       const method = editingId ? 'PUT' : 'POST'
@@ -438,6 +446,27 @@ export function BuildingOrgsAdminPage() {
               </div>
             </div>
 
+            <div className={styles.fieldRow}>
+              <div className={styles.field}>
+                <label className={styles.label}>Корпус</label>
+                <input
+                  className={styles.input}
+                  value={form.corpusNumber}
+                  onChange={(e) => setForm((p) => ({ ...p, corpusNumber: e.target.value }))}
+                  placeholder="например: 2 или А"
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Номер офиса</label>
+                <input
+                  className={styles.input}
+                  value={form.officeNumber}
+                  onChange={(e) => setForm((p) => ({ ...p, officeNumber: e.target.value }))}
+                  placeholder="например: 305"
+                />
+              </div>
+            </div>
+
             <div className={styles.checkboxRow}>
               <label className={styles.checkboxLabel}>
                 <input
@@ -489,6 +518,14 @@ export function BuildingOrgsAdminPage() {
                         {CATEGORIES.find((c) => c.value === org.category)?.label ?? org.category}
                         {' · '}
                         {org.floor} этаж
+                        {(org.corpusNumber || org.officeNumber) && (
+                          <>
+                            {' · '}
+                            {org.corpusNumber && `корп. ${org.corpusNumber}`}
+                            {org.corpusNumber && org.officeNumber && ', '}
+                            {org.officeNumber && `офис ${org.officeNumber}`}
+                          </>
+                        )}
                         {org.website && (
                           <>
                             {' '}

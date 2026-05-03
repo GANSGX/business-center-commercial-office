@@ -44,6 +44,8 @@ const createSchema = z.object({
   color: z.string().default('blue'),
   order: z.number().int().default(0),
   active: z.boolean().default(true),
+  corpusNumber: z.string().optional(),
+  officeNumber: z.string().optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -60,6 +62,8 @@ export async function POST(req: NextRequest) {
       logo: parsed.data.logo || null,
       website: parsed.data.website || null,
       contact: parsed.data.contact || null,
+      corpusNumber: parsed.data.corpusNumber || null,
+      officeNumber: parsed.data.officeNumber || null,
     }
     const org = await prisma.buildingOrg.create({ data })
     buildingOrgsEmitter.emit('orgs-updated')
@@ -89,6 +93,8 @@ export async function PUT(req: NextRequest) {
       ...(rest.logo !== undefined ? { logo: rest.logo || null } : {}),
       ...(rest.website !== undefined ? { website: rest.website || null } : {}),
       ...(rest.contact !== undefined ? { contact: rest.contact || null } : {}),
+      ...(rest.corpusNumber !== undefined ? { corpusNumber: rest.corpusNumber || null } : {}),
+      ...(rest.officeNumber !== undefined ? { officeNumber: rest.officeNumber || null } : {}),
     }
     const org = await prisma.buildingOrg.update({ where: { id }, data })
     buildingOrgsEmitter.emit('orgs-updated')

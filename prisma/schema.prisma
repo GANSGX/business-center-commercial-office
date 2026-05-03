@@ -128,19 +128,21 @@ model User {
 }
 
 model BuildingOrg {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  name        String
-  category    String
-  description String?
-  floor       Int      @default(1)
-  color       String   @default("blue")
-  order       Int      @default(0)
-  active      Boolean  @default(true)
-  website     String?
-  contact     String?
-  logo        String?
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  name         String
+  category     String
+  description  String?
+  floor        Int      @default(1)
+  color        String   @default("blue")
+  order        Int      @default(0)
+  active       Boolean  @default(true)
+  website      String?
+  contact      String?
+  logo         String?
+  corpusNumber String?
+  officeNumber String?
 }
 
 model TenantRequest {

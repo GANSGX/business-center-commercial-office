@@ -49,6 +49,8 @@ export type BuildingOrgMinAggregateOutputType = {
   website: string | null
   contact: string | null
   logo: string | null
+  corpusNumber: string | null
+  officeNumber: string | null
 }
 
 export type BuildingOrgMaxAggregateOutputType = {
@@ -65,6 +67,8 @@ export type BuildingOrgMaxAggregateOutputType = {
   website: string | null
   contact: string | null
   logo: string | null
+  corpusNumber: string | null
+  officeNumber: string | null
 }
 
 export type BuildingOrgCountAggregateOutputType = {
@@ -81,6 +85,8 @@ export type BuildingOrgCountAggregateOutputType = {
   website: number
   contact: number
   logo: number
+  corpusNumber: number
+  officeNumber: number
   _all: number
 }
 
@@ -108,6 +114,8 @@ export type BuildingOrgMinAggregateInputType = {
   website?: true
   contact?: true
   logo?: true
+  corpusNumber?: true
+  officeNumber?: true
 }
 
 export type BuildingOrgMaxAggregateInputType = {
@@ -124,6 +132,8 @@ export type BuildingOrgMaxAggregateInputType = {
   website?: true
   contact?: true
   logo?: true
+  corpusNumber?: true
+  officeNumber?: true
 }
 
 export type BuildingOrgCountAggregateInputType = {
@@ -140,6 +150,8 @@ export type BuildingOrgCountAggregateInputType = {
   website?: true
   contact?: true
   logo?: true
+  corpusNumber?: true
+  officeNumber?: true
   _all?: true
 }
 
@@ -248,6 +260,8 @@ export type BuildingOrgGroupByOutputType = {
   website: string | null
   contact: string | null
   logo: string | null
+  corpusNumber: string | null
+  officeNumber: string | null
   _count: BuildingOrgCountAggregateOutputType | null
   _avg: BuildingOrgAvgAggregateOutputType | null
   _sum: BuildingOrgSumAggregateOutputType | null
@@ -284,6 +298,8 @@ export type BuildingOrgWhereInput = {
   website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
   contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
   logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+  corpusNumber?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+  officeNumber?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
 }
 
 export type BuildingOrgOrderByWithRelationInput = {
@@ -300,6 +316,8 @@ export type BuildingOrgOrderByWithRelationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  corpusNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  officeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type BuildingOrgWhereUniqueInput = Prisma.AtLeast<
@@ -320,6 +338,8 @@ export type BuildingOrgWhereUniqueInput = Prisma.AtLeast<
     website?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
     contact?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
     logo?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+    corpusNumber?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
+    officeNumber?: Prisma.StringNullableFilter<'BuildingOrg'> | string | null
   },
   'id'
 >
@@ -338,6 +358,8 @@ export type BuildingOrgOrderByWithAggregationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   contact?: Prisma.SortOrderInput | Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
+  corpusNumber?: Prisma.SortOrderInput | Prisma.SortOrder
+  officeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BuildingOrgCountOrderByAggregateInput
   _avg?: Prisma.BuildingOrgAvgOrderByAggregateInput
   _max?: Prisma.BuildingOrgMaxOrderByAggregateInput
@@ -366,6 +388,8 @@ export type BuildingOrgScalarWhereWithAggregatesInput = {
   website?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
   contact?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
   logo?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
+  corpusNumber?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
+  officeNumber?: Prisma.StringNullableWithAggregatesFilter<'BuildingOrg'> | string | null
 }
 
 export type BuildingOrgCreateInput = {
@@ -382,6 +406,8 @@ export type BuildingOrgCreateInput = {
   website?: string | null
   contact?: string | null
   logo?: string | null
+  corpusNumber?: string | null
+  officeNumber?: string | null
 }
 
 export type BuildingOrgUncheckedCreateInput = {
@@ -398,6 +424,8 @@ export type BuildingOrgUncheckedCreateInput = {
   website?: string | null
   contact?: string | null
   logo?: string | null
+  corpusNumber?: string | null
+  officeNumber?: string | null
 }
 
 export type BuildingOrgUpdateInput = {
@@ -414,6 +442,8 @@ export type BuildingOrgUpdateInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corpusNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgUncheckedUpdateInput = {
@@ -430,6 +460,8 @@ export type BuildingOrgUncheckedUpdateInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corpusNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgCreateManyInput = {
@@ -446,6 +478,8 @@ export type BuildingOrgCreateManyInput = {
   website?: string | null
   contact?: string | null
   logo?: string | null
+  corpusNumber?: string | null
+  officeNumber?: string | null
 }
 
 export type BuildingOrgUpdateManyMutationInput = {
@@ -462,6 +496,8 @@ export type BuildingOrgUpdateManyMutationInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corpusNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgUncheckedUpdateManyInput = {
@@ -478,6 +514,8 @@ export type BuildingOrgUncheckedUpdateManyInput = {
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  corpusNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  officeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BuildingOrgCountOrderByAggregateInput = {
@@ -494,6 +532,8 @@ export type BuildingOrgCountOrderByAggregateInput = {
   website?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  corpusNumber?: Prisma.SortOrder
+  officeNumber?: Prisma.SortOrder
 }
 
 export type BuildingOrgAvgOrderByAggregateInput = {
@@ -515,6 +555,8 @@ export type BuildingOrgMaxOrderByAggregateInput = {
   website?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  corpusNumber?: Prisma.SortOrder
+  officeNumber?: Prisma.SortOrder
 }
 
 export type BuildingOrgMinOrderByAggregateInput = {
@@ -531,6 +573,8 @@ export type BuildingOrgMinOrderByAggregateInput = {
   website?: Prisma.SortOrder
   contact?: Prisma.SortOrder
   logo?: Prisma.SortOrder
+  corpusNumber?: Prisma.SortOrder
+  officeNumber?: Prisma.SortOrder
 }
 
 export type BuildingOrgSumOrderByAggregateInput = {
@@ -555,6 +599,8 @@ export type BuildingOrgSelect<
     website?: boolean
     contact?: boolean
     logo?: boolean
+    corpusNumber?: boolean
+    officeNumber?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -576,6 +622,8 @@ export type BuildingOrgSelectCreateManyAndReturn<
     website?: boolean
     contact?: boolean
     logo?: boolean
+    corpusNumber?: boolean
+    officeNumber?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -597,6 +645,8 @@ export type BuildingOrgSelectUpdateManyAndReturn<
     website?: boolean
     contact?: boolean
     logo?: boolean
+    corpusNumber?: boolean
+    officeNumber?: boolean
   },
   ExtArgs['result']['buildingOrg']
 >
@@ -615,6 +665,8 @@ export type BuildingOrgSelectScalar = {
   website?: boolean
   contact?: boolean
   logo?: boolean
+  corpusNumber?: boolean
+  officeNumber?: boolean
 }
 
 export type BuildingOrgOmit<
@@ -632,7 +684,9 @@ export type BuildingOrgOmit<
   | 'active'
   | 'website'
   | 'contact'
-  | 'logo',
+  | 'logo'
+  | 'corpusNumber'
+  | 'officeNumber',
   ExtArgs['result']['buildingOrg']
 >
 
@@ -656,6 +710,8 @@ export type $BuildingOrgPayload<
       website: string | null
       contact: string | null
       logo: string | null
+      corpusNumber: string | null
+      officeNumber: string | null
     },
     ExtArgs['result']['buildingOrg']
   >
@@ -1238,6 +1294,8 @@ export interface BuildingOrgFieldRefs {
   readonly website: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly contact: Prisma.FieldRef<'BuildingOrg', 'String'>
   readonly logo: Prisma.FieldRef<'BuildingOrg', 'String'>
+  readonly corpusNumber: Prisma.FieldRef<'BuildingOrg', 'String'>
+  readonly officeNumber: Prisma.FieldRef<'BuildingOrg', 'String'>
 }
 
 // Custom InputTypes

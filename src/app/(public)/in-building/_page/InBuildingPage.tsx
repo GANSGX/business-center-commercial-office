@@ -21,6 +21,8 @@ export interface BuildingOrgItem {
   color: string
   order: number
   active: boolean
+  corpusNumber: string | null
+  officeNumber: string | null
 }
 
 interface Props {

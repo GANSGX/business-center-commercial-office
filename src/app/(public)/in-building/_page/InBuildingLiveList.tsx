@@ -224,6 +224,48 @@ export function InBuildingLiveList({ initialOrgs }: Props) {
                 </div>
                 <div className={styles.cardBody}>
                   <h3 className={styles.cardName}>{org.name}</h3>
+                  <div className={styles.cardLocationRow}>
+                    {org.corpusNumber && (
+                      <span className={styles.locationBadge}>
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
+                        </svg>
+                        Корп.&nbsp;{org.corpusNumber}
+                      </span>
+                    )}
+                    {org.officeNumber && (
+                      <span className={styles.locationBadge}>
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M13 3H7a2 2 0 0 0-2 2v16l3-3 3 3 3-3 3 3V5a2 2 0 0 0-2-2z" />
+                        </svg>
+                        Офис&nbsp;{org.officeNumber}
+                      </span>
+                    )}
+                    {!org.corpusNumber && !org.officeNumber && (
+                      <span className={styles.locationBadgeMuted}>не указано</span>
+                    )}
+                  </div>
                   {org.description && <p className={styles.cardDesc}>{org.description}</p>}
                   {(org.website || org.contact) && <div className={styles.cardDivider} />}
                   {org.website && (
