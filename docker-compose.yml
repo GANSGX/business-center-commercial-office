@@ -12,7 +12,7 @@ services:
     networks:
       - internal
     profiles: [prod]
-    restart: unless-stopped
+    restart: always
 
   app-dev:
     build:
@@ -48,7 +48,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - internal
+      internal:
+        aliases:
+          - postgres
     profiles: [dev, prod]
 
   postgres-exposed:
@@ -67,24 +69,26 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - internal
+      internal:
+        aliases:
+          - postgres
     profiles: [dev]
+    restart: always
 
   nginx:
     image: nginx:1.25-alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
     volumes:
       - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/certs:/etc/nginx/certs:ro
       - uploads_data:/app/uploads:ro
     depends_on:
       - app
     networks:
-      - internal
+      internal:
+        ipv4_address: 172.18.0.4
     profiles: [prod]
-    restart: unless-stopped
+    restart: always
 
 volumes:
   pgdata:
@@ -93,3 +97,6 @@ volumes:
 networks:
   internal:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
