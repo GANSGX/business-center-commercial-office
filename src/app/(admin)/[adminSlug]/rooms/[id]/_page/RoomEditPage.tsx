@@ -428,7 +428,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
                   value={form.area}
                   onChange={(v) => {
                     set('area', v)
-                    if (form.priceM2 && v)
+                    if (!form.hidePrice && form.priceM2 && v)
                       set(
                         'priceMonth',
                         String(Math.round(parseFloat(v) * parseFloat(form.priceM2)))
@@ -443,32 +443,43 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
                   onChange={(v) => set('floor', v)}
                 />
               </FieldRow>
-              <FieldRow>
-                <FieldWithHint
-                  label="Цена за м², ₽"
-                  hint="Заполните для авторасчёта"
-                  type="number"
-                  placeholder="777"
-                  value={form.priceM2}
-                  onChange={(v) => {
-                    set('priceM2', v)
-                    if (form.area && v)
-                      set('priceMonth', String(Math.round(parseFloat(form.area) * parseFloat(v))))
-                  }}
+              <div className={styles.pricePlate}>
+                <FieldRow>
+                  <FieldWithHint
+                    label="Цена за м², ₽"
+                    hint="Заполните для авторасчёта"
+                    type="number"
+                    placeholder="777"
+                    value={form.priceM2}
+                    disabled={form.hidePrice}
+                    onChange={(v) => {
+                      set('priceM2', v)
+                      if (form.area && v)
+                        set('priceMonth', String(Math.round(parseFloat(form.area) * parseFloat(v))))
+                    }}
+                  />
+                  <FieldWithHint
+                    label="Цена в месяц, ₽ *"
+                    hint={
+                      form.hidePrice
+                        ? 'на сайте не показывается'
+                        : form.priceM2 && form.area
+                          ? `= ${form.area} м² × ${form.priceM2} ₽`
+                          : 'можно ввести вручную'
+                    }
+                    type="number"
+                    placeholder="35 000"
+                    value={form.priceMonth}
+                    disabled={form.hidePrice}
+                    onChange={(v) => set('priceMonth', v)}
+                  />
+                </FieldRow>
+                <Checkbox
+                  label="Скрыть стоимость на сайте"
+                  checked={form.hidePrice}
+                  onChange={(v) => set('hidePrice', v)}
                 />
-                <FieldWithHint
-                  label="Цена в месяц, ₽ *"
-                  hint={
-                    form.priceM2 && form.area
-                      ? `= ${form.area} м² × ${form.priceM2} ₽`
-                      : 'можно ввести вручную'
-                  }
-                  type="number"
-                  placeholder="35 000"
-                  value={form.priceMonth}
-                  onChange={(v) => set('priceMonth', v)}
-                />
-              </FieldRow>
+              </div>
               <FieldRow>
                 <Select
                   label="Условия аренды"
@@ -549,11 +560,6 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
                   label="Показывать на главной странице"
                   checked={form.showOnHome}
                   onChange={(v) => set('showOnHome', v)}
-                />
-                <Checkbox
-                  label="Скрыть стоимость на сайте"
-                  checked={form.hidePrice}
-                  onChange={(v) => set('hidePrice', v)}
                 />
               </div>
             </div>
@@ -729,6 +735,7 @@ function FieldWithHint({
   value,
   onChange,
   type = 'text',
+  disabled = false,
 }: {
   label: string
   hint?: string
@@ -736,15 +743,17 @@ function FieldWithHint({
   value: string
   onChange: (v: string) => void
   type?: string
+  disabled?: boolean
 }) {
   return (
-    <div className={styles.fieldGroup}>
+    <div className={`${styles.fieldGroup} ${disabled ? styles.fieldGroupDisabled : ''}`}>
       <label className={styles.fieldLabel}>{label}</label>
       <input
         className={styles.fieldInput}
         type={type}
         placeholder={placeholder}
         value={value}
+        disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
       />
       {hint && <span className={styles.fieldHint}>{hint}</span>}
