@@ -60,6 +60,7 @@ export type RoomMinAggregateOutputType = {
   minRentTerm: string | null
   priceMonth: number | null
   priceM2: number | null
+  hidePrice: boolean | null
   description: string | null
   status: $Enums.RoomStatus | null
   showOnHome: boolean | null
@@ -86,6 +87,7 @@ export type RoomMaxAggregateOutputType = {
   minRentTerm: string | null
   priceMonth: number | null
   priceM2: number | null
+  hidePrice: boolean | null
   description: string | null
   status: $Enums.RoomStatus | null
   showOnHome: boolean | null
@@ -112,6 +114,7 @@ export type RoomCountAggregateOutputType = {
   minRentTerm: number
   priceMonth: number
   priceM2: number
+  hidePrice: number
   description: number
   suitableFor: number
   status: number
@@ -154,6 +157,7 @@ export type RoomMinAggregateInputType = {
   minRentTerm?: true
   priceMonth?: true
   priceM2?: true
+  hidePrice?: true
   description?: true
   status?: true
   showOnHome?: true
@@ -180,6 +184,7 @@ export type RoomMaxAggregateInputType = {
   minRentTerm?: true
   priceMonth?: true
   priceM2?: true
+  hidePrice?: true
   description?: true
   status?: true
   showOnHome?: true
@@ -206,6 +211,7 @@ export type RoomCountAggregateInputType = {
   minRentTerm?: true
   priceMonth?: true
   priceM2?: true
+  hidePrice?: true
   description?: true
   suitableFor?: true
   status?: true
@@ -321,6 +327,7 @@ export type RoomGroupByOutputType = {
   minRentTerm: string | null
   priceMonth: number
   priceM2: number | null
+  hidePrice: boolean
   description: string | null
   suitableFor: string[]
   status: $Enums.RoomStatus
@@ -368,6 +375,7 @@ export type RoomWhereInput = {
   minRentTerm?: Prisma.StringNullableFilter<'Room'> | string | null
   priceMonth?: Prisma.IntFilter<'Room'> | number
   priceM2?: Prisma.FloatNullableFilter<'Room'> | number | null
+  hidePrice?: Prisma.BoolFilter<'Room'> | boolean
   description?: Prisma.StringNullableFilter<'Room'> | string | null
   suitableFor?: Prisma.StringNullableListFilter<'Room'>
   status?: Prisma.EnumRoomStatusFilter<'Room'> | $Enums.RoomStatus
@@ -396,6 +404,7 @@ export type RoomOrderByWithRelationInput = {
   minRentTerm?: Prisma.SortOrderInput | Prisma.SortOrder
   priceMonth?: Prisma.SortOrder
   priceM2?: Prisma.SortOrderInput | Prisma.SortOrder
+  hidePrice?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   suitableFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -428,6 +437,7 @@ export type RoomWhereUniqueInput = Prisma.AtLeast<
     minRentTerm?: Prisma.StringNullableFilter<'Room'> | string | null
     priceMonth?: Prisma.IntFilter<'Room'> | number
     priceM2?: Prisma.FloatNullableFilter<'Room'> | number | null
+    hidePrice?: Prisma.BoolFilter<'Room'> | boolean
     description?: Prisma.StringNullableFilter<'Room'> | string | null
     suitableFor?: Prisma.StringNullableListFilter<'Room'>
     status?: Prisma.EnumRoomStatusFilter<'Room'> | $Enums.RoomStatus
@@ -458,6 +468,7 @@ export type RoomOrderByWithAggregationInput = {
   minRentTerm?: Prisma.SortOrderInput | Prisma.SortOrder
   priceMonth?: Prisma.SortOrder
   priceM2?: Prisma.SortOrderInput | Prisma.SortOrder
+  hidePrice?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   suitableFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -493,6 +504,7 @@ export type RoomScalarWhereWithAggregatesInput = {
   minRentTerm?: Prisma.StringNullableWithAggregatesFilter<'Room'> | string | null
   priceMonth?: Prisma.IntWithAggregatesFilter<'Room'> | number
   priceM2?: Prisma.FloatNullableWithAggregatesFilter<'Room'> | number | null
+  hidePrice?: Prisma.BoolWithAggregatesFilter<'Room'> | boolean
   description?: Prisma.StringNullableWithAggregatesFilter<'Room'> | string | null
   suitableFor?: Prisma.StringNullableListFilter<'Room'>
   status?: Prisma.EnumRoomStatusWithAggregatesFilter<'Room'> | $Enums.RoomStatus
@@ -520,6 +532,7 @@ export type RoomCreateInput = {
   minRentTerm?: string | null
   priceMonth: number
   priceM2?: number | null
+  hidePrice?: boolean
   description?: string | null
   suitableFor?: Prisma.RoomCreatesuitableForInput | string[]
   status?: $Enums.RoomStatus
@@ -548,6 +561,7 @@ export type RoomUncheckedCreateInput = {
   minRentTerm?: string | null
   priceMonth: number
   priceM2?: number | null
+  hidePrice?: boolean
   description?: string | null
   suitableFor?: Prisma.RoomCreatesuitableForInput | string[]
   status?: $Enums.RoomStatus
@@ -576,6 +590,7 @@ export type RoomUpdateInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -604,6 +619,7 @@ export type RoomUncheckedUpdateInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -632,6 +648,7 @@ export type RoomCreateManyInput = {
   minRentTerm?: string | null
   priceMonth: number
   priceM2?: number | null
+  hidePrice?: boolean
   description?: string | null
   suitableFor?: Prisma.RoomCreatesuitableForInput | string[]
   status?: $Enums.RoomStatus
@@ -659,6 +676,7 @@ export type RoomUpdateManyMutationInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -686,6 +704,7 @@ export type RoomUncheckedUpdateManyInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -721,6 +740,7 @@ export type RoomCountOrderByAggregateInput = {
   minRentTerm?: Prisma.SortOrder
   priceMonth?: Prisma.SortOrder
   priceM2?: Prisma.SortOrder
+  hidePrice?: Prisma.SortOrder
   description?: Prisma.SortOrder
   suitableFor?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -755,6 +775,7 @@ export type RoomMaxOrderByAggregateInput = {
   minRentTerm?: Prisma.SortOrder
   priceMonth?: Prisma.SortOrder
   priceM2?: Prisma.SortOrder
+  hidePrice?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
   showOnHome?: Prisma.SortOrder
@@ -781,6 +802,7 @@ export type RoomMinOrderByAggregateInput = {
   minRentTerm?: Prisma.SortOrder
   priceMonth?: Prisma.SortOrder
   priceM2?: Prisma.SortOrder
+  hidePrice?: Prisma.SortOrder
   description?: Prisma.SortOrder
   status?: Prisma.SortOrder
   showOnHome?: Prisma.SortOrder
@@ -898,6 +920,7 @@ export type RoomCreateWithoutPhotosInput = {
   minRentTerm?: string | null
   priceMonth: number
   priceM2?: number | null
+  hidePrice?: boolean
   description?: string | null
   suitableFor?: Prisma.RoomCreatesuitableForInput | string[]
   status?: $Enums.RoomStatus
@@ -925,6 +948,7 @@ export type RoomUncheckedCreateWithoutPhotosInput = {
   minRentTerm?: string | null
   priceMonth: number
   priceM2?: number | null
+  hidePrice?: boolean
   description?: string | null
   suitableFor?: Prisma.RoomCreatesuitableForInput | string[]
   status?: $Enums.RoomStatus
@@ -980,6 +1004,7 @@ export type RoomUpdateWithoutPhotosInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -1007,6 +1032,7 @@ export type RoomUncheckedUpdateWithoutPhotosInput = {
   minRentTerm?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceMonth?: Prisma.IntFieldUpdateOperationsInput | number
   priceM2?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  hidePrice?: Prisma.BoolFieldUpdateOperationsInput | boolean
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suitableFor?: Prisma.RoomUpdatesuitableForInput | string[]
   status?: Prisma.EnumRoomStatusFieldUpdateOperationsInput | $Enums.RoomStatus
@@ -1072,6 +1098,7 @@ export type RoomSelect<
     minRentTerm?: boolean
     priceMonth?: boolean
     priceM2?: boolean
+    hidePrice?: boolean
     description?: boolean
     suitableFor?: boolean
     status?: boolean
@@ -1106,6 +1133,7 @@ export type RoomSelectCreateManyAndReturn<
     minRentTerm?: boolean
     priceMonth?: boolean
     priceM2?: boolean
+    hidePrice?: boolean
     description?: boolean
     suitableFor?: boolean
     status?: boolean
@@ -1138,6 +1166,7 @@ export type RoomSelectUpdateManyAndReturn<
     minRentTerm?: boolean
     priceMonth?: boolean
     priceM2?: boolean
+    hidePrice?: boolean
     description?: boolean
     suitableFor?: boolean
     status?: boolean
@@ -1167,6 +1196,7 @@ export type RoomSelectScalar = {
   minRentTerm?: boolean
   priceMonth?: boolean
   priceM2?: boolean
+  hidePrice?: boolean
   description?: boolean
   suitableFor?: boolean
   status?: boolean
@@ -1196,6 +1226,7 @@ export type RoomOmit<
   | 'minRentTerm'
   | 'priceMonth'
   | 'priceM2'
+  | 'hidePrice'
   | 'description'
   | 'suitableFor'
   | 'status'
@@ -1244,6 +1275,7 @@ export type $RoomPayload<
       minRentTerm: string | null
       priceMonth: number
       priceM2: number | null
+      hidePrice: boolean
       description: string | null
       suitableFor: string[]
       status: $Enums.RoomStatus
@@ -1820,6 +1852,7 @@ export interface RoomFieldRefs {
   readonly minRentTerm: Prisma.FieldRef<'Room', 'String'>
   readonly priceMonth: Prisma.FieldRef<'Room', 'Int'>
   readonly priceM2: Prisma.FieldRef<'Room', 'Float'>
+  readonly hidePrice: Prisma.FieldRef<'Room', 'Boolean'>
   readonly description: Prisma.FieldRef<'Room', 'String'>
   readonly suitableFor: Prisma.FieldRef<'Room', 'String[]'>
   readonly status: Prisma.FieldRef<'Room', 'RoomStatus'>

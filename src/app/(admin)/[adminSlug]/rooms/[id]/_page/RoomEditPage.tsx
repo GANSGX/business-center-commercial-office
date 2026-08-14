@@ -78,6 +78,7 @@ interface FormData {
   floor: string
   priceMonth: string
   priceM2: string
+  hidePrice: boolean
   layoutType: string
   internet: string
   entrance: string
@@ -102,6 +103,7 @@ const EMPTY_FORM: FormData = {
   floor: '',
   priceMonth: '',
   priceM2: '',
+  hidePrice: false,
   layoutType: 'Открытая',
   internet: 'Оптоволокно',
   entrance: 'Главный',
@@ -154,6 +156,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
           floor: data.floor?.toString() ?? '',
           priceMonth: data.priceMonth?.toString() ?? '',
           priceM2: data.priceM2?.toString() ?? '',
+          hidePrice: data.hidePrice ?? false,
           layoutType: data.layoutType ?? 'Открытая',
           internet: data.internet ?? 'Оптоволокно',
           entrance: data.entrance ?? 'Главный',
@@ -198,6 +201,7 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
       floor: parseInt(form.floor),
       priceMonth: parseInt(form.priceMonth),
       priceM2: form.priceM2 ? parseFloat(form.priceM2) : undefined,
+      hidePrice: form.hidePrice,
       layoutType: form.layoutType || undefined,
       internet: form.internet || undefined,
       entrance: form.entrance || undefined,
@@ -545,6 +549,11 @@ export function RoomEditPage({ roomId }: { roomId?: string }) {
                   label="Показывать на главной странице"
                   checked={form.showOnHome}
                   onChange={(v) => set('showOnHome', v)}
+                />
+                <Checkbox
+                  label="Скрыть стоимость на сайте"
+                  checked={form.hidePrice}
+                  onChange={(v) => set('hidePrice', v)}
                 />
               </div>
             </div>

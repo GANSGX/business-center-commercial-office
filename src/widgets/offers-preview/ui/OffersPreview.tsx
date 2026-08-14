@@ -17,6 +17,7 @@ interface Office {
   layoutType?: string | null
   water: boolean
   priceMonth: number
+  hidePrice?: boolean
   status: string
   photos: { url: string }[]
 }
@@ -142,10 +143,12 @@ export function OffersPreview() {
                   </dl>
 
                   <div className={styles.cardFooter}>
-                    <div className={styles.priceWrap}>
-                      <span className={styles.priceLabel}>от</span>
-                      <span className={styles.price}>{formatPrice(office.priceMonth)}</span>
-                    </div>
+                    {!office.hidePrice && (
+                      <div className={styles.priceWrap}>
+                        <span className={styles.priceLabel}>от</span>
+                        <span className={styles.price}>{formatPrice(office.priceMonth)}</span>
+                      </div>
+                    )}
                     <button
                       type="button"
                       className={styles.ctaBtn}

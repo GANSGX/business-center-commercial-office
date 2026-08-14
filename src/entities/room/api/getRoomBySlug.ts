@@ -24,6 +24,7 @@ export async function getRoomBySlug(slug: string): Promise<Room | null> {
       minRentTerm: true,
       priceMonth: true,
       priceM2: true,
+      hidePrice: true,
       description: true,
       suitableFor: true,
       status: true,

@@ -17,6 +17,7 @@ interface Room {
   floor: number
   status: RoomStatus
   priceMonth: number
+  hidePrice?: boolean
   showOnHome: boolean
   photos: { id: string; url: string }[]
 }
@@ -263,7 +264,10 @@ export function RoomsPage() {
                       </span>
                     </div>
                   </td>
-                  <td className={styles.priceCell}>{formatPrice(room.priceMonth)}</td>
+                  <td className={styles.priceCell}>
+                    {formatPrice(room.priceMonth)}
+                    {room.hidePrice ? <span className={styles.mutedCell}> · скрыта</span> : null}
+                  </td>
                   <td>
                     <button
                       className={`${styles.toggle} ${room.showOnHome ? styles.toggleOn : ''}`}

@@ -191,12 +191,14 @@ export function OfficePage({ room, children }: Props) {
             {/* ── Боковая панель ── */}
             <aside className={styles.sidebar} aria-label="Условия аренды">
               <div className={styles.sidebarCard}>
-                <div className={styles.priceBlock}>
-                  <span className={styles.priceValue}>{formatPrice(room.priceMonth)}</span>
-                  {room.priceM2 && (
-                    <span className={styles.priceM2}>{Math.round(room.priceM2)}&thinsp;₽/м²</span>
-                  )}
-                </div>
+                {!room.hidePrice && (
+                  <div className={styles.priceBlock}>
+                    <span className={styles.priceValue}>{formatPrice(room.priceMonth)}</span>
+                    {room.priceM2 && (
+                      <span className={styles.priceM2}>{Math.round(room.priceM2)}&thinsp;₽/м²</span>
+                    )}
+                  </div>
+                )}
 
                 <div className={styles.sidebarBadge}>
                   <Badge status={toStatus(room.status)} />

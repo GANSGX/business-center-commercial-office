@@ -21,12 +21,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const plainDesc = room.description?.replace(/<[^>]*>/g, '').slice(0, 155) ?? ''
   const title = `${room.title} — аренда ${room.area}\u00a0м², ${floorLabel.toLowerCase()} | Коммунистическая-35`
+  const fallbackDesc = room.hidePrice
+    ? `Аренда офиса ${room.area}\u00a0м², ${floorLabel.toLowerCase()} в бизнес-центре Коммунистическая-35.`
+    : `Аренда офиса ${room.area}\u00a0м², ${floorLabel.toLowerCase()} в бизнес-центре Коммунистическая-35. ${room.priceMonth.toLocaleString('ru-RU')}\u00a0₽/мес.`
 
   return {
     title,
-    description:
-      plainDesc ||
-      `Аренда офиса ${room.area}\u00a0м², ${floorLabel.toLowerCase()} в бизнес-центре Коммунистическая-35. ${room.priceMonth.toLocaleString('ru-RU')}\u00a0₽/мес.`,
+    description: plainDesc || fallbackDesc,
     openGraph: {
       title: `${room.title} — ${room.area}\u00a0м², ${floorLabel.toLowerCase()}`,
       description: plainDesc,
@@ -58,8 +59,7 @@ export default async function OfficeSlugPage({ params }: PageProps) {
     image: room.photos[0]?.url,
     offers: {
       '@type': 'Offer',
-      price: room.priceMonth,
-      priceCurrency: 'RUB',
+      ...(room.hidePrice ? {} : { price: room.priceMonth, priceCurrency: 'RUB' }),
       availability:
         room.status === 'FREE'
           ? 'https://schema.org/InStock'

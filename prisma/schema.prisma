@@ -28,6 +28,7 @@ model Room {
   minRentTerm String?
   priceMonth  Int
   priceM2     Float?
+  hidePrice   Boolean     @default(false)
   description String?
   suitableFor String[]
   status      RoomStatus  @default(FREE)

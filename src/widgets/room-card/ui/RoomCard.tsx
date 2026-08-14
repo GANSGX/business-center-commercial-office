@@ -123,15 +123,17 @@ export function RoomCard({ room, priority = false }: Props) {
         </dl>
 
         <div className={styles.footer}>
-          <div className={styles.priceWrap}>
-            <span className={styles.priceLabel}>от</span>
-            <span className={styles.price}>{formatPrice(room.priceMonth)}</span>
-            {room.priceM2 && (
-              <span
-                className={styles.priceM2}
-              >{`${room.priceM2.toLocaleString('ru-RU')}\u00a0₽/м²`}</span>
-            )}
-          </div>
+          {!room.hidePrice && (
+            <div className={styles.priceWrap}>
+              <span className={styles.priceLabel}>от</span>
+              <span className={styles.price}>{formatPrice(room.priceMonth)}</span>
+              {room.priceM2 && (
+                <span
+                  className={styles.priceM2}
+                >{`${room.priceM2.toLocaleString('ru-RU')}\u00a0₽/м²`}</span>
+              )}
+            </div>
+          )}
           <button
             type="button"
             className={`${styles.cta} ${room.status === 'RENTED' ? styles.ctaRented : ''}`}

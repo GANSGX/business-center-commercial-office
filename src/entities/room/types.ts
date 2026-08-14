@@ -26,6 +26,7 @@ export interface Room {
   minRentTerm: string | null
   priceMonth: number
   priceM2: number | null
+  hidePrice: boolean
   description: string | null
   suitableFor: string[]
   status: RoomStatus

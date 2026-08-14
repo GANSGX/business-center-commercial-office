@@ -101,6 +101,7 @@ export const RoomScalarFieldEnum = {
   minRentTerm: 'minRentTerm',
   priceMonth: 'priceMonth',
   priceM2: 'priceM2',
+  hidePrice: 'hidePrice',
   description: 'description',
   suitableFor: 'suitableFor',
   status: 'status',

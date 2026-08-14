@@ -41,6 +41,7 @@ export async function getRooms(params: GetRoomsParams = {}): Promise<Room[]> {
       minRentTerm: true,
       priceMonth: true,
       priceM2: true,
+      hidePrice: true,
       description: true,
       suitableFor: true,
       status: true,
